@@ -6,7 +6,6 @@ const loginWithProvider = async (provider: AuthProvider) => {
   const auth = getAuth();
   try {
     const { user } = await signInWithPopup(auth, provider);
-    console.log(user);
   } catch (e) {
     console.log(e);
   }
@@ -22,7 +21,6 @@ const logOut = async () => {
 export const CurrentUser = () => {
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
-  console.log(user);
 
   if (loading) {
     return (
