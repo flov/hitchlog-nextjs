@@ -1,11 +1,28 @@
+import { onValue } from "firebase/database";
+import { ChangeEvent, ChangeEventHandler, FormEvent, SyntheticEvent, useEffect, useState } from "react";
+import { AutocompleteDirectionsHandler } from "../utils/AutocompleteDirectionsHandler";
+
 export function NewTripForm() {
+  const [state, setState] = useState({})
+  const submitForm = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(state);
+  }
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const {value, name} = e.target
+    setState({...state, [name]: value})
+  }
+
   return (
-    <form className="container mx-auto max-w-lg">
+    <form onSubmit={submitForm} className="container mx-auto max-w-lg">
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group my-6">
           <input
             type="text"
             id="origin-input"
+            name='origin'
+            onChange={handleChange}
             className="form-control
                   block
                   w-full
@@ -28,6 +45,8 @@ export function NewTripForm() {
         <div className="form-group my-6">
           <input
             type="text"
+            onChange={handleChange}
+            name='destination'
             className="form-control
           block
           w-full
@@ -52,6 +71,8 @@ export function NewTripForm() {
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-6">
           <input
+            onChange={handleChange}
+            name='start'
             type="datetime-local"
             className="form-control block
           w-full
@@ -74,6 +95,8 @@ export function NewTripForm() {
         <div className="form-group mb-6">
           <input
             type="datetime-local"
+            onChange={handleChange}
+            name='arrival'
             className="form-control block
           w-full
           px-3
