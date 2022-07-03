@@ -33,8 +33,8 @@ const Home: NextPage = ({
     loader.load().then(() => {
       map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
         mapTypeControl: false,
-        center: { lat: -33.8688, lng: 151.2195 },
-        zoom: 13,
+        zoom: 11,
+        center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
       });
 
       new AutocompleteDirectionsHandler(map);
@@ -52,9 +52,11 @@ const Home: NextPage = ({
       <main>
         <div className="w-full bg-gray-200 h-96" id="map"></div>
 
-        <h1 className={styles.title}>
-          Welcome to <Link href="/">Hitchlog</Link>
-        </h1>
+        <div className="mt-4">
+          <h1 className={styles.title}>
+            Welcome to <Link href="/">Hitchlog</Link>
+          </h1>
+        </div>
         {/* <CurrentUser /> */}
 
         <NewTripForm />
