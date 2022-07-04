@@ -6,9 +6,8 @@ import type {
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Home.module.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
-import { AutocompleteDirectionsHandler } from '../src/utils/AutocompleteDirectionsHandler';
 import { NewTripForm } from '../src/components/NewTripForm';
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -22,24 +21,25 @@ export const getServerSideProps: GetServerSideProps = async () => {
 const Home: NextPage = ({
   googleMapsKey,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [map, setMap] = useState<google.maps.Map>();
+
   useEffect(() => {
     const loader = new Loader({
       apiKey: googleMapsKey,
       version: 'weekly',
       libraries: ['places'],
     });
-    let map;
 
-    loader.load().then(() => {
+    let map;
+    loader.load().then((google) => {
       map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
         mapTypeControl: false,
         zoom: 11,
         center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
       });
-
-      new AutocompleteDirectionsHandler(map);
+      setMap(map);
     });
-  }, []);
+  }, [googleMapsKey]);
 
   return (
     <>
@@ -59,7 +59,7 @@ const Home: NextPage = ({
         </div>
         {/* <CurrentUser /> */}
 
-        <NewTripForm />
+        { map ? <NewTripForm map={map} /> : <></>}
       </main>
     </>
   );
