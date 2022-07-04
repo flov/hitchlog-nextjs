@@ -1,28 +1,43 @@
-import { onValue } from "firebase/database";
-import { ChangeEvent, ChangeEventHandler, FormEvent, SyntheticEvent, useEffect, useState } from "react";
-import { AutocompleteDirectionsHandler } from "../utils/AutocompleteDirectionsHandler";
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useState,
+} from 'react';
+import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
 
-export function NewTripForm() {
-  const [state, setState] = useState({})
+export function NewTripForm({ map }: { map: google.maps.Map }) {
+  const [state, setState] = useState<{
+    originPlaceId?: string;
+    destinationPlaceId?: string;
+    start?: string;
+    arrival?: string;
+  }>({});
+
+  useEffect(() => {
+    new AutocompleteDirectionsHandler(map, setState);
+  }, [map]);
+
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(state);
-  }
+  };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const {value, name} = e.target
-    setState({...state, [name]: value})
-  }
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setState({ ...state, [name]: value });
+  };
+
+  console.log(state);
 
   return (
-    <form onSubmit={submitForm} className="container mx-auto max-w-lg">
+    <form onSubmit={submitForm} className="container max-w-lg mx-auto">
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group my-6">
+        <div className="my-6 form-group">
           <input
             type="text"
             id="origin-input"
-            name='origin'
-            onChange={handleChange}
+            name="origin"
             className="form-control
                   block
                   w-full
@@ -42,11 +57,10 @@ export function NewTripForm() {
             placeholder="Enter an origin location"
           />
         </div>
-        <div className="form-group my-6">
+        <div className="my-6 form-group">
           <input
             type="text"
-            onChange={handleChange}
-            name='destination'
+            name="destination"
             className="form-control
           block
           w-full
@@ -69,10 +83,10 @@ export function NewTripForm() {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="mb-6 form-group">
           <input
-            onChange={handleChange}
-            name='start'
+            onChange={handleInputChange}
+            name="start"
             type="datetime-local"
             className="form-control block
           w-full
@@ -92,11 +106,11 @@ export function NewTripForm() {
             placeholder="Started when?"
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="mb-6 form-group">
           <input
             type="datetime-local"
-            onChange={handleChange}
-            name='arrival'
+            onChange={handleInputChange}
+            name="arrival"
             className="form-control block
           w-full
           px-3
