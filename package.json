@@ -20,6 +20,8 @@
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.0.3",
     "reactfire": "^4.2.1",
+    "rxfire": "^6.0.3",
+    "rxjs": "^7.5.5",
     "tailwindcss": "^3.1.4"
   },
   "devDependencies": {

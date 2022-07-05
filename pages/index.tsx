@@ -9,6 +9,10 @@ import styles from '../styles/Home.module.css';
 import { useEffect, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { NewTripForm } from '../src/components/NewTripForm';
+import { CurrentUser } from '../src/components/CurrentUser';
+import { getAuth } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { ListTrips } from '../src/components/ListTrips';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   return {
@@ -41,6 +45,9 @@ const Home: NextPage = ({
     });
   }, [googleMapsKey]);
 
+  const auth = getAuth();
+  const [user] = useAuthState(auth);
+
   return (
     <>
       <Head>
@@ -52,14 +59,16 @@ const Home: NextPage = ({
       <main>
         <div className="w-full bg-gray-200 h-96" id="map"></div>
 
-        <div className="mt-4">
-          <h1 className={styles.title}>
-            Welcome to <Link href="/">Hitchlog</Link>
-          </h1>
+        <div className="container max-w-xl mx-auto">
+          <div className="my-4">
+            <h1 className={styles.title}>
+              Welcome to <Link href="/">Hitchlog</Link>
+            </h1>
+          </div>
+          <CurrentUser />
+          {map && user ? <NewTripForm map={map} /> : <></>}
+          <ListTrips />
         </div>
-        {/* <CurrentUser /> */}
-
-        { map ? <NewTripForm map={map} /> : <></>}
       </main>
     </>
   );
