@@ -9,6 +9,8 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
 import { createTrip } from '../db/trips';
 import { secondsToTime } from '../utils/secondsToTime';
+import { start } from 'repl';
+import { calculateTimeBetweenDates } from '../utils/calculateTimeBetweenDates';
 
 export function NewTripForm({ map }: { map: google.maps.Map }) {
   const [state, setState] = useState<{
@@ -151,9 +153,18 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
           />
         </div>
         <div className="flex justify-between col-span-2">
-          <span>Your duration: </span>
           <span>
-            {state.googleDuration ? `Google Maps Duration ${secondsToTime(state.googleDuration)}` : ''}
+            {state.start && state.arrival
+              ? `Your duration: ${calculateTimeBetweenDates(
+                  state.start,
+                  state.arrival
+                )}`
+              : ''}
+          </span>
+          <span>
+            {state.googleDuration
+              ? `Google Maps Duration ${secondsToTime(state.googleDuration)}`
+              : ''}
           </span>
         </div>
         <div className="">
@@ -204,7 +215,7 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
       focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             aria-label="Default select example"
           >
-            <option selected value="1">
+            <option defaultValue={1} value="1">
               Travelling Alone
             </option>
             <option value="2">Travelling in twosome</option>
