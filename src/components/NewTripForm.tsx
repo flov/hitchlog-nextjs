@@ -1,10 +1,14 @@
 import {
-  ChangeEvent,
-  FormEvent,
-  useEffect,
-  useState,
-} from 'react';
+  addDoc,
+  collection,
+  orderBy,
+  query,
+  serverTimestamp,
+} from 'firebase/firestore';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
+import { createTrip } from '../db/trips';
+import { secondsToTime } from '../utils/secondsToTime';
 
 export function NewTripForm({ map }: { map: google.maps.Map }) {
   const [state, setState] = useState<{
@@ -12,6 +16,8 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
     destinationPlaceId?: string;
     start?: string;
     arrival?: string;
+    googleDuration?: number;
+    totalDistance?: number;
   }>({});
 
   useEffect(() => {
@@ -19,11 +25,26 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
   }, [map]);
 
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
+    createTrip({ ...state, createdAt: serverTimestamp() });
+
     e.preventDefault();
-    console.log(state);
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleBlurStart = (e: ChangeEvent<HTMLInputElement>) => {
+    const arrival = document.getElementById('arrival');
+    if (!arrival?.getAttribute('value')) {
+      arrival?.setAttribute('value', e.target.value);
+    }
+  };
+
+  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    console.log(e);
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { value, name } = e.target;
     setState({ ...state, [name]: value });
   };
@@ -31,9 +52,9 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
   console.log(state);
 
   return (
-    <form onSubmit={submitForm} className="container max-w-lg mx-auto">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="my-6 form-group">
+    <form onSubmit={submitForm}>
+      <div className="grid grid-cols-2 gap-4 mt-4">
+        <div className="form-group">
           <input
             type="text"
             id="origin-input"
@@ -57,7 +78,7 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
             placeholder="Enter an origin location"
           />
         </div>
-        <div className="my-6 form-group">
+        <div className="form-group">
           <input
             type="text"
             name="destination"
@@ -81,11 +102,10 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
             placeholder="Enter destination"
           />
         </div>
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="mb-6 form-group">
+        <div className="form-group">
           <input
             onChange={handleInputChange}
+            onBlur={handleBlurStart}
             name="start"
             type="datetime-local"
             className="form-control block
@@ -106,7 +126,8 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
             placeholder="Started when?"
           />
         </div>
-        <div className="mb-6 form-group">
+
+        <div className="form-group">
           <input
             type="datetime-local"
             onChange={handleInputChange}
@@ -125,14 +146,77 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
           ease-in-out
           m-0
           focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-            id="arrived"
+            id="arrival"
             placeholder="Arrived when?"
           />
         </div>
+        <div className="flex justify-between col-span-2">
+          <span>Your duration: </span>
+          <span>
+            {state.googleDuration ? `Google Maps Duration ${secondsToTime(state.googleDuration)}` : ''}
+          </span>
+        </div>
+        <div className="">
+          <input
+            type="number"
+            onChange={handleInputChange}
+            name="rides"
+            className="
+        form-control
+        block
+        w-full
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        border border-solid border-gray-300
+        rounded
+        transition
+        ease-in-out
+        m-0
+        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+      "
+            id="numberOfRides"
+            placeholder="Number of Rides"
+          />
+        </div>
+
+        <div className="">
+          <select
+            onChange={handleInputChange}
+            name="amountOfTravellers"
+            className="form-select appearance-none
+      block
+      w-full
+      px-3
+      py-1.5
+      text-base
+      font-normal
+      text-gray-700
+      bg-white bg-clip-padding bg-no-repeat
+      border border-solid border-gray-300
+      rounded
+      transition
+      ease-in-out
+      m-0
+      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            aria-label="Default select example"
+          >
+            <option selected value="1">
+              Travelling Alone
+            </option>
+            <option value="2">Travelling in twosome</option>
+            <option value="3">Travelling in thressome</option>
+          </select>
+        </div>
       </div>
+
       <button
         type="submit"
         className="
+        mt-4
         w-full
         px-6
         py-2.5

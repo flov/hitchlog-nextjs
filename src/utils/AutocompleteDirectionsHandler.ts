@@ -26,30 +26,76 @@ export class AutocompleteDirectionsHandler {
       'destination-input'
     ) as HTMLInputElement;
 
+    const fields = ['place_id', 'geometry', 'address_component'];
+
     // Specify just the place data fields that you need.
     const originAutocomplete = new google.maps.places.Autocomplete(
       originInput,
-      { fields: ['place_id', 'geometry'] }
+      { fields }
     );
 
     // Specify just the place data fields that you need.
     const destinationAutocomplete = new google.maps.places.Autocomplete(
       destinationInput,
-      { fields: ['place_id'] }
+      { fields }
     );
 
     this.setupPlaceChangedListener(originAutocomplete, 'origin');
     this.setupPlaceChangedListener(destinationAutocomplete, 'destination');
   }
 
+  getCityFromAddressComponent(
+    address_component: google.maps.GeocoderAddressComponent[]
+  ) {
+    const city = address_component.find((component) =>
+      component.types.includes('locality')
+    );
+    return city ? city.long_name : '';
+  }
+
+  getDataFromAddressComponent(
+    address_component: google.maps.GeocoderAddressComponent[]
+  ) {
+    const city = address_component.find((component) =>
+      component.types.includes('locality')
+    );
+    const country = address_component.find((component) =>
+      component.types.includes('country')
+    );
+    return {
+      city: city ? city.long_name : '',
+      country: country ? country.long_name : '',
+      countryCode: country ? country.short_name : '',
+    };
+  }
+
+  computeTotalDistance(result: google.maps.DirectionsResult | null) {
+    let totalDistance = 0;
+    let totalDuration = 0;
+    const myroute = result?.routes[0];
+
+    if (!myroute || !result) return { totalDistance: 0, googleDuration: 0 };
+
+    for (let i = 0; i < myroute.legs.length; i++) {
+      totalDistance += myroute.legs[i]!.distance!.value;
+      totalDuration += myroute.legs[i]!.duration!.value;
+    }
+
+    return {
+      totalDistance: totalDistance / 1000,
+      googleDuration: totalDuration,
+    };
+  }
+
   setupPlaceChangedListener(
     autocomplete: google.maps.places.Autocomplete,
     mode: string
   ) {
-    autocomplete.setFields(['address_component', 'geometry']);
-
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace();
+      const { city, country, countryCode } = this.getDataFromAddressComponent(
+        place.address_components as google.maps.GeocoderAddressComponent[]
+      );
       const lat = place.geometry?.location?.lat();
       const lng = place.geometry?.location?.lng();
 
@@ -69,6 +115,9 @@ export class AutocompleteDirectionsHandler {
           placeId: place.place_id,
           lat,
           lng,
+          city,
+          country,
+          countryCode,
         },
       }));
       this.route();
@@ -90,6 +139,13 @@ export class AutocompleteDirectionsHandler {
       },
       (response, status) => {
         if (status === 'OK') {
+          const { totalDistance, googleDuration } =
+            this.computeTotalDistance(response);
+          this.setState((prevState) => ({
+            ...prevState,
+            totalDistance,
+            googleDuration,
+          }));
           me.directionsRenderer.setDirections(response);
         } else {
           window.alert('Directions request failed due to ' + status);

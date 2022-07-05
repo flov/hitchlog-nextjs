@@ -17,6 +17,8 @@ specifiers:
   react-dom: 18.2.0
   react-firebase-hooks: ^5.0.3
   reactfire: ^4.2.1
+  rxfire: ^6.0.3
+  rxjs: ^7.5.5
   tailwindcss: ^3.1.4
   typescript: 4.7.4
 
@@ -32,6 +34,8 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-firebase-hooks: 5.0.3_bq46dn4pj2gu2k2krqqiasfr4m
   reactfire: 4.2.1_bq46dn4pj2gu2k2krqqiasfr4m
+  rxfire: 6.0.3_firebase@9.8.4+rxjs@7.5.5
+  rxjs: 7.5.5
   tailwindcss: 3.1.4
 
 devDependencies:
