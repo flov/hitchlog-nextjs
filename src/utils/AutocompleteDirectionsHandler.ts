@@ -1,4 +1,4 @@
-import { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 export class AutocompleteDirectionsHandler {
   map: google.maps.Map;

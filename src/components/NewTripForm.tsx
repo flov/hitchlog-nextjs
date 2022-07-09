@@ -7,27 +7,23 @@ import {
 } from 'firebase/firestore';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
-import { createTrip } from '../db/trips';
+import { createTrip, Trip } from '../db/trips';
 import { secondsToTime } from '../utils/secondsToTime';
-import { start } from 'repl';
 import { calculateTimeBetweenDates } from '../utils/calculateTimeBetweenDates';
+import { Button } from 'flowbite-react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../utils/firebase';
 
 export function NewTripForm({ map }: { map: google.maps.Map }) {
-  const [state, setState] = useState<{
-    originPlaceId?: string;
-    destinationPlaceId?: string;
-    start?: string;
-    arrival?: string;
-    googleDuration?: number;
-    totalDistance?: number;
-  }>({});
+  const [state, setState] = useState<Trip|{}>({});
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
     new AutocompleteDirectionsHandler(map, setState);
   }, [map]);
 
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
-    createTrip({ ...state, createdAt: serverTimestamp() });
+    createTrip({ ...state, uid: user?.uid, createdAt: serverTimestamp() });
 
     e.preventDefault();
   };
@@ -152,21 +148,25 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
             placeholder="Arrived when?"
           />
         </div>
-        <div className="flex justify-between col-span-2">
-          <span>
-            {state.start && state.arrival
-              ? `Your duration: ${calculateTimeBetweenDates(
-                  state.start,
-                  state.arrival
-                )}`
-              : ''}
-          </span>
-          <span>
-            {state.googleDuration
-              ? `Google Maps Duration ${secondsToTime(state.googleDuration)}`
-              : ''}
-          </span>
-        </div>
+        {(state.arrival && state.start) || state.googleDuration ? (
+          <div className="flex justify-between col-span-2">
+            <span>
+              {state.start && state.arrival
+                ? `Your trip duration: ${calculateTimeBetweenDates(
+                    state.start,
+                    state.arrival
+                  )}`
+                : ''}
+            </span>
+            <span>
+              {state.googleDuration
+                ? `Google Maps Duration ${secondsToTime(state.googleDuration)}`
+                : ''}
+            </span>
+          </div>
+        ) : (
+          ''
+        )}
         <div className="">
           <input
             type="number"
@@ -224,30 +224,9 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
         </div>
       </div>
 
-      <button
-        type="submit"
-        className="
-        mt-4
-        w-full
-        px-6
-        py-2.5
-        bg-blue-600
-        text-white
-        font-medium
-        text-xs
-        leading-tight
-        uppercase
-        rounded
-      shadow-md
-      hover:bg-blue-700 hover:shadow-lg
-      focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
-      active:bg-blue-800 active:shadow-lg
-      transition
-      duration-150
-      ease-in-out"
-      >
-        Add Trip
-      </button>
+      <div className="mt-4">
+        <Button type="submit">Submit</Button>
+      </div>
     </form>
   );
 }

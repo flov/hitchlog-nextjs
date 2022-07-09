@@ -56,15 +56,15 @@ const Home: NextPage = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <div className="w-full bg-gray-200 h-96" id="map"></div>
       <main>
-        <div className="w-full bg-gray-200 h-96" id="map"></div>
-
         <div className="container max-w-xl mx-auto">
           <div className="my-4">
             <h1 className={styles.title}>
               Welcome to <Link href="/">Hitchlog</Link>
             </h1>
           </div>
+
           <CurrentUser />
           {map && user ? <NewTripForm map={map} /> : <></>}
           <ListTrips />
