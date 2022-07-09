@@ -16,6 +16,7 @@
     "firebase": "^9.8.4",
     "flowbite": "^1.4.7",
     "flowbite-react": "^0.1.2",
+    "formik": "^2.2.9",
     "moment": "^2.29.4",
     "next": "12.2.0",
     "postcss": "^8.4.14",
