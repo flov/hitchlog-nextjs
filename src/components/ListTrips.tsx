@@ -14,9 +14,7 @@ export const ListTrips = () => {
     trips$.subscribe((trips) => {
       setTrips(trips);
     });
-  }, []);
-
-  console.log(trips);
+  }, [trips$]);
 
   return (
     <>
@@ -34,7 +32,7 @@ export const ListTrips = () => {
         </Table.Head>
         <Table.Body className="divide-y">
           {trips?.map((trip) => (
-            <Table.Row key={trip.key} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+            <Table.Row key={trip.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
               <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
               {trip.origin.city}
               </Table.Cell>

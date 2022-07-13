@@ -1,5 +1,7 @@
 import { getAuth, signInWithPopup, AuthProvider, signOut } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { createUser, getUser, writeUserToFirebase } from '../db/users';
 import { provider } from '../utils/firebase';
 
 const loginWithProvider = async (provider: AuthProvider) => {
@@ -18,9 +20,14 @@ const logOut = async () => {
     console.log(error);
   }
 };
+
 export const CurrentUser = () => {
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
+
+  useEffect(() => {
+    writeUserToFirebase(user);
+  }, [user]);
 
   if (loading) {
     return (
