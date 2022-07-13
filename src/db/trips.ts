@@ -6,10 +6,13 @@ import {
   getDoc,
   orderBy,
   query,
+  updateDoc,
 } from 'firebase/firestore';
 import { collectionData } from 'rxfire/firestore';
 import { startWith } from 'rxjs';
 import { db } from '../utils/firebase';
+
+export type EXPERIENCES = 'very good' | 'good' | 'neutral' | 'bad' | 'very bad';
 
 export const tripsRef = query(
   collection(db, 'trips'),
@@ -24,22 +27,21 @@ export const createTrip = async (trip: any) => {
   console.log({ doc });
 };
 
-export const getTrip = async (id: string) => {
-  const tripSnapshot = await getDoc(doc(db, 'trips', id));
-  if (tripSnapshot.exists()) {
-    console.log('trip exists');
-    return tripSnapshot.data();
-  } else {
-    return tripSnapshot.data();
-    console.log("Trip doesn't exist");
-  }
+export const addRideData = async (
+  trip: Trip,
+  rideData: Ride,
+  index: number
+) => {
+  const { rides } = trip;
+  rides[index] = rideData;
+  return await updateDoc(doc(db, 'trips', trip.id), {
+    rides: rides,
+  });
 };
 
-// get single document from firestore
-export const fetchTrip = async (id: string) => {
-  const docRef = doc(db, `trips/${id}`);
-  const docSnap = await getDoc(docRef);
-  return docSnap.data();
+export const getTrip = async (id: string) => {
+  const userSnapshot = await getDoc(doc(db, 'trips', id));
+  return { ...userSnapshot.data(), id: userSnapshot.id } as Trip;
 };
 
 export const deleteTrip = async (id: string) => {
@@ -59,6 +61,12 @@ export type Location = {
   placeId: string;
 };
 
+export type Ride = {
+  title: string;
+  story: string;
+  experience: string;
+};
+
 export type Trip = {
   arrival: string;
   createdAt: { seconds: number; nanoseconds: number };
@@ -66,9 +74,10 @@ export type Trip = {
   googleDuration: number;
   id: string;
   origin: Location;
-  rides: string;
+  rides: Ride[];
   start: string;
   totalDistance: number;
+  uid: string;
 };
 
 export const tripsMock: Trip[] = [

@@ -8,6 +8,7 @@ specifiers:
   '@types/react': 18.0.14
   '@types/react-dom': 18.0.5
   autoprefixer: ^10.4.7
+  canvas-confetti: ^1.5.1
   eslint: 8.18.0
   eslint-config-next: 12.2.0
   firebase: ^9.8.4
@@ -20,17 +21,20 @@ specifiers:
   react: 18.2.0
   react-dom: 18.2.0
   react-firebase-hooks: ^5.0.3
+  react-icons: ^4.4.0
   reactfire: ^4.2.1
   rxfire: ^6.0.3
   rxjs: ^7.5.5
   tailwindcss: ^3.1.4
   typescript: 4.7.4
+  yup: ^0.32.11
 
 dependencies:
   '@googlemaps/js-api-loader': 1.14.3
   '@googlemaps/react-wrapper': 1.1.35_react@18.2.0
   '@types/google.maps': 3.49.2
   autoprefixer: 10.4.7_postcss@8.4.14
+  canvas-confetti: 1.5.1
   firebase: 9.8.4
   flowbite: 1.4.7
   flowbite-react: 0.1.2_emjdixx36mwwjms4no7z4ka6dq
@@ -41,10 +45,12 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-firebase-hooks: 5.0.3_bq46dn4pj2gu2k2krqqiasfr4m
+  react-icons: 4.4.0_react@18.2.0
   reactfire: 4.2.1_bq46dn4pj2gu2k2krqqiasfr4m
   rxfire: 6.0.3_firebase@9.8.4+rxjs@7.5.5
   rxjs: 7.5.5
   tailwindcss: 3.1.4
+  yup: 0.32.11
 
 devDependencies:
   '@types/node': 18.0.0
@@ -93,7 +99,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.13.9
-    dev: true
 
   /@commitlint/config-validator/17.0.3:
     resolution: {integrity: sha512-3tLRPQJKapksGE7Kee9axv+9z5I2GDHitDH4q63q7NmNA0wkB+DAorJ0RHz2/K00Zb1/MVdHzhCga34FJvDihQ==}
@@ -964,6 +969,10 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
 
+  /@types/lodash/4.14.182:
+    resolution: {integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==}
+    dev: false
+
   /@types/long/4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: false
@@ -1304,6 +1313,10 @@ packages:
 
   /caniuse-lite/1.0.30001361:
     resolution: {integrity: sha512-ybhCrjNtkFji1/Wto6SSJKkWk6kZgVQsDq5QI83SafsF6FXv2JB4df9eEdH6g8sdGgqTXrFLjAxqBGgYoU3azQ==}
+    dev: false
+
+  /canvas-confetti/1.5.1:
+    resolution: {integrity: sha512-Ncz+oZJP6OvY7ti4E1slxVlyAV/3g7H7oQtcCDXgwGgARxPnwYY9PW5Oe+I8uvspYNtuHviAdgA0LfcKFWJfpg==}
     dev: false
 
   /chalk/2.4.2:
@@ -2782,6 +2795,10 @@ packages:
     resolution: {integrity: sha1-MHXOk7whuPq0PhvE2n6BFe0ee6s=}
     dev: false
 
+  /nanoclone/0.2.1:
+    resolution: {integrity: sha512-wynEP02LmIbLpcYw8uBKpcfF6dmg2vcpKqxeH5UcoKEYdExslsdUA4ugFauuaeYdTB76ez6gJW8XAZ6CgkXYxA==}
+    dev: false
+
   /nanoid/3.3.4:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -3134,6 +3151,10 @@ packages:
       react-is: 16.13.1
     dev: true
 
+  /property-expr/2.0.5:
+    resolution: {integrity: sha512-IJUkICM5dP5znhCckHSv30Q4b5/JA5enCtkRHYaOVOAocnH/1BQEYTC5NMfT3AVl/iXKdr3aqQbQn9DxyWknwA==}
+    dev: false
+
   /protobufjs/6.11.3:
     resolution: {integrity: sha512-xL96WDdCZYdU7Slin569tFX712BxsxslWwAfAhCYjQKGTq7dAU91Lomy6nLLhh/dyGhk/YH4TwTSRxTzhuHyZg==}
     hasBin: true
@@ -3262,7 +3283,6 @@ packages:
 
   /regenerator-runtime/0.13.9:
     resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
-    dev: true
 
   /regexp.prototype.flags/1.4.3:
     resolution: {integrity: sha512-fjggEOO3slI6Wvgjwflkc4NFRCTZAu5CnNfBd5qOMYhWdn67nJBBu34/TkD++eeFmd8C9r9jfXJ27+nSiRkSUA==}
@@ -3653,6 +3673,10 @@ packages:
     dependencies:
       is-number: 7.0.0
 
+  /toposort/2.0.2:
+    resolution: {integrity: sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==}
+    dev: false
+
   /tr46/0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
     dev: false
@@ -3921,3 +3945,16 @@ packages:
     engines: {node: '>=6'}
     dev: false
     optional: true
+
+  /yup/0.32.11:
+    resolution: {integrity: sha512-Z2Fe1bn+eLstG8DRR6FTavGD+MeAwyfmouhHsIUgaADz8jvFKbO/fXc2trJKZg+5EBjh4gGm3iU/t3onKlXHIg==}
+    engines: {node: '>=10'}
+    dependencies:
+      '@babel/runtime': 7.18.6
+      '@types/lodash': 4.14.182
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      nanoclone: 0.2.1
+      property-expr: 2.0.5
+      toposort: 2.0.2
+    dev: false
