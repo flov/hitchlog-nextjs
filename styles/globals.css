@@ -9,11 +9,19 @@ body {
   font-family: 'Lexend', sans-serif;
   height: 100%;
 }
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Lexend', sans-serif;
 }
 p {
   font-family: 'Roboto', sans-serif;
+}
+nav a {
+  text-decoration: none;
 }
 a {
   text-decoration: underline;
