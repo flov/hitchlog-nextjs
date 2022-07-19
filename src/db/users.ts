@@ -1,5 +1,6 @@
+import { AuthProvider, getAuth, signInWithPopup, signOut } from 'firebase/auth';
 import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../utils/firebase';
+import { db, googleProvider } from '../utils/firebase';
 
 export const createUser = async (userData: any, uid: string) => {
   console.log({ userData });
@@ -18,6 +19,28 @@ export const writeUserToFirebase = async (user: any) => {
     if (!firebaseUser) {
       createUser(userData, user.uid);
     }
+  }
+};
+
+export const signInWithGoogle = () => {
+  return loginWithProvider(googleProvider);
+};
+
+export const loginWithProvider = async (provider: AuthProvider) => {
+  const auth = getAuth();
+  try {
+    const { user } = await signInWithPopup(auth, provider);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const logOut = async () => {
+  const auth = getAuth();
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.log(error);
   }
 };
 

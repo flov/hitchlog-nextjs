@@ -6,7 +6,6 @@ export function displayRoute(
   service: google.maps.DirectionsService,
   display: google.maps.DirectionsRenderer
 ) {
-  console.log(origin.placeId, destination.placeId);
   service
     .route({
       origin,
@@ -17,7 +16,7 @@ export function displayRoute(
       display.setDirections(result);
     })
     .catch((e) => {
-      alert("Could not display directions due to: " + e);
+      alert('Could not display directions due to: ' + e);
     });
 }
 
@@ -30,8 +29,8 @@ export class AutocompleteDirectionsHandler {
 
   constructor(map: google.maps.Map, origin: Location, destination: Location) {
     this.map = map;
-    this.origin = origin
-    this.destination = destination
+    this.origin = origin;
+    this.destination = destination;
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.directionsRenderer.setMap(map);

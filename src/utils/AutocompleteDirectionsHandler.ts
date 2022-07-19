@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { myXOR } from '.';
 
 export class AutocompleteDirectionsHandler {
   map: google.maps.Map;
@@ -8,6 +9,7 @@ export class AutocompleteDirectionsHandler {
   directionsService: google.maps.DirectionsService;
   directionsRenderer: google.maps.DirectionsRenderer;
   setState: Dispatch<SetStateAction<{}>>;
+  location: google.maps.LatLng;
 
   constructor(map: google.maps.Map, setState: Dispatch<SetStateAction<{}>>) {
     this.map = map;
@@ -109,6 +111,8 @@ export class AutocompleteDirectionsHandler {
       } else {
         this.destinationPlaceId = place.place_id;
       }
+      if (!place.geometry?.location) return;
+      this.location = place.geometry.location;
       this.setState((prevState) => ({
         ...prevState,
         [mode]: {
@@ -125,6 +129,16 @@ export class AutocompleteDirectionsHandler {
   }
 
   route() {
+    if (myXOR(this.originPlaceId, this.destinationPlaceId)) {
+      this.map.setCenter(this.location);
+      // set a marker on the map
+      const marker = new google.maps.Marker({
+        position: this.location,
+        map: this.map,
+      });
+    }
+
+
     if (!this.originPlaceId || !this.destinationPlaceId) {
       return;
     }

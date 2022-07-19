@@ -30,19 +30,12 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
     }
   };
 
-  // const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-  // console.log(e);
-  // setState({ ...state, [e.target.name]: e.target.value });
-  // };
-
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { value, name } = e.target;
     setState({ ...state, [name]: value });
   };
-
-  console.log(state);
 
   return (
     <form onSubmit={submitForm}>
