@@ -1,10 +1,4 @@
-import {
-  addDoc,
-  collection,
-  orderBy,
-  query,
-  serverTimestamp,
-} from 'firebase/firestore';
+import { serverTimestamp } from 'firebase/firestore';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
 import { createTrip, Trip } from '../db/trips';
@@ -15,7 +9,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/firebase';
 
 export function NewTripForm({ map }: { map: google.maps.Map }) {
-  const [state, setState] = useState<Trip|{}>({});
+  const [state, setState] = useState<Trip | {}>({});
   const [user] = useAuthState(auth);
 
   useEffect(() => {
@@ -28,17 +22,17 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
     e.preventDefault();
   };
 
-  const handleBlurStart = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleBlurDeparted = (e: ChangeEvent<HTMLInputElement>) => {
     const arrival = document.getElementById('arrival');
     if (!arrival?.getAttribute('value')) {
       arrival?.setAttribute('value', e.target.value);
     }
   };
 
-  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    console.log(e);
-    setState({ ...state, [e.target.name]: e.target.value });
-  };
+  // const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  // console.log(e);
+  // setState({ ...state, [e.target.name]: e.target.value });
+  // };
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -103,8 +97,8 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
         <div className="form-group">
           <input
             onChange={handleInputChange}
-            onBlur={handleBlurStart}
-            name="start"
+            onBlur={handleBlurDeparted}
+            name="departure"
             type="datetime-local"
             className="form-control block
           w-full
@@ -120,8 +114,8 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
           ease-in-out
           m-0
           focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-            id="started"
-            placeholder="Started when?"
+            id="departed"
+            placeholder="Departed when?"
           />
         </div>
 
@@ -148,12 +142,12 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
             placeholder="Arrived when?"
           />
         </div>
-        {(state.arrival && state.start) || state.googleDuration ? (
+        {(state.arrival && state.departure) || state.googleDuration ? (
           <div className="flex justify-between col-span-2">
             <span>
-              {state.start && state.arrival
+              {state.departure && state.arrival
                 ? `Your trip duration: ${calculateTimeBetweenDates(
-                    state.start,
+                    state.departure,
                     state.arrival
                   )}`
                 : ''}

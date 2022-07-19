@@ -82,7 +82,7 @@ export class AutocompleteDirectionsHandler {
     }
 
     return {
-      totalDistance: totalDistance / 1000,
+      totalDistance: totalDistance,
       googleDuration: totalDuration,
     };
   }

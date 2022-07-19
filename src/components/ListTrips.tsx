@@ -1,20 +1,37 @@
-import { Table } from 'flowbite-react';
+import { Query } from 'firebase/firestore';
+import { Pagination, Table } from 'flowbite-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { collectionData } from 'rxfire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
-import { tripsRef } from '../db/trips';
+import { paginatedTripsRef } from '../db/trips';
 import { secondsToTime } from '../utils/secondsToTime';
 
 export const ListTrips = () => {
   const [trips, setTrips] = useState<DocumentData[]>();
-  const trips$ = collectionData(tripsRef, { idField: 'id' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginatedQuery, setPaginatedQuery] = useState<Query>(
+    paginatedTripsRef()
+  );
+  const trips$ = collectionData(paginatedQuery, { idField: 'id' });
 
   useEffect(() => {
     trips$.subscribe((trips) => {
       setTrips(trips);
     });
   }, [trips$]);
+
+  const onPageChange = (page: number) => {
+    if (!trips) return;
+    if (page > currentPage) {
+      console.log('next page', currentPage);
+      setCurrentPage(page);
+      // setPaginatedQuery(nextTripsRef(trips[trips.length - 1]));
+    } else {
+      setCurrentPage(page);
+      console.log('previous page', currentPage);
+    }
+  };
 
   return (
     <>
@@ -32,16 +49,17 @@ export const ListTrips = () => {
         </Table.Head>
         <Table.Body className="divide-y">
           {trips?.map((trip) => (
-            <Table.Row key={trip.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+            <Table.Row
+              key={trip.id}
+              className="bg-white dark:border-gray-700 dark:bg-gray-800"
+            >
               <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              {trip.origin.city}
+                {trip.origin.city}
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {trip.destination.city}
               </Table.Cell>
-              <Table.Cell>
-                {secondsToTime(trip.googleDuration)}
-              </Table.Cell>
+              <Table.Cell>{secondsToTime(trip.googleDuration)}</Table.Cell>
               <Table.Cell>{trip.origin.country}</Table.Cell>
               <Table.Cell>
                 <Link
@@ -55,6 +73,15 @@ export const ListTrips = () => {
           ))}
         </Table.Body>
       </Table>
+
+      <div className="my-4 text-center">
+        <Pagination
+          currentPage={1}
+          layout="navigation"
+          totalPages={100}
+          onPageChange={onPageChange}
+        />
+      </div>
     </>
   );
 };

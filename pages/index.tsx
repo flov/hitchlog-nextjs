@@ -38,7 +38,7 @@ const Home: NextPage = ({
     loader.load().then((google) => {
       map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
         mapTypeControl: false,
-        zoom: 11,
+        zoom: 5,
         center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
       });
       setMap(map);
@@ -58,7 +58,7 @@ const Home: NextPage = ({
 
       <div className="w-full bg-gray-200 h-96" id="map"></div>
       <main>
-        <div className="container max-w-xl mx-auto">
+        <div className="container max-w-screen-xl p-4 mx-auto">
           <div className="my-4">
             <h1 className={styles.title}>
               Welcome to <Link href="/">Hitchlog</Link>
