@@ -30,17 +30,16 @@ export type GENDERS = 'male' | 'female' | 'mixed';
 
 export const tripsRef = query(
   collection(db, 'trips'),
-  orderBy('createdAt', 'desc')
+  orderBy('createdAt', 'desc'),
+  limit(25)
 );
 
-export const paginatedTripsRef = () => {
-  return query(
-    collection(db, 'trips'),
-    where('id', '>', 600),
-    orderBy('id'),
-    limit(25)
-  );
-};
+export const paginatedTripsRef = query(
+  collection(db, 'trips'),
+  where('id', '>', 600),
+  orderBy('id'),
+  limit(25)
+);
 
 export const nextTripsRef = (lastDoc: any) => {
   return query(
@@ -116,9 +115,8 @@ export const getTripsForExperience = async (experience: string) => {
 export const getTrips = async () => {
   const q = query(
     collection(db, 'trips'),
-    where('id', '>', 500),
-    orderBy('id', 'asc'),
-    limit(25)
+    orderBy('createdAt', 'desc'),
+    limit(50)
   );
   const querySnapshot = await getDocs(q);
   const trips: Trip[] = [];

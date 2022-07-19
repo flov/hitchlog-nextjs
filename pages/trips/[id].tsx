@@ -1,5 +1,4 @@
 import { Loader } from '@googlemaps/js-api-loader';
-import { getAuth } from 'firebase/auth';
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -36,7 +35,6 @@ const ShowTrip: NextPage<{
   user,
   rides,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.log({rides, trip, user});
   useEffect(() => {
     const loader = new Loader({
       apiKey: googleMapsKey,
@@ -72,7 +70,11 @@ const ShowTrip: NextPage<{
     <div>
       <div className="w-full bg-gray-200 h-96" id="map"></div>
       <div className="max-w-4xl py-8 mx-auto">
-        <HitchhikingTrip rides={rides} trip={trip} user={user}></HitchhikingTrip>
+        <HitchhikingTrip
+          rides={rides}
+          trip={trip}
+          user={user}
+        ></HitchhikingTrip>
       </div>
     </div>
   );

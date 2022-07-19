@@ -6,6 +6,7 @@ import { HitchhikingTrip } from '../src/components/HitchhikingTrip';
 import { Ride } from '../src/db/trips';
 import { getRidesForTrip, getTrips, Trip } from '../src/db/trips';
 import { getUser, User } from '../src/db/users';
+import { displayRoute } from '../src/utils/DirectionsHandler';
 import { getLoader } from '../src/utils/firebase';
 import { initPopup } from '../src/utils/Popup';
 
@@ -30,6 +31,10 @@ const Map: NextPage<{
   const [user, setUser] = useState<User>();
   const [trip, setTrip] = useState<Trip>();
   const [rides, setRides] = useState<Ride[]>();
+  const [directionsService, setDirectionsService] =
+    useState<google.maps.DirectionsService>();
+  const [directionsRenderer, setDirectionsRenderer] =
+    useState<google.maps.DirectionsRenderer>();
 
   useEffect(() => {
     if (trip) {
@@ -45,15 +50,21 @@ const Map: NextPage<{
 
   useEffect(() => {
     const loader = getLoader(googleMapsKey);
-    let map: google.maps.Map;
     loader.load().then(() => {
-      map = new google.maps.Map(googlemap.current as HTMLDivElement, {
+      const map = new google.maps.Map(googlemap.current as HTMLDivElement, {
         center: {
           lat: trips[2]?.origin?.lat as number,
           lng: trips[2]?.origin?.lng as number,
         },
         zoom: 3,
       });
+      setDirectionsService(new google.maps.DirectionsService());
+      setDirectionsRenderer(
+        new google.maps.DirectionsRenderer({
+          map,
+        })
+      );
+
       const Popup = initPopup();
       if (typeof window === 'object') {
         trips.forEach((t, index) => {
@@ -69,8 +80,35 @@ const Map: NextPage<{
     });
   }, [googleMapsKey, trips]);
 
+  const handleClickOnTripBubble = (trip: Trip) => {
+    setTrip(trip);
+    if (
+      trip.origin &&
+      trip.destination &&
+      directionsService &&
+      directionsRenderer
+    ) {
+      displayRoute(
+        trip.origin,
+        trip.destination,
+        directionsService,
+        directionsRenderer
+      );
+    }
+  };
+
   return (
     <>
+      {/* <div className="w-full h-20">
+        <div className="flex items-center justify-between">
+          <div className="grid ">
+            <button>
+              <FaCarSide size="52" color="gray" />
+              <p>Sort by Car</p>
+            </button>
+          </div>
+        </div>
+      </div> */}
       <div className="h-4/6" ref={googlemap} id="map"></div>
       {trips.map((trip, index) => (
         <div
@@ -79,10 +117,10 @@ const Map: NextPage<{
             overlayRefs.current.splice(index, 1, element as HTMLDivElement)
           }
         >
-          <p onClick={() => setTrip(trip)}>
+          <button onClick={() => handleClickOnTripBubble(trip)}>
             {trip.origin?.city} <BsArrowRight className="inline" />{' '}
             {trip.destination?.city}
-          </p>
+          </button>
         </div>
       ))}
       <div className="max-w-4xl py-8 mx-auto">

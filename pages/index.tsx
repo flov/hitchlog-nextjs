@@ -9,31 +9,50 @@ import styles from '../styles/Home.module.css';
 import { useEffect, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { NewTripForm } from '../src/components/NewTripForm';
-import { CurrentUser } from '../src/components/CurrentUser';
 import { getAuth } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ListTrips } from '../src/components/ListTrips';
+import { Trip } from '../src/db/trips';
+import {
+  collection,
+  CollectionReference,
+  getDocs,
+  limit,
+  orderBy,
+} from 'firebase/firestore';
+import { db, getLoader } from '../src/utils/firebase';
+import { query } from 'firebase/database';
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  const trips: Trip[] = [];
+  const q = query(
+    collection(db, 'trips') as CollectionReference<Trip[]>,
+    orderBy('createdAt', 'desc'),
+    limit(25)
+  );
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((trip) => {
+    trips.push(
+      JSON.parse(JSON.stringify({ ...trip.data(), id: trip.id })) as Trip
+    );
+  });
+
   return {
     props: {
       googleMapsKey: process.env.GOOGLE_MAPS_KEY,
+      trips,
     },
   };
 };
 
 const Home: NextPage = ({
   googleMapsKey,
+  trips,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [map, setMap] = useState<google.maps.Map>();
 
   useEffect(() => {
-    const loader = new Loader({
-      apiKey: googleMapsKey,
-      version: 'weekly',
-      libraries: ['places'],
-    });
-
+    const loader = getLoader(googleMapsKey);
     let map;
     loader.load().then((google) => {
       map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
@@ -65,9 +84,7 @@ const Home: NextPage = ({
             </h1>
           </div>
 
-          <CurrentUser />
-          {map && user ? <NewTripForm map={map} /> : <></>}
-          <ListTrips />
+          <ListTrips trips={trips} />
         </div>
       </main>
     </>

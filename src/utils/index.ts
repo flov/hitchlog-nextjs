@@ -1,7 +1,6 @@
 import { EXPERIENCES, Trip } from '../db/trips';
-import { FaCarSide } from 'react-icons/fa';
-import { BsTypeH1 } from 'react-icons/bs';
 import { Timestamp } from 'firebase/firestore';
+import { IpLocation } from '../types/IpLocation';
 
 export const experienceToColor = (experience: EXPERIENCES) => {
   switch (experience) {
@@ -30,3 +29,22 @@ export const timestampToDate = ({
   seconds: number;
   nanoseconds: number;
 }) => new Timestamp(seconds, nanoseconds).toDate();
+
+export const fetchIpAddressOfClient = async () => {
+  const response = await fetch('https://api.ipify.org?format=json');
+  const json = await response.json();
+  return json.ip;
+};
+
+export const fetchLocationFromClient = async () => {
+  const ipAddress = await fetchIpAddressOfClient();
+  const response = await fetch(
+    `https://api.ipgeolocation.io/ipgeo?apiKey=632c15294cec4b7480bbebad1136a9a9&ip=${ipAddress}`
+  );
+  const data = await response.json();
+  return data as IpLocation;
+};
+
+export const myXOR = (a: any, b: any): boolean => {
+  return (a || b) && !(a && b);
+};

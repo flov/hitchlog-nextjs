@@ -24,8 +24,8 @@ export const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
 export const database = getDatabase(firebaseApp);
 export const auth = getAuth();
-export const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
+export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 export const getLoader = (googleMapsKey: string) =>
   new Loader({

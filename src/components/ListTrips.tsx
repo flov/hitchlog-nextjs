@@ -1,25 +1,15 @@
 import { Query } from 'firebase/firestore';
 import { Pagination, Table } from 'flowbite-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { collectionData } from 'rxfire/firestore';
 import { DocumentData } from 'rxfire/firestore/interfaces';
-import { paginatedTripsRef } from '../db/trips';
+import { paginatedTripsRef, Trip } from '../db/trips';
 import { secondsToTime } from '../utils/secondsToTime';
 
-export const ListTrips = () => {
-  const [trips, setTrips] = useState<DocumentData[]>();
+export const ListTrips: FC<{trips: Trip[]}> = ({trips}) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [paginatedQuery, setPaginatedQuery] = useState<Query>(
-    paginatedTripsRef()
-  );
-  const trips$ = collectionData(paginatedQuery, { idField: 'id' });
-
-  useEffect(() => {
-    trips$.subscribe((trips) => {
-      setTrips(trips);
-    });
-  }, [trips$]);
+  const trips$ = collectionData(paginatedTripsRef, { idField: 'id' });
 
   const onPageChange = (page: number) => {
     if (!trips) return;
@@ -54,13 +44,13 @@ export const ListTrips = () => {
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
               <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {trip.origin.city}
+                {trip.origin?.city}
               </Table.Cell>
               <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                {trip.destination.city}
+                {trip.destination?.city}
               </Table.Cell>
-              <Table.Cell>{secondsToTime(trip.googleDuration)}</Table.Cell>
-              <Table.Cell>{trip.origin.country}</Table.Cell>
+              <Table.Cell>{trip.googleDuration && secondsToTime(trip.googleDuration)}</Table.Cell>
+              <Table.Cell>{trip.origin?.country}</Table.Cell>
               <Table.Cell>
                 <Link
                   href={`/trips/${trip.id}`}

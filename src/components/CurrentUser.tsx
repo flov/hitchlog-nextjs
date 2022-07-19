@@ -1,25 +1,9 @@
-import { getAuth, signInWithPopup, AuthProvider, signOut } from 'firebase/auth';
+import { getAuth, signInWithPopup, AuthProvider } from 'firebase/auth';
+import { Button } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { createUser, getUser, writeUserToFirebase } from '../db/users';
-import { provider } from '../utils/firebase';
-
-const loginWithProvider = async (provider: AuthProvider) => {
-  const auth = getAuth();
-  try {
-    const { user } = await signInWithPopup(auth, provider);
-  } catch (e) {
-    console.log(e);
-  }
-};
-const logOut = async () => {
-  const auth = getAuth();
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.log(error);
-  }
-};
+import { loginWithProvider, logOut, writeUserToFirebase } from '../db/users';
+import { googleProvider } from '../utils/firebase';
 
 export const CurrentUser = () => {
   const auth = getAuth();
@@ -39,7 +23,9 @@ export const CurrentUser = () => {
   if (error) {
     return (
       <div>
-        <p>Error: <span>{error.message}</span></p>
+        <p>
+          Error: <span>{error.message}</span>
+        </p>
       </div>
     );
   }
@@ -47,21 +33,13 @@ export const CurrentUser = () => {
     return (
       <div>
         <p>Current User: {user.email}</p>
-        <button
-          className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-          onClick={logOut}
-        >
-          Log out
-        </button>
+        <Button onClick={logOut}>Log out</Button>
       </div>
     );
   }
   return (
-    <button
-      className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-      onClick={() => loginWithProvider(provider)}
-    >
+    <Button onClick={() => loginWithProvider(googleProvider)}>
       Sign in with Google
-    </button>
+    </Button>
   );
 };

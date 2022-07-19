@@ -44,7 +44,6 @@ const ShowTrip: NextPage = ({
   googleMapsKey,
   trip,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [isLoading, setIsLoading] = useState<boolean>();
   const [user] = useAuthState(auth);
   const confetti = require('canvas-confetti');
 
@@ -61,20 +60,17 @@ const ShowTrip: NextPage = ({
         zoom: 11,
         center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
       });
-      if (trip) {
-        const directionsService = new google.maps.DirectionsService();
-        const directionsRenderer = new google.maps.DirectionsRenderer({
-          draggable: true,
-          map,
-          panel: document.getElementById('panel') as HTMLElement,
-        });
-        displayRoute(
-          trip.origin,
-          trip.destination,
-          directionsService,
-          directionsRenderer
-        );
-      }
+      const directionsService = new google.maps.DirectionsService();
+      const directionsRenderer = new google.maps.DirectionsRenderer({
+        draggable: true,
+        map,
+      });
+      displayRoute(
+        trip.origin,
+        trip.destination,
+        directionsService,
+        directionsRenderer
+      );
     });
   }, [googleMapsKey, trip]);
 
@@ -92,40 +88,32 @@ const ShowTrip: NextPage = ({
 
       <div className="w-full bg-gray-200 h-96" id="map"></div>
       <div className="max-w-4xl mx-auto">
-        {isLoading || !trip ? (
-          <h1 className="my-4 text-2xl font-medium">Loading...</h1>
-        ) : (
-          <>
-            <h1 className="my-4 text-2xl font-medium">
-              Edit Trip from {trip?.origin?.city} to {trip?.destination?.city}
-            </h1>
-            <Accordion alwaysOpen={true}>
-              {new Array(Number(trip?.rides.length))
-                .fill(null)
-                .map((x, index) => (
-                  <Accordion.Panel key={`ride${index}`}>
-                    <Accordion.Title>Ride {index + 1}</Accordion.Title>
-                    <Accordion.Content>
-                      <Formik
-                        component={RideForm}
-                        initialValues={{story: '', title: '', experience: ''}}
-                        onSubmit={async (values) => {
-                          await addRideData(trip, values as Ride, index);
-                          window.confetti({
-                            angle: randomInRange(55, 125),
-                            spread: randomInRange(50, 70),
-                            particleCount: randomInRange(50, 100),
-                            origin: { y: 0.6 },
-                          });
-                          console.log(values);
-                        }}
-                      />
-                    </Accordion.Content>
-                  </Accordion.Panel>
-                ))}
-            </Accordion>
-          </>
-        )}
+        <h1 className="my-4 text-2xl font-medium">
+          Edit Trip from {trip?.origin?.city} to {trip?.destination?.city}
+        </h1>
+        <Accordion alwaysOpen={true}>
+          {new Array(Number(trip?.rides.length)).fill(null).map((x, index) => (
+            <Accordion.Panel key={`ride${index}`}>
+              <Accordion.Title>Ride {index + 1}</Accordion.Title>
+              <Accordion.Content>
+                <Formik
+                  component={RideForm}
+                  initialValues={{ story: '', title: '', experience: '' }}
+                  onSubmit={async (values) => {
+                    await addRideData(trip, values as Ride, index);
+                    window.confetti({
+                      angle: randomInRange(55, 125),
+                      spread: randomInRange(50, 70),
+                      particleCount: randomInRange(50, 100),
+                      origin: { y: 0.6 },
+                    });
+                    console.log(values);
+                  }}
+                />
+              </Accordion.Content>
+            </Accordion.Panel>
+          ))}
+        </Accordion>
       </div>
     </>
   );
