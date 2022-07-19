@@ -17,7 +17,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { addRideData, getTrip } from '../../../src/db/trips';
+import { addRideData, getTrip, Ride } from '../../../src/db/trips';
 import { displayRoute } from '../../../src/utils/DirectionsHandler';
 import { auth } from '../../../src/utils/firebase';
 
@@ -110,7 +110,7 @@ const ShowTrip: NextPage = ({
                         component={RideForm}
                         initialValues={{story: '', title: '', experience: ''}}
                         onSubmit={async (values) => {
-                          await addRideData(trip, values, index);
+                          await addRideData(trip, values as Ride, index);
                           window.confetti({
                             angle: randomInRange(55, 125),
                             spread: randomInRange(50, 70),

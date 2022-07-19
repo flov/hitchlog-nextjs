@@ -12,7 +12,6 @@ import {
   orderBy,
   query,
   startAfter,
-  updateDoc,
   where,
 } from 'firebase/firestore';
 import { collectionData } from 'rxfire/firestore';
@@ -35,7 +34,12 @@ export const tripsRef = query(
 );
 
 export const paginatedTripsRef = () => {
-  return query(collection(db, 'trips'), orderBy('createdAt'), limit(25));
+  return query(
+    collection(db, 'trips'),
+    where('id', '>', 600),
+    orderBy('id'),
+    limit(25)
+  );
 };
 
 export const nextTripsRef = (lastDoc: any) => {
@@ -71,10 +75,11 @@ export const addRideData = async (
   index: number
 ) => {
   const { rides } = trip;
-  rides[index] = rideData;
-  return await updateDoc(doc(db, 'trips', trip.id), {
-    rides: rides,
-  });
+  // Todo: update this to reflect the new data structure
+  // rides[index] = rideData;
+  // return await updateDoc(doc(db, 'trips', trip.id), {
+  //   rides: rides,
+  // });
 };
 
 export const getTrip = async (id: string) => {
@@ -101,11 +106,11 @@ export const getTripsForExperience = async (experience: string) => {
     where('experience', '==', experience)
   );
   const querySnapshot = await getDocs(ridesRef);
-  const rides: Ride[] = [];
+  const trip_ids: string[] = [];
   querySnapshot.forEach((doc) => {
-    rides.push({ ...doc.data(), id: doc.id });
+    trip_ids.push(...doc.data()['trip_id']);
   });
-  return rides;
+  return trip_ids;
 };
 
 export const getTrips = async () => {
@@ -155,14 +160,14 @@ export type Ride = {
 export type Timestamp = { seconds: number; nanoseconds: number };
 
 export type Trip = {
-  arrival: Timestamp;
-  createdAt: Timestamp;
-  destination: Location;
-  googleDuration: number;
-  id: string;
-  origin: Location;
-  rides: Ride[];
-  departure: Timestamp;
-  totalDistance: number;
-  uid: string;
+  arrival?: Timestamp;
+  createdAt?: Timestamp;
+  destination?: Location;
+  googleDuration?: number;
+  id?: string;
+  origin?: Location;
+  rides?: Ride[];
+  departure?: Timestamp;
+  totalDistance?: number;
+  uid?: string;
 };

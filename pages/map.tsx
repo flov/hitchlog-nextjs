@@ -11,7 +11,6 @@ import { initPopup } from '../src/utils/Popup';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const trips = await getTrips();
-  const rides = await getRidesForTrip(trips[0].id);
 
   return {
     props: {
@@ -35,7 +34,7 @@ const Map: NextPage<{
   useEffect(() => {
     if (trip) {
       forkJoin([
-        getRidesForTrip(trip.id),
+        getRidesForTrip(trip.id as string),
         getUser(trip?.uid as string),
       ]).subscribe(([rides, user]) => {
         setRides(rides as Ride[]);
@@ -49,17 +48,22 @@ const Map: NextPage<{
     let map: google.maps.Map;
     loader.load().then(() => {
       map = new google.maps.Map(googlemap.current as HTMLDivElement, {
-        center: { lat: trips[2].origin.lat, lng: trips[2].origin.lng },
+        center: {
+          lat: trips[2]?.origin?.lat as number,
+          lng: trips[2]?.origin?.lng as number,
+        },
         zoom: 3,
       });
       const Popup = initPopup();
       if (typeof window === 'object') {
         trips.forEach((t, index) => {
-          const popup = new Popup(
-            new google.maps.LatLng(t.origin.lat, t.origin.lng),
-            overlayRefs.current[index] as HTMLDivElement
-          );
-          popup.setMap(map);
+          if (t.origin) {
+            const popup = new Popup(
+              new google.maps.LatLng(t?.origin?.lat, t?.origin?.lng),
+              overlayRefs.current[index] as HTMLDivElement
+            );
+            popup.setMap(map);
+          }
         });
       }
     });
@@ -76,8 +80,8 @@ const Map: NextPage<{
           }
         >
           <p onClick={() => setTrip(trip)}>
-            {trip.origin.city} <BsArrowRight className="inline" />{' '}
-            {trip.destination.city}
+            {trip.origin?.city} <BsArrowRight className="inline" />{' '}
+            {trip.destination?.city}
           </p>
         </div>
       ))}

@@ -6,29 +6,37 @@ import {
   NextPage,
 } from 'next';
 import { useEffect } from 'react';
-import { getTrip, Ride, Trip } from '../../src/db/trips';
-import { getUser } from '../../src/db/users';
+import { getRidesForTrip, getTrip, Ride, Trip } from '../../src/db/trips';
+import { getUser, User } from '../../src/db/users';
 import { displayRoute } from '../../src/utils/DirectionsHandler';
 import { HitchhikingTrip } from '../../src/components/HitchhikingTrip';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const trip = await getTrip(params?.id as string);
   const user = await getUser(trip?.uid as string);
+  const rides = await getRidesForTrip(trip?.id as string);
   return {
     props: {
       googleMapsKey: process.env.GOOGLE_MAPS_KEY,
-      t: JSON.parse(JSON.stringify(trip)),
+      trip: JSON.parse(JSON.stringify(trip)),
       user: JSON.parse(JSON.stringify(user)),
+      rides: JSON.parse(JSON.stringify(rides)),
     },
   };
 };
 
-const ShowTrip: NextPage = ({
+const ShowTrip: NextPage<{
+  googleMapsKey: string;
+  trip: Trip;
+  user: User;
+  rides: Ride[];
+}> = ({
   googleMapsKey,
-  t,
+  trip,
   user,
+  rides,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const trip = t as Trip;
+  console.log({rides, trip, user});
   useEffect(() => {
     const loader = new Loader({
       apiKey: googleMapsKey,
@@ -64,7 +72,7 @@ const ShowTrip: NextPage = ({
     <div>
       <div className="w-full bg-gray-200 h-96" id="map"></div>
       <div className="max-w-4xl py-8 mx-auto">
-        <HitchhikingTrip trip={trip} user={user}></HitchhikingTrip>
+        <HitchhikingTrip rides={rides} trip={trip} user={user}></HitchhikingTrip>
       </div>
     </div>
   );

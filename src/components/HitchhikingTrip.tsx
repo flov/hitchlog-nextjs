@@ -1,7 +1,7 @@
 import { Badge, Card, Timeline } from 'flowbite-react';
 import moment from 'moment';
 import Image from 'next/image';
-import { EXPERIENCES, Trip } from '../db/trips';
+import { EXPERIENCES, Timestamp, Trip } from '../db/trips';
 import { BsArrowRight } from 'react-icons/bs';
 import { experienceToColor, timestampToDate } from '../utils';
 import { vehicleToIcon } from '../utils/viewHelpers';
@@ -18,9 +18,9 @@ export function HitchhikingTrip({
   trip: Trip;
   rides: Ride[];
 }) {
-  const createdAt = timestampToDate(trip.createdAt);
-  const departure = timestampToDate(trip.departure);
-  const arrival = timestampToDate(trip.arrival);
+  const createdAt = timestampToDate(trip.createdAt as Timestamp);
+  const departure = timestampToDate(trip.departure as Timestamp);
+  const arrival = timestampToDate(trip.arrival as Timestamp);
   console.log(trip);
 
   return (
@@ -46,8 +46,8 @@ export function HitchhikingTrip({
         </div>
 
         <h5 className="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Trip from {trip.origin.city} <BsArrowRight className="inline" />{' '}
-          {trip.destination.city} hitchhiked {moment(departure).fromNow()}
+          Trip from {trip.origin?.city} <BsArrowRight className="inline" />{' '}
+          {trip.destination?.city} hitchhiked {moment(departure).fromNow()}
         </h5>
         <Timeline>
           {rides.map((ride, index) => {
