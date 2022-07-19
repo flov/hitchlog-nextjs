@@ -7,7 +7,7 @@ export const createUser = async (userData: any, uid: string) => {
 };
 
 export const getUser = async (id: string) => {
-  const userSnapshot = await getDoc(doc(db, 'users', id));
+  const userSnapshot = await getDoc(doc(db, 'users', String(id)));
   return userSnapshot.data();
 };
 
@@ -19,4 +19,27 @@ export const writeUserToFirebase = async (user: any) => {
       createUser(userData, user.uid);
     }
   }
+};
+
+export type User = {
+  displayName: string;
+  providerId?: string;
+  email: string;
+  createdAt?: string;
+  gender?: string;
+  uid?: string;
+  dateOfBirth?: string;
+  name?: string;
+  beWelcomeUser?: string;
+  languages?: string;
+  photoURL?: string;
+  location?: Location;
+};
+
+export type Location = {
+  lng: number;
+  lat: number;
+  country: string;
+  city: string;
+  countryCode: string;
 };
