@@ -7,9 +7,10 @@ import { calculateTimeBetweenDates } from '../utils/calculateTimeBetweenDates';
 import { Button } from 'flowbite-react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/firebase';
+import { timestampToDate } from '../utils';
 
 export function NewTripForm({ map }: { map: google.maps.Map }) {
-  const [state, setState] = useState<Trip | {}>({});
+  const [state, setState] = useState<Trip>({});
   const [user] = useAuthState(auth);
 
   useEffect(() => {
@@ -142,13 +143,13 @@ export function NewTripForm({ map }: { map: google.maps.Map }) {
             placeholder="Arrived when?"
           />
         </div>
-        {(state.arrival && state.departure) || state.googleDuration ? (
+        {(state?.arrival && state?.departure) || state.googleDuration ? (
           <div className="flex justify-between col-span-2">
             <span>
               {state.departure && state.arrival
                 ? `Your trip duration: ${calculateTimeBetweenDates(
-                    state.departure,
-                    state.arrival
+                    timestampToDate(state.departure),
+                    timestampToDate(state.arrival)
                   )}`
                 : ''}
             </span>

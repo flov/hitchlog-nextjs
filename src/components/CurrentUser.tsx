@@ -39,7 +39,7 @@ export const CurrentUser = () => {
   if (error) {
     return (
       <div>
-        <p>Error: {error}</p>
+        <p>Error: <span>{error.message}</span></p>
       </div>
     );
   }
