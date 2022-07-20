@@ -1,4 +1,4 @@
-import { Location } from '../db/trips';
+import { Location } from '../types';
 
 export function displayRoute(
   origin: Location,

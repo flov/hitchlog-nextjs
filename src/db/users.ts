@@ -1,5 +1,5 @@
 import { AuthProvider, getAuth, signInWithPopup, signOut } from 'firebase/auth';
-import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db, googleProvider } from '../utils/firebase';
 
 export const createUser = async (userData: any, uid: string) => {
@@ -42,27 +42,4 @@ export const logOut = async () => {
   } catch (error) {
     console.log(error);
   }
-};
-
-export type User = {
-  displayName: string;
-  providerId?: string;
-  email: string;
-  createdAt?: string;
-  gender?: string;
-  uid?: string;
-  dateOfBirth?: string;
-  name?: string;
-  beWelcomeUser?: string;
-  languages?: string;
-  photoURL?: string;
-  location?: Location;
-};
-
-export type Location = {
-  lng: number;
-  lat: number;
-  country: string;
-  city: string;
-  countryCode: string;
 };

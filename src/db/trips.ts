@@ -16,17 +16,9 @@ import {
 } from 'firebase/firestore';
 import { collectionData } from 'rxfire/firestore';
 import { startWith } from 'rxjs';
+import { Ride, Trip } from '../types';
 import { db } from '../utils/firebase';
 
-export type EXPERIENCES = 'very good' | 'good' | 'neutral' | 'bad' | 'very bad';
-export type VEHICLES =
-  | 'car'
-  | 'bus'
-  | 'truck'
-  | 'motorcycle'
-  | 'plane'
-  | 'boat';
-export type GENDERS = 'male' | 'female' | 'mixed';
 
 export const tripsRef = query(
   collection(db, 'trips'),
@@ -132,40 +124,4 @@ export const deleteTrip = async (id: string) => {
   } catch (err) {
     console.log(err);
   }
-};
-
-export type Location = {
-  lat: number;
-  lng: number;
-  city: string;
-  country: string;
-  countryCode: string;
-  placeId: string;
-};
-
-export type Ride = {
-  id?: string;
-  title?: string;
-  story?: string;
-  experience?: EXPERIENCES;
-  tagList?: string[];
-  vehicle?: VEHICLES;
-  waitingTime?: number;
-  youtube?: string;
-  gender?: GENDERS;
-};
-
-export type Timestamp = { seconds: number; nanoseconds: number };
-
-export type Trip = {
-  arrival?: Timestamp;
-  createdAt?: Timestamp;
-  destination?: Location;
-  googleDuration?: number;
-  id?: string;
-  origin?: Location;
-  rides?: Ride[];
-  departure?: Timestamp;
-  totalDistance?: number;
-  uid?: string;
 };

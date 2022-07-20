@@ -7,17 +7,17 @@ import {
   Textarea,
   TextInput,
 } from 'flowbite-react';
-import { Field, Formik, FormikValues } from 'formik';
+import { Formik, FormikValues } from 'formik';
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { addRideData, getTrip, Ride } from '../../../src/db/trips';
+import { addRideData, getTrip } from '../../../src/db/trips';
+import { Ride } from '../../../src/types';
 import { displayRoute } from '../../../src/utils/DirectionsHandler';
 import { auth } from '../../../src/utils/firebase';
 
@@ -45,7 +45,6 @@ const ShowTrip: NextPage = ({
   trip,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [user] = useAuthState(auth);
-  const confetti = require('canvas-confetti');
 
   useEffect(() => {
     const loader = new Loader({
@@ -73,12 +72,6 @@ const ShowTrip: NextPage = ({
       );
     });
   }, [googleMapsKey, trip]);
-
-  interface InitialValues {
-    story: string;
-    title: string;
-    experience: string;
-  }
 
   return (
     <>

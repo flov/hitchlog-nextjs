@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { BsArrowRight } from 'react-icons/bs';
 import { forkJoin } from 'rxjs';
 import { HitchhikingTrip } from '../src/components/HitchhikingTrip';
-import { Ride } from '../src/db/trips';
-import { getRidesForTrip, getTrips, Trip } from '../src/db/trips';
-import { getUser, User } from '../src/db/users';
+import { getRidesForTrip, getTrips } from '../src/db/trips';
+import { getUser } from '../src/db/users';
+import { Ride } from '../src/types/Ride';
+import { Trip } from '../src/types/Trip';
+import { User } from '../src/types/User';
 import { displayRoute } from '../src/utils/DirectionsHandler';
 import { getLoader } from '../src/utils/firebase';
 import { initPopup } from '../src/utils/Popup';
@@ -53,8 +55,8 @@ const Map: NextPage<{
     loader.load().then(() => {
       const map = new google.maps.Map(googlemap.current as HTMLDivElement, {
         center: {
-          lat: trips[2]?.origin?.lat as number,
-          lng: trips[2]?.origin?.lng as number,
+          lat: trips[0]?.origin?.lat as number,
+          lng: trips[0]?.origin?.lng as number,
         },
         zoom: 3,
       });
@@ -68,7 +70,7 @@ const Map: NextPage<{
       const Popup = initPopup();
       if (typeof window === 'object') {
         trips.forEach((t, index) => {
-          if (t.origin) {
+          if (t.origin?.lat && t.origin?.lng) {
             const popup = new Popup(
               new google.maps.LatLng(t?.origin?.lat, t?.origin?.lng),
               overlayRefs.current[index] as HTMLDivElement

@@ -9,13 +9,14 @@ export class AutocompleteDirectionsHandler {
   directionsService: google.maps.DirectionsService;
   directionsRenderer: google.maps.DirectionsRenderer;
   setState: Dispatch<SetStateAction<{}>>;
-  location: google.maps.LatLng;
+  location: google.maps.LatLng | null;
 
   constructor(map: google.maps.Map, setState: Dispatch<SetStateAction<{}>>) {
     this.map = map;
     this.setState = setState;
     this.originPlaceId = '';
     this.destinationPlaceId = '';
+    this.location = null;
     this.travelMode = google.maps.TravelMode.DRIVING;
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
@@ -130,6 +131,7 @@ export class AutocompleteDirectionsHandler {
 
   route() {
     if (myXOR(this.originPlaceId, this.destinationPlaceId)) {
+      if (!this.location) return
       this.map.setCenter(this.location);
       // set a marker on the map
       const marker = new google.maps.Marker({

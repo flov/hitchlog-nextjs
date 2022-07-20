@@ -1,13 +1,11 @@
 import { Badge, Card, Timeline } from 'flowbite-react';
 import moment from 'moment';
 import Image from 'next/image';
-import { EXPERIENCES, Timestamp, Trip } from '../db/trips';
 import { BsArrowRight } from 'react-icons/bs';
 import { experienceToColor, timestampToDate } from '../utils';
 import { vehicleToIcon } from '../utils/viewHelpers';
-import { User } from '../db/users';
 import ReactMarkdown from 'react-markdown';
-import { Ride } from '../db/trips';
+import { User, EXPERIENCES, Ride, Timestamp, Trip } from '../types';
 
 export function HitchhikingTrip({
   user,
@@ -21,7 +19,6 @@ export function HitchhikingTrip({
   const createdAt = timestampToDate(trip.createdAt as Timestamp);
   const departure = timestampToDate(trip.departure as Timestamp);
   const arrival = timestampToDate(trip.arrival as Timestamp);
-  console.log(trip);
 
   return (
     <div className="shadow-lg">

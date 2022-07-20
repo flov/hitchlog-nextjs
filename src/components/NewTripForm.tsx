@@ -1,13 +1,14 @@
 import { serverTimestamp } from 'firebase/firestore';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
-import { createTrip, Trip } from '../db/trips';
+import { createTrip } from '../db/trips';
 import { secondsToTime } from '../utils/secondsToTime';
 import { calculateTimeBetweenDates } from '../utils/calculateTimeBetweenDates';
 import { Button } from 'flowbite-react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/firebase';
 import { timestampToDate } from '../utils';
+import { Trip } from '../types';
 
 export function NewTripForm({ map }: { map: google.maps.Map }) {
   const [state, setState] = useState<Trip>({});

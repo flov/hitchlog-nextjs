@@ -5,10 +5,11 @@ import {
   NextPage,
 } from 'next';
 import { useEffect } from 'react';
-import { getRidesForTrip, getTrip, Ride, Trip } from '../../src/db/trips';
-import { getUser, User } from '../../src/db/users';
+import { getRidesForTrip, getTrip} from '../../src/db/trips';
+import { getUser } from '../../src/db/users';
 import { displayRoute } from '../../src/utils/DirectionsHandler';
 import { HitchhikingTrip } from '../../src/components/HitchhikingTrip';
+import { Trip, User, Ride } from '../../src/types';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const trip = await getTrip(params?.id as string);
