@@ -25,7 +25,7 @@ export function HitchhikingTrip({
       <Card>
         <div className="flex flex-col items-center text-center ">
           <Image
-            className="w-24 h-24 "
+            className="w-24 h-24 rounded-full"
             width={96}
             height={96}
             src={
