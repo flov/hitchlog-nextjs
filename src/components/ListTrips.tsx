@@ -24,8 +24,6 @@ export const ListTrips: FC<{ trips: Trip[] }> = ({ trips }) => {
 
   return (
     <>
-      <h1 className="my-3 text-2xl">Trips</h1>
-
       <Table>
         <Table.Head>
           <Table.HeadCell>From</Table.HeadCell>

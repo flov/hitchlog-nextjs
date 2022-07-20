@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
 import { myXOR } from '.';
 
 export class AutocompleteDirectionsHandler {
@@ -8,12 +7,18 @@ export class AutocompleteDirectionsHandler {
   travelMode: google.maps.TravelMode;
   directionsService: google.maps.DirectionsService;
   directionsRenderer: google.maps.DirectionsRenderer;
-  setState: Dispatch<SetStateAction<{}>>;
   location: google.maps.LatLng | null;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
+  marker: google.maps.Marker | null;
 
-  constructor(map: google.maps.Map, setState: Dispatch<SetStateAction<{}>>) {
+  constructor(
+    originRef: React.RefObject<HTMLInputElement>,
+    destinationRef: React.RefObject<HTMLInputElement>,
+    map: google.maps.Map,
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+  ) {
     this.map = map;
-    this.setState = setState;
+    this.setFieldValue = setFieldValue;
     this.originPlaceId = '';
     this.destinationPlaceId = '';
     this.location = null;
@@ -21,13 +26,10 @@ export class AutocompleteDirectionsHandler {
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.directionsRenderer.setMap(map);
+    this.marker = null;
 
-    const originInput = document.getElementById(
-      'origin-input'
-    ) as HTMLInputElement;
-    const destinationInput = document.getElementById(
-      'destination-input'
-    ) as HTMLInputElement;
+    const originInput = originRef.current as HTMLInputElement;
+    const destinationInput = destinationRef.current as HTMLInputElement;
 
     const fields = ['place_id', 'geometry', 'address_component'];
 
@@ -114,38 +116,37 @@ export class AutocompleteDirectionsHandler {
       }
       if (!place.geometry?.location) return;
       this.location = place.geometry.location;
-      this.setState((prevState) => ({
-        ...prevState,
-        [mode]: {
-          placeId: place.place_id,
-          lat,
-          lng,
-          city,
-          country,
-          countryCode,
-        },
-      }));
+      this.setFieldValue(mode, {
+        placeId: place.place_id,
+        lat,
+        lng,
+        city,
+        country,
+        countryCode,
+      });
       this.route();
     });
   }
 
   route() {
+    let marker;
     if (myXOR(this.originPlaceId, this.destinationPlaceId)) {
-      if (!this.location) return
+      if (!this.location) return;
       this.map.setCenter(this.location);
       // set a marker on the map
-      const marker = new google.maps.Marker({
+      this.marker = new google.maps.Marker({
         position: this.location,
         map: this.map,
       });
     }
-
 
     if (!this.originPlaceId || !this.destinationPlaceId) {
       return;
     }
 
     const me = this;
+
+    if (this.marker) this.marker.setMap(null);
 
     this.directionsService.route(
       {
@@ -157,11 +158,8 @@ export class AutocompleteDirectionsHandler {
         if (status === 'OK') {
           const { totalDistance, googleDuration } =
             this.computeTotalDistance(response);
-          this.setState((prevState) => ({
-            ...prevState,
-            totalDistance,
-            googleDuration,
-          }));
+          this.setFieldValue('totalDistance', totalDistance);
+          this.setFieldValue('googleDuration', googleDuration);
           me.directionsRenderer.setDirections(response);
         } else {
           window.alert('Directions request failed due to ' + status);
