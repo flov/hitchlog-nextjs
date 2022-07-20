@@ -1,5 +1,5 @@
 import { FaBus, FaCarSide, FaMotorcycle, FaPlane, FaShip, FaTruck } from "react-icons/fa";
-import { VEHICLES } from "../db/trips";
+import { VEHICLES } from "../types";
 
 export const vehicleToIcon = (vehicle: VEHICLES) => {
   switch (vehicle) {

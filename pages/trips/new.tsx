@@ -4,15 +4,11 @@ import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { NewTripForm } from '../../src/components/NewTripForm';
-import { IpLocation } from '../../src/types/IpLocation';
-import {
-  fetchLocationFromClient,
-  fetchIpAddressOfClient,
-} from '../../src/utils';
-import { db, getLoader } from '../../src/utils/firebase';
+import { IpLocation } from '../../src/types';
+import { fetchLocationFromClient } from '../../src/utils';
+import { getLoader } from '../../src/utils/firebase';
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const ipAddress = await fetchIpAddressOfClient();
   const clientLocation = await fetchLocationFromClient();
   return {
     props: {

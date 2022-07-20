@@ -1,13 +1,12 @@
-import { Query } from 'firebase/firestore';
 import { Pagination, Table } from 'flowbite-react';
 import Link from 'next/link';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { collectionData } from 'rxfire/firestore';
-import { DocumentData } from 'rxfire/firestore/interfaces';
-import { paginatedTripsRef, Trip } from '../db/trips';
+import { paginatedTripsRef } from '../db/trips';
 import { secondsToTime } from '../utils/secondsToTime';
+import { Trip } from '../types';
 
-export const ListTrips: FC<{trips: Trip[]}> = ({trips}) => {
+export const ListTrips: FC<{ trips: Trip[] }> = ({ trips }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const trips$ = collectionData(paginatedTripsRef, { idField: 'id' });
 
@@ -49,7 +48,9 @@ export const ListTrips: FC<{trips: Trip[]}> = ({trips}) => {
               <Table.Cell className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {trip.destination?.city}
               </Table.Cell>
-              <Table.Cell>{trip.googleDuration && secondsToTime(trip.googleDuration)}</Table.Cell>
+              <Table.Cell>
+                {trip.googleDuration && secondsToTime(trip.googleDuration)}
+              </Table.Cell>
               <Table.Cell>{trip.origin?.country}</Table.Cell>
               <Table.Cell>
                 <Link

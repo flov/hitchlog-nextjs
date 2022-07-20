@@ -1,6 +1,5 @@
-import { EXPERIENCES, Trip } from '../db/trips';
+import { EXPERIENCES, Trip, IpLocation } from '../types';
 import { Timestamp } from 'firebase/firestore';
-import { IpLocation } from '../types/IpLocation';
 
 export const experienceToColor = (experience: EXPERIENCES) => {
   switch (experience) {
