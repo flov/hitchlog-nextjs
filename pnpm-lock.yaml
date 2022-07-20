@@ -13,7 +13,7 @@ specifiers:
   eslint-config-next: 12.2.0
   firebase: ^9.8.4
   flowbite: ^1.4.7
-  flowbite-react: ^0.1.2
+  flowbite-react: ^0.1.3
   formik: ^2.2.9
   moment: ^2.29.4
   next: 12.2.0
@@ -39,7 +39,7 @@ dependencies:
   canvas-confetti: 1.5.1
   firebase: 9.8.4
   flowbite: 1.4.7
-  flowbite-react: 0.1.2_emjdixx36mwwjms4no7z4ka6dq
+  flowbite-react: 0.1.3_emjdixx36mwwjms4no7z4ka6dq
   formik: 2.2.9_react@18.2.0
   moment: 2.29.4
   next: 12.2.0_biqbaboplfbrettd7655fr4n2y
@@ -2192,8 +2192,8 @@ packages:
     resolution: {integrity: sha512-0sQoMh9s0BYsm+12Huy/rkKxVu4R1+r96YX5cG44rHV0pQ6iC3Q+mkoMFaGWObMFYQxCVT+ssG1ksneA2MI9KQ==}
     dev: true
 
-  /flowbite-react/0.1.2_emjdixx36mwwjms4no7z4ka6dq:
-    resolution: {integrity: sha512-pkdT7ZxPJ4a48lPn+Mk1WknG5qPP3b/LLjWq4JY9yulLk7rLRPkWCqq3C3DKeavDIq65Z6DpMQgFsae+DpGtPQ==}
+  /flowbite-react/0.1.3_emjdixx36mwwjms4no7z4ka6dq:
+    resolution: {integrity: sha512-bE1sEdntX0x8CAvWfoSzBpCSjU4heWkNmpV6lBu/CqbuYH/7Jb8vg9DVIvmNN5o0CJ08T3hy+eSQQqB2T2Ofug==}
     peerDependencies:
       flowbite: ^1
       react: ^17 || ^18
