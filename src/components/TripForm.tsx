@@ -48,28 +48,55 @@ export const TripForm = ({
     handleBlur(e);
   };
 
-  console.log({ errors });
-
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-4 grid grid-cols-2 gap-4">
         <TextInput
           ref={originRef}
           type="text"
+          color={
+            touched.originName && errors.origin?.lat
+              ? 'failure'
+              : touched.originName
+              ? 'success'
+              : 'primary'
+          }
           required={true}
           placeholder="Enter an origin location"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          value={values.originName}
+          name="originName"
         />
         <TextInput
           ref={destinationRef}
           type="text"
           required={true}
           placeholder="Enter a destination location"
+          color={
+            touched.destinationName && errors.destination?.lat
+              ? 'failure'
+              : touched.destinationName
+              ? 'success'
+              : 'primary'
+          }
+          onChange={handleChange}
+          onBlur={handleBlur}
+          value={values.destinationName}
+          name="destinationName"
         />
         <TextInput
           id="departure"
           type="datetime-local"
           required={true}
           placeholder="departure"
+          color={
+            touched.departure && errors.departure
+              ? 'failure'
+              : touched.departure
+              ? 'success'
+              : 'primary'
+          }
           onChange={handleChange}
           onBlur={handleBlurArrivalDeparted}
           value={values.departure}
@@ -79,6 +106,13 @@ export const TripForm = ({
           id="arrival"
           ref={arrivalRef}
           type="datetime-local"
+          color={
+            touched.arrival && errors.arrival
+              ? 'failure'
+              : touched.arrival
+              ? 'success'
+              : 'primary'
+          }
           required={true}
           placeholder="arrival"
           onChange={handleChange}
@@ -87,28 +121,34 @@ export const TripForm = ({
           name="arrival"
         />
         {(values?.arrival && values?.departure) || values.googleDuration ? (
-          <div className="flex justify-around col-span-2">
-            <span>
+          <>
+            <p className="text-center">
               {values.departure && values.arrival
                 ? `Your trip duration: ${calculateTimeBetweenDates(
                     values.departure,
                     values.arrival
                   )}`
                 : ''}
-            </span>
-            <span>
+            </p>
+            <p className="text-center">
               {values.googleDuration
                 ? `Google Maps Duration ${secondsToTime(values.googleDuration)}`
                 : ''}
-            </span>
-          </div>
+            </p>
+          </>
         ) : (
           ''
         )}
 
         <div className="">
           <TextInput
-            color={'red'}
+            color={
+              touched.numberOfRides && errors.numberOfRides
+                ? 'failure'
+                : touched.numberOfRides
+                ? 'success'
+                : 'primary'
+            }
             id="numberOfRides"
             type="number"
             required={true}
@@ -116,7 +156,6 @@ export const TripForm = ({
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.numberOfRides}
-            helperText={<>{errors.numberOfRides}</>}
             name="numberOfRides"
           />
         </div>
@@ -134,10 +173,9 @@ export const TripForm = ({
           <option value="2">Travelling in threesome</option>
           <option value="3">Travelling in foursome</option>
         </Select>
-      </div>
-
-      <div className="mt-4">
-        <Button type="submit">Submit Trip</Button>
+        <div className="col-span-2 flex justify-center">
+          <Button type="submit">Submit Trip</Button>
+        </div>
       </div>
     </form>
   );
