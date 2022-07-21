@@ -31,7 +31,12 @@ export class AutocompleteDirectionsHandler {
     const originInput = originRef.current as HTMLInputElement;
     const destinationInput = destinationRef.current as HTMLInputElement;
 
-    const fields = ['place_id', 'geometry', 'address_component'];
+    const fields = [
+      'place_id',
+      'geometry',
+      'address_component',
+      'formatted_address',
+    ];
 
     // Specify just the place data fields that you need.
     const originAutocomplete = new google.maps.places.Autocomplete(
@@ -116,6 +121,7 @@ export class AutocompleteDirectionsHandler {
       }
       if (!place.geometry?.location) return;
       this.location = place.geometry.location;
+      this.setFieldValue(`${mode}Name`, place.formatted_address);
       this.setFieldValue(mode, {
         placeId: place.place_id,
         lat,
@@ -129,7 +135,6 @@ export class AutocompleteDirectionsHandler {
   }
 
   route() {
-    let marker;
     if (myXOR(this.originPlaceId, this.destinationPlaceId)) {
       if (!this.location) return;
       this.map.setCenter(this.location);

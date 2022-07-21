@@ -19,7 +19,6 @@ import { startWith } from 'rxjs';
 import { Ride, Trip } from '../types';
 import { db } from '../utils/firebase';
 
-
 export const tripsRef = query(
   collection(db, 'trips'),
   orderBy('createdAt', 'desc'),
@@ -74,14 +73,14 @@ export const addRideData = async (
 };
 
 export const getTrip = async (id: string) => {
-  const userSnapshot = await getDoc(doc(db, 'trips', id));
-  return { ...userSnapshot.data(), id: userSnapshot.id } as Trip;
+  const tripSnapshot = await getDoc(doc(db, 'trips', id));
+  return { ...tripSnapshot.data(), id: tripSnapshot.id } as Trip;
 };
 
 export const getRidesForTrip = async (id: string) => {
   const ridesRef = query(
     collectionGroup(db, 'rides'),
-    where('trip_id', '==', id)
+    where('trip_id', '==', Number(id))
   );
   const querySnapshot = await getDocs(ridesRef);
   const rides: Ride[] = [];
@@ -125,3 +124,4 @@ export const deleteTrip = async (id: string) => {
     console.log(err);
   }
 };
+

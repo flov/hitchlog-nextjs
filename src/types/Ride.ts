@@ -1,5 +1,6 @@
 export type Ride = {
   id?: string;
+  trip_id?: string;
   title?: string;
   story?: string;
   experience?: EXPERIENCES;

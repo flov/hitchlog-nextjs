@@ -86,7 +86,7 @@ const New: NextPage<{ googleMapsKey: string; clientLocation: IpLocation }> = ({
       <div className="h-96" ref={googlemap} id="map"></div>
       <div className="max-w-2xl mx-auto p-4">
         <h1 className="text-2xl text-center">
-          Enter a new hitchhiking adventure
+          Log a new hitchhiking adventure
         </h1>
         {map && user ? (
           <Formik
@@ -94,7 +94,6 @@ const New: NextPage<{ googleMapsKey: string; clientLocation: IpLocation }> = ({
             initialValues={initialValues}
             validationSchema={TripSchema}
             onSubmit={async (values) => {
-              // await addRideData(trip, values as Ride, index);
               console.log({ values });
               window.confetti();
             }}

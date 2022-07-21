@@ -29,6 +29,9 @@ a {
 #__next {
   height: 100%;
 }
+#map {
+  transition: height 1s ease-in-out;
+}
 /* The popup bubble styling. */
 .popup-bubble {
   /* Position the bubble centred-above its parent. */
