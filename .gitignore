@@ -35,3 +35,4 @@ yarn-error.log*
 *.tsbuildinfo
 firebase-debug.log
 .firebase/
+functions/firestore-debug.log
