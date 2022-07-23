@@ -20,16 +20,15 @@ export const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const firebaseApp = initializeApp(firebaseConfig);
-export const db = getFirestore(firebaseApp);
-export const database = getDatabase(firebaseApp);
+export const db = getFirestore(initializeApp(firebaseConfig));
 export const auth = getAuth();
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-export const getLoader = (googleMapsKey: string) =>
-  new Loader({
+export const getLoader = (googleMapsKey: string) => {
+  return new Loader({
     apiKey: googleMapsKey,
     version: 'weekly',
     libraries: ['places'],
   });
+};

@@ -19,17 +19,19 @@ import { startWith } from 'rxjs';
 import { Ride, Trip } from '../types';
 import { db } from '../utils/firebase';
 
+const limitNumber = 5;
+
 export const tripsRef = query(
   collection(db, 'trips'),
   orderBy('createdAt', 'desc'),
-  limit(25)
+  limit(limitNumber)
 );
 
 export const paginatedTripsRef = query(
   collection(db, 'trips'),
   where('id', '>', 600),
   orderBy('id'),
-  limit(25)
+  limit(limitNumber)
 );
 
 export const nextTripsRef = (lastDoc: any) => {
@@ -37,7 +39,7 @@ export const nextTripsRef = (lastDoc: any) => {
     collection(db, 'trips'),
     orderBy('createdAt'),
     startAfter(lastDoc),
-    limit(25)
+    limit(limitNumber)
   );
 };
 
@@ -46,7 +48,7 @@ export const prevTripsRef = (firstDoc: any) => {
     collection(db, 'trips'),
     orderBy('createdAt'),
     endBefore(firstDoc),
-    limitToLast(25)
+    limitToLast(limitNumber)
   );
 };
 
@@ -90,24 +92,27 @@ export const getRidesForTrip = async (id: string) => {
   return rides;
 };
 
-export const getTripsForExperience = async (experience: string) => {
-  const ridesRef = query(
-    collectionGroup(db, 'rides'),
-    where('experience', '==', experience)
+export const getTripsByExperience = async (experience: string) => {
+  const tripsRef = query(
+    collectionGroup(db, 'trips'),
+    where('rideExperiences', 'array-contains', experience),
+    limit(limitNumber)
   );
-  const querySnapshot = await getDocs(ridesRef);
-  const trip_ids: string[] = [];
-  querySnapshot.forEach((doc) => {
-    trip_ids.push(...doc.data()['trip_id']);
-  });
-  return trip_ids;
+  const querySnapshot = await getDocs(tripsRef);
+  console.log(querySnapshot.docs.length);
+  const trips = await Promise.all(
+    querySnapshot.docs.map(async (doc) => {
+      return { ...doc.data(), id: doc.id };
+    })
+  );
+  return trips;
 };
 
 export const getTrips = async () => {
   const q = query(
     collection(db, 'trips'),
     orderBy('createdAt', 'desc'),
-    limit(50)
+    limit(limitNumber)
   );
   const querySnapshot = await getDocs(q);
   const trips: Trip[] = [];
@@ -124,4 +129,3 @@ export const deleteTrip = async (id: string) => {
     console.log(err);
   }
 };
-

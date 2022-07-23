@@ -10,8 +10,6 @@ export const initPopup = () => {
       super();
       this.position = position;
 
-      content.classList.add('popup-bubble');
-
       // This zero-height div is positioned at the bottom of the bubble.
       const bubbleAnchor = document.createElement('div');
 
@@ -60,5 +58,5 @@ export const initPopup = () => {
         this.containerDiv.style.display = display;
       }
     }
-  }
-}
+  };
+};
