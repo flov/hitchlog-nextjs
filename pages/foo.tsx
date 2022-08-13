@@ -4,10 +4,9 @@ import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import { Status } from '@googlemaps/react-wrapper';
 import OverlayContainer from '../src/components/OverlayContainer';
 import OverlayBubble from '../src/components/OverlayBubble';
-import Trips from '../src/stubs/trips';
 import { getTrips, getTripsByExperience } from '../src/db/trips';
 import { Experiences, Trip } from '../src/types';
-import { Badge, Button, Dropdown, Label, Select } from 'flowbite-react';
+import { Select } from 'flowbite-react';
 import { ListTrips } from '../src/components/ListTrips';
 import { PuffLoader } from 'react-spinners';
 
@@ -38,7 +37,10 @@ const Foo: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
   useEffect(() => {
     if (ref.current) {
       let createdMap = new google.maps.Map(ref.current, {
-        center: { lat: Trips[0].origin.lat, lng: Trips[0].origin.lng },
+        center: {
+          lat: trips[0].origin?.lat as number,
+          lng: trips[0].origin?.lng as number,
+        },
         zoom: 2,
       });
       setMap(createdMap);
