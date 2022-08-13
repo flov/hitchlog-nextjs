@@ -6,8 +6,8 @@ import OverlayContainer from '../src/components/OverlayContainer';
 import OverlayBubble from '../src/components/OverlayBubble';
 import Trips from '../src/stubs/trips';
 import { getTrips, getTripsByExperience } from '../src/db/trips';
-import { Trip } from '../src/types';
-import { Badge, Button, Dropdown } from 'flowbite-react';
+import { Experiences, Trip } from '../src/types';
+import { Badge, Button, Dropdown, Label, Select } from 'flowbite-react';
 import { ListTrips } from '../src/components/ListTrips';
 import { PuffLoader } from 'react-spinners';
 
@@ -45,10 +45,10 @@ const Foo: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
     }
   }, []);
 
-  const handleExperienceClick = async (experience: string) => {
+  const handleExperienceChange = async (e: any) => {
     setIsLoading(true);
-    const trips = await getTripsByExperience(experience);
-    setTrips(trips);
+    const newTrips = await getTripsByExperience(e.target.value);
+    setTrips(newTrips as Trip[]);
     setIsLoading(false);
   };
 
@@ -69,27 +69,32 @@ const Foo: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
         ))}
       </div>
 
-      <div className="flex justify-between p-2 gap-4">
-        {['very good', 'good', 'neutral', 'bad', 'very bad'].map(
-          (experience, index) => (
-            <Button
-              key={index}
-              onClick={() => handleExperienceClick(experience)}
+      <div className="max-w-4xl mx-auto">
+        <div className="flex justify-between py-2 ">
+          <div className="w-48">
+            <Select
+              id="countries"
+              onChange={handleExperienceChange}
+              required={true}
             >
-              {experience}
-            </Button>
-          )
-        )}
-        <Button onClick={() => setTrips([])}>reset trips</Button>
-      </div>
-
-      {isLoading ? (
-        <div className="p-8 grid place-items-center">
-          <PuffLoader color="blue" />
+              <option>Select Experience</option>
+              {Experiences.map((experience) => (
+                <option key={experience} value={experience}>
+                  {experience}
+                </option>
+              ))}
+            </Select>
+          </div>
         </div>
-      ) : (
-        <ListTrips trips={trips} />
-      )}
+
+        {isLoading ? (
+          <div className="p-8 grid place-items-center">
+            <PuffLoader color="blue" />
+          </div>
+        ) : (
+          <ListTrips trips={trips} />
+        )}
+      </div>
     </>
   );
 };

@@ -51,7 +51,6 @@ const Map: NextPage<{
         getRidesForTrip(trip.id as string),
         getUser(trip?.uid as string),
       ]).subscribe(([rides, user]) => {
-        console.log({ rides, user });
         setRides(rides as Ride[]);
         setUser(user as User);
       });
@@ -123,7 +122,7 @@ const Map: NextPage<{
 
   const handleExperienceClick = async (experience: string) => {
     const trips = await getTripsByExperience(experience);
-    setTrips(trips);
+    setTrips(trips as Trip[]);
   };
 
   return (

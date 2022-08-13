@@ -1,6 +1,6 @@
 export type Ride = {
   id?: string;
-  trip_id?: string;
+  tripId?: string;
   title?: string;
   story?: string;
   experience?: EXPERIENCES;
@@ -12,6 +12,7 @@ export type Ride = {
 };
 
 export type EXPERIENCES = 'very good' | 'good' | 'neutral' | 'bad' | 'very bad';
+export const Experiences = ['very good', 'good', 'neutral', 'bad', 'very bad'];
 
 export type VEHICLES =
   | 'car'

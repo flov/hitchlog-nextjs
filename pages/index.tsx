@@ -8,22 +8,11 @@ import Link from 'next/link';
 import styles from '../styles/Home.module.css';
 import { useEffect } from 'react';
 import { ListTrips } from '../src/components/ListTrips';
-import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
-import { db, getLoader } from '../src/utils/firebase';
-import { Trip, tripConverter } from '../src/types/Trip';
+import { getLoader } from '../src/utils/firebase';
+import { getTrips } from '../src/db/trips';
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const trips: Trip[] = [];
-  const q = query(
-    collection(db, 'trips').withConverter(tripConverter),
-    orderBy('createdAt', 'desc'),
-    limit(25)
-  );
-
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((trip) => {
-    trips.push({ ...(trip.data() as object), id: trip.id });
-  });
+  const trips = await getTrips();
 
   return {
     props: {
@@ -40,11 +29,14 @@ const Home: NextPage = ({
   useEffect(() => {
     const loader = getLoader(googleMapsKey);
     loader.load().then((google) => {
-      const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
-        mapTypeControl: false,
-        zoom: 5,
-        center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
-      });
+      const map = new google.maps.Map(
+        document.getElementById('map') as HTMLElement,
+        {
+          mapTypeControl: false,
+          zoom: 5,
+          center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
+        }
+      );
     });
   }, [googleMapsKey]);
 

@@ -47,3 +47,11 @@ export const fetchLocationFromClient = async () => {
 export const myXOR = (a: any, b: any): boolean => {
   return (a || b) && !(a && b);
 };
+
+export const removeDuplicates = (arr: any[]) => {
+  return arr.filter((item, index) => arr.indexOf(item) === index);
+};
+
+export const pluralize = (count: number, word: string) => {
+  return count === 1 ? word : word + 's';
+};

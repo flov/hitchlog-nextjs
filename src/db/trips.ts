@@ -82,7 +82,7 @@ export const getTrip = async (id: string) => {
 export const getRidesForTrip = async (id: string) => {
   const ridesRef = query(
     collectionGroup(db, 'rides'),
-    where('trip_id', '==', Number(id))
+    where('tripId', '==', Number(id))
   );
   const querySnapshot = await getDocs(ridesRef);
   const rides: Ride[] = [];

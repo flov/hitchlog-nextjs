@@ -5,7 +5,7 @@ import {
   NextPage,
 } from 'next';
 import { useEffect } from 'react';
-import { getRidesForTrip, getTrip} from '../../src/db/trips';
+import { getRidesForTrip, getTrip } from '../../src/db/trips';
 import { getUser } from '../../src/db/users';
 import { displayRoute } from '../../src/utils/DirectionsHandler';
 import { HitchhikingTrip } from '../../src/components/HitchhikingTrip';

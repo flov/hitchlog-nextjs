@@ -13,14 +13,14 @@ export type Location = {
 export type Timestamp = { seconds: number; nanoseconds: number };
 
 export type Trip = {
-  arrival?: Timestamp;
+  arrival: Timestamp;
   createdAt?: Timestamp;
   destination?: Location;
   googleDuration?: number;
   id?: number | string;
   origin?: Location;
   rides?: Ride[];
-  departure?: Timestamp;
+  departure: Timestamp;
   totalDistance?: number;
   uid?: string | number;
   travellingWith?: number;
@@ -31,4 +31,3 @@ export const tripConverter = {
   toFirestore: (data: Trip) => data,
   fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as Trip,
 };
-
