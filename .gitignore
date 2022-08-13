@@ -33,6 +33,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-firebase-debug.log
+firestore-debug.log
 .firebase/
 functions/firestore-debug.log
