@@ -1,13 +1,14 @@
-import { Table, Tooltip } from 'flowbite-react';
+import { Table } from 'flowbite-react';
 import Link from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
-import ReactCountryFlag from 'react-country-flag';
 import { getRidesForTrip } from '../db/trips';
 import { Ride, Trip } from '../types';
-import { pluralize, removeDuplicates } from '../utils';
 import { durationDiffToString, secondsToTime } from '../utils/secondsToTime';
-import { countries } from '../utils/country_codes';
-import { vehicleToIcon } from '../utils/viewHelpers';
+import {
+  countryFlagsForTrip,
+  experiencesForRides,
+  vehicleIconsForRides,
+} from '../utils/viewHelpers';
 
 const TripRow: FC<{ trip: Trip }> = ({ trip }) => {
   const tripDuration = trip.arrival.seconds - trip.departure.seconds;
@@ -52,52 +53,9 @@ const TripRow: FC<{ trip: Trip }> = ({ trip }) => {
       </Table.Cell>
       <Table.Cell>
         <div className="flex items-center gap-1">
-          <Tooltip
-            content={`${rides.length} ${pluralize(rides.length, 'ride')}`}
-          >
-            <div className="flex -space-x-2">
-              {rides.map((ride, index) => (
-                <div
-                  key={`${index}RideNumber`}
-                  className={`rounded-full border h-5 w-5 ${
-                    ride.experience === 'very good'
-                      ? 'bg-green-400'
-                      : ride.experience === 'good'
-                      ? 'bg-green-500'
-                      : ride.experience === 'bad'
-                      ? 'bg-red-500'
-                      : ride.experience === 'very bad'
-                      ? 'bg-red-600'
-                      : 'bg-yellow-300'
-                  }`}
-                ></div>
-              ))}
-            </div>
-          </Tooltip>
-
-          {removeDuplicates(rides.map((ride, index) => ride.vehicle)).map(
-            (vehicle, index) => (
-              <Tooltip key={`${index}Vehicles`} content={`${vehicle} ride`}>
-                {vehicle && vehicleToIcon(vehicle)}
-              </Tooltip>
-            )
-          )}
-
-          {removeDuplicates([
-            trip.origin?.countryCode,
-            trip.destination?.countryCode,
-          ]).map((countryCode, index) => (
-            <Tooltip
-              //@ts-ignore
-              content={`${countries[countryCode]}`}
-              key={`${index}CountryCode`}
-            >
-              <ReactCountryFlag
-                style={{ fontSize: '1.5rem' }}
-                countryCode={countryCode}
-              />
-            </Tooltip>
-          ))}
+          {experiencesForRides(rides)}
+          {vehicleIconsForRides(rides)}
+          {countryFlagsForTrip(trip)}
         </div>
       </Table.Cell>
       <Table.Cell>

@@ -1,4 +1,4 @@
-import { Badge, Card, Timeline } from 'flowbite-react';
+import { Badge, Card, Timeline, Tooltip } from 'flowbite-react';
 import moment from 'moment';
 import Image from 'next/image';
 import { BsArrowRight } from 'react-icons/bs';
@@ -6,6 +6,7 @@ import { experienceToColor, timestampToDate } from '../utils';
 import { vehicleToIcon } from '../utils/viewHelpers';
 import ReactMarkdown from 'react-markdown';
 import { User, EXPERIENCES, Ride, Timestamp, Trip } from '../types';
+import { CgSandClock } from 'react-icons/cg';
 
 export function HitchhikingTrip({
   user,
@@ -34,7 +35,7 @@ export function HitchhikingTrip({
                 user.gender === 'male' ? 'set1' : 'set4'
               }`
             }
-            alt={`Avatar from ${user?.displayName}`}
+            alt={`${user?.displayName}'s profile picture'`}
           />
           <h5 className="mt-2 mb-1 text-xl font-medium text-gray-900 dark:text-white"></h5>
           <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -43,7 +44,7 @@ export function HitchhikingTrip({
         </div>
 
         <h5 className="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Trip from {trip.origin?.city} <BsArrowRight className="inline" />{' '}
+          {trip.origin?.city} <BsArrowRight className="inline" />{' '}
           {trip.destination?.city} hitchhiked {moment(departure).fromNow()}
         </h5>
         <Timeline>
@@ -53,7 +54,7 @@ export function HitchhikingTrip({
                 <Timeline.Point />
                 <Timeline.Content>
                   <Timeline.Time>
-                    <div className="flex items-center gap-4">
+                    <div className="flex text-gray-600 items-center gap-4">
                       <span>Ride {index + 1} </span>
                       <Badge
                         className="inline"
@@ -66,7 +67,14 @@ export function HitchhikingTrip({
                       {ride.vehicle && vehicleToIcon(ride.vehicle)}
                       {ride.gender && <span>{ride.gender}</span>}
                       {ride.waitingTime ? (
-                        <span>waiting time: {ride.waitingTime}m</span>
+                        <span>
+                          <Tooltip
+                            content={`Waiting time: ${ride.waitingTime} minutes`}
+                          >
+                            <CgSandClock className="inline" />{' '}
+                            {ride.waitingTime}m
+                          </Tooltip>
+                        </span>
                       ) : (
                         ''
                       )}

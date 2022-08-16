@@ -1,5 +1,12 @@
-import moment from "moment";
+import moment from 'moment';
+import { Timestamp } from '../types';
 
-export const timeAgoInWords = (date: Date) => {
-  moment().subtract(3, 'days').calendar();  // Last Tuesday at 10:10 AM
-}
+//unix timestamp to date
+export const unixToDate = (unix: number) => {
+  return moment.unix(unix).toDate();
+};
+
+export const timeAgoInWords = (timestamp: Timestamp) => {
+  const date = moment.unix(timestamp.seconds);
+  return moment(date).fromNow();
+};

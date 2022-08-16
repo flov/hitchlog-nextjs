@@ -10,55 +10,45 @@ import { useEffect } from 'react';
 import { ListTrips } from '../src/components/ListTrips';
 import { getLoader } from '../src/utils/firebase';
 import { getTrips } from '../src/db/trips';
+import { Trip } from '../src/types/Trip';
+import BlogCard from '../src/components/BlogCard';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const trips = await getTrips();
 
   return {
     props: {
-      googleMapsKey: process.env.GOOGLE_MAPS_KEY,
-      trips: JSON.parse(JSON.stringify(trips)),
+      trips: JSON.parse(JSON.stringify(trips)) as Trip[],
     },
   };
 };
 
-const Home: NextPage = ({
-  googleMapsKey,
+const Home: NextPage<{ googleMapsKey: string; trips: Trip[] }> = ({
   trips,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  useEffect(() => {
-    const loader = getLoader(googleMapsKey);
-    loader.load().then((google) => {
-      const map = new google.maps.Map(
-        document.getElementById('map') as HTMLElement,
-        {
-          mapTypeControl: false,
-          zoom: 5,
-          center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
-        }
-      );
-    });
-  }, [googleMapsKey]);
-
   return (
     <>
       <Head>
-        <title>Hitchlog</title>
+        <title>The Hitchlog</title>
         <meta name="description" content="Log your hitchhiking experience" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="w-full bg-gray-200 h-96" id="map"></div>
       <main>
-        <div className="container max-w-screen-xl p-4 mx-auto">
-          <div className="my-4">
-            <h1 className={styles.title}>
-              Welcome to <Link href="/">Hitchlog</Link>
-            </h1>
-          </div>
-
-          <ListTrips trips={trips} />
+        <div className="mx-auto mb-8 text-center max-w-screen-sm lg:mb-16">
+          <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 lg:text-4xl dark:text-white">
+            The Hitchlog
+          </h1>
+          <p className="font-light text-gray-500 sm:text-xl dark:text-gray-400">
+            Share your hitchhiking adventure with the world.
+          </p>
         </div>
+
+        <section>
+          <div className="container p-4 mx-auto max-w-screen-xl">
+            <ListTrips trips={trips} />
+          </div>
+        </section>
       </main>
     </>
   );

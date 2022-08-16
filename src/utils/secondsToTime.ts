@@ -3,7 +3,11 @@ export const secondsToTime = (seconds: number | null) => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const secondsLeft = seconds % 60;
-  return `${hours}h ${minutes}m ${secondsLeft}s`;
+  const array = [];
+  hours > 0 ? array.push(hours + 'h') : null;
+  minutes > 0 ? array.push(minutes + 'm') : null;
+  secondsLeft > 0 ? array.push(secondsLeft + 's') : null;
+  return array.join(' ');
 };
 
 export const durationDiffToString = (durationDiff: number) => {

@@ -2,12 +2,12 @@ import { GetServerSideProps } from 'next';
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react';
 import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import { Status } from '@googlemaps/react-wrapper';
-import OverlayContainer from '../src/components/OverlayContainer';
-import OverlayBubble from '../src/components/OverlayBubble';
-import { getTrips, getTripsByExperience } from '../src/db/trips';
-import { Experiences, Trip } from '../src/types';
+import OverlayContainer from '../../src/components/OverlayContainer';
+import OverlayBubble from '../../src/components/OverlayBubble';
+import { getTrips, getTripsByExperience } from '../../src/db/trips';
+import { Experiences, Trip } from '../../src/types';
 import { Select } from 'flowbite-react';
-import { ListTrips } from '../src/components/ListTrips';
+import { ListTrips } from '../../src/components/ListTrips';
 import { PuffLoader } from 'react-spinners';
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -27,7 +27,7 @@ const LoadingContainer = (status: Status): ReactElement => {
   return <></>;
 };
 
-const Foo: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
+const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
   const { google } = props;
   const ref = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -38,8 +38,8 @@ const Foo: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
     if (ref.current) {
       let createdMap = new google.maps.Map(ref.current, {
         center: {
-          lat: trips[0].origin?.lat as number,
-          lng: trips[0].origin?.lng as number,
+          lat: trips[1]?.origin?.lat as number,
+          lng: trips[1]?.origin?.lng as number,
         },
         zoom: 2,
       });
@@ -71,8 +71,8 @@ const Foo: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
         ))}
       </div>
 
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between py-2 ">
+      <div className="mx-auto p-4 max-w-7xl">
+        <div className="flex justify-between pb-4 ">
           <div className="w-48">
             <Select
               id="countries"
@@ -104,4 +104,4 @@ const Foo: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
 export default GoogleApiWrapper(({ googleMapsKey }) => ({
   apiKey: googleMapsKey,
   LoadingContainer: LoadingContainer,
-}))(Foo);
+}))(Index);

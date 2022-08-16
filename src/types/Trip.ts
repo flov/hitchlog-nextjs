@@ -14,7 +14,7 @@ export type Timestamp = { seconds: number; nanoseconds: number };
 
 export type Trip = {
   arrival: Timestamp;
-  createdAt?: Timestamp;
+  createdAt: Timestamp;
   destination?: Location;
   googleDuration?: number;
   id?: number | string;

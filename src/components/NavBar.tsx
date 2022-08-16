@@ -81,10 +81,7 @@ const NavBar = () => {
           <Link href="/">Home</Link>
         </li>
         <li>
-          <Link href="/map">Map</Link>
-        </li>
-        <li>
-          <Link href="/foo">Foo</Link>
+          <Link href="/trips">Trips</Link>
         </li>
       </Navbar.Collapse>
     </Navbar>

@@ -1,4 +1,4 @@
-import { Button, Select, TextInput } from 'flowbite-react';
+import { Button, Select, Spinner, TextInput } from 'flowbite-react';
 import { FormikValues } from 'formik';
 import moment from 'moment';
 import { ChangeEvent, MutableRefObject, useEffect, useRef } from 'react';
@@ -15,6 +15,7 @@ export const TripForm = ({
   errors,
   touched,
   map,
+  isSubmitting,
 }: FormikValues) => {
   const originRef = useRef<HTMLInputElement>(null);
   const destinationRef = useRef<HTMLInputElement>(null);
@@ -62,7 +63,7 @@ export const TripForm = ({
               : 'primary'
           }
           required={true}
-          placeholder="Enter an origin location"
+          placeholder="Enter origin"
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.originName}
@@ -72,7 +73,7 @@ export const TripForm = ({
           ref={destinationRef}
           type="text"
           required={true}
-          placeholder="Enter a destination location"
+          placeholder="Enter destination"
           color={
             touched.destinationName && errors.destination?.lat
               ? 'failure'
@@ -173,8 +174,10 @@ export const TripForm = ({
           <option value="2">Travelling in threesome</option>
           <option value="3">Travelling in foursome</option>
         </Select>
-        <div className="col-span-2 flex justify-center">
-          <Button type="submit">Submit Trip</Button>
+        <div className="col-span-2 my-4 flex justify-center">
+          <Button disabled={isSubmitting} type="submit">
+            Submit Trip
+          </Button>
         </div>
       </div>
     </form>

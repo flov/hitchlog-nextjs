@@ -1,5 +1,6 @@
 export type User = {
   displayName: string;
+  admin?: boolean;
   providerId?: string;
   email: string;
   createdAt?: string;

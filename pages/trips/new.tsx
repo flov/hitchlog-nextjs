@@ -1,4 +1,5 @@
 import { getAuth } from 'firebase/auth';
+import { serverTimestamp, Timestamp } from 'firebase/firestore';
 import { Formik } from 'formik';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
@@ -6,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { date, number, object, ref, string } from 'yup';
 import { TripForm } from '../../src/components/TripForm';
+import { createTrip } from '../../src/db/trips';
 import { IpLocation } from '../../src/types';
 import { fetchLocationFromClient } from '../../src/utils';
 import { getLoader } from '../../src/utils/firebase';
@@ -76,6 +78,32 @@ const New: NextPage<{ googleMapsKey: string; clientLocation: IpLocation }> = ({
     googleDuration: 0,
   };
 
+  const getUnixTimestamp = (date: string) => {
+    const d = new Date(date);
+    return Math.round(d.getTime() / 1000);
+  };
+
+  const handleSubmit = async (values: any) => {
+    const createdAt = Timestamp.now();
+    const updatedAt = Timestamp.now();
+    const arrival = new Timestamp(getUnixTimestamp(values.arrival), 0);
+    const departure = new Timestamp(getUnixTimestamp(values.departure), 0);
+    const uid = user?.uid;
+    const rides = Array(values.numberOfRides).fill({});
+
+    const t = await createTrip({
+      ...values,
+      uid,
+      createdAt,
+      updatedAt,
+      arrival,
+      departure,
+      rides,
+    });
+    console.log(t);
+    window.confetti();
+  };
+
   return (
     <div>
       <Head>
@@ -84,20 +112,19 @@ const New: NextPage<{ googleMapsKey: string; clientLocation: IpLocation }> = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="h-96" ref={googlemap} id="map"></div>
-      <div className="max-w-2xl mx-auto p-4">
-        <h1 className="text-2xl text-center">
+      <div className="max-w-2xl mx-auto">
+        <h2 className="my-6 text-center text-3xl lg:text-4xl tracking-tight font-extrabold">
           Log a new hitchhiking adventure
-        </h1>
+        </h2>
         {map && user ? (
-          <Formik
-            component={(props) => <TripForm {...props} map={map} />}
-            initialValues={initialValues}
-            validationSchema={TripSchema}
-            onSubmit={async (values) => {
-              console.log({ values });
-              window.confetti();
-            }}
-          />
+          <div className="px-4">
+            <Formik
+              component={(props) => <TripForm {...props} map={map} />}
+              initialValues={initialValues}
+              validationSchema={TripSchema}
+              onSubmit={handleSubmit}
+            />
+          </div>
         ) : (
           <></>
         )}

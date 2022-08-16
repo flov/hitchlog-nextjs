@@ -19,7 +19,7 @@ import { startWith } from 'rxjs';
 import { Ride, Trip } from '../types';
 import { db } from '../utils/firebase';
 
-const limitNumber = 5;
+const limitNumber = 12;
 
 export const tripsRef = query(
   collection(db, 'trips'),
@@ -56,7 +56,7 @@ export const trips = collectionData(tripsRef, { idField: 'id' }).pipe(
   startWith([])
 );
 
-export const createTrip = async (trip: any) => {
+export const createTrip = async (trip: Trip) => {
   const doc = await addDoc(collection(db, 'trips'), trip);
   console.log({ doc });
 };

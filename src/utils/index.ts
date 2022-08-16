@@ -1,4 +1,4 @@
-import { EXPERIENCES, Trip, IpLocation } from '../types';
+import { EXPERIENCES, Trip, IpLocation, User } from '../types';
 import { Timestamp } from 'firebase/firestore';
 
 export const experienceToColor = (experience: EXPERIENCES) => {
@@ -55,3 +55,13 @@ export const removeDuplicates = (arr: any[]) => {
 export const pluralize = (count: number, word: string) => {
   return count === 1 ? word : word + 's';
 };
+
+// https://maps.googleapis.com/maps/api/staticmap?size=300x200&maptype=roadmap&markers=color:red|label:A|${trip.origin?.lat},${trip.origin?.lng}&markers=color:red|label:B|${trip.destination?.lat},${trip.destination?.lng}&path=color:0xff0000|weight:5|${trip.origin?.lat},${trip.origin?.lng}|${trip.destination?.lat},${trip.destination?.lng}&key=AIzaSyD3jCmxfmJm9Mm-XS9zSGZ-4eGAh-vqDs0
+export const staticGoogleMapUrl = (trip: Trip) =>
+  `https://maps.googleapis.com/maps/api/staticmap?size=300x200&maptype=roadmap&markers=color:red|label:A|${trip.origin?.lat},${trip.origin?.lng}&markers=color:red|label:B|${trip.destination?.lat},${trip.destination?.lng}&key=AIzaSyD3jCmxfmJm9Mm-XS9zSGZ-4eGAh-vqDs0`;
+
+export const photoForUser = (user: User, size = '96x96') =>
+  user?.photoURL ||
+  `https://robohash.org/${user?.displayName}?size=${size}&set=${
+    user?.gender === 'male' ? 'set1' : 'set4'
+  }`;

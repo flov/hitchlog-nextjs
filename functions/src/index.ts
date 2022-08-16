@@ -7,7 +7,7 @@ import admin = require('firebase-admin');
 admin.initializeApp();
 
 export const ridesOnUpdate = functions.firestore
-  .document('trips/{trip_id}/rides/{ride_id}')
+  .document('trips/{tripId}/rides/{rideId}')
   .onUpdate(
     async (change: Change<QueryDocumentSnapshot>, context: EventContext) => {
       const before = change.before.data();
@@ -24,7 +24,7 @@ export const ridesOnUpdate = functions.firestore
           const updatedTrip = { ...tripData, rideExperiences: experiences };
           functions.logger.log(
             'Updated Experiences of trip',
-            context.params.trip_id,
+            context.params.tripId,
             experiences
           );
           return tripRef.set(updatedTrip);
@@ -35,7 +35,7 @@ export const ridesOnUpdate = functions.firestore
   );
 
 exports.myFunction = functions.firestore
-  .document('trips/{trip_id}/rides/{ride_id}')
+  .document('trips/{tripId}/rides/{rideId}')
   .onWrite(async (change, context) => {
     const tripRef = change.after.ref.parent.parent;
     if (!tripRef) return null;
@@ -50,7 +50,7 @@ exports.myFunction = functions.firestore
       };
       functions.logger.log(
         'Updated Experiences of trip',
-        context.params.trip_id,
+        context.params.tripId,
         experiences
       );
       return tripRef.set(updatedTrip);

@@ -48,6 +48,7 @@ a {
   max-height: 60px;
   box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.5);
   cursor: pointer;
+  color: black;
 }
 .popup-bubble.opened {
   background-color: #222222;
@@ -72,10 +73,21 @@ a {
   width: 200px;
 }
 
+.dark input {
+  color: #000;
+}
+
 * {
   box-sizing: border-box;
 }
 
 .content-area {
   height: calc(100vh - theme(spacing.96));
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(385px, 1fr));
+  grid-gap: theme(spacing.4);
+  margin-bottom: theme(spacing.4);
 }
