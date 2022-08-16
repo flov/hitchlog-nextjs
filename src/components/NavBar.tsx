@@ -1,13 +1,32 @@
 import { getAuth } from 'firebase/auth';
-import { Avatar, Button, Dropdown, Navbar } from 'flowbite-react';
+import {
+  Avatar,
+  Button,
+  DarkThemeToggle,
+  Dropdown,
+  Navbar,
+} from 'flowbite-react';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { logOut, signInWithGoogle } from '../db/users';
+import { useTheme } from 'next-themes';
 
 const NavBar = () => {
   const auth = getAuth();
   const [user] = useAuthState(auth);
+  const { theme, setTheme } = useTheme();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleThemeSwitch = () => {
+    if (isMounted) {
+      setTheme(theme === 'light' ? 'dark' : 'light');
+    }
+  };
 
   return (
     <Navbar fluid={true} rounded={true}>
@@ -53,6 +72,9 @@ const NavBar = () => {
         ) : (
           <Button onClick={signInWithGoogle}>Sign in with Google</Button>
         )}
+        <div className="ml-2">
+          <DarkThemeToggle onClick={handleThemeSwitch} />
+        </div>
       </div>
       <Navbar.Collapse>
         <li>
