@@ -14,7 +14,7 @@ import { useTheme } from 'next-themes';
 
 const NavBar = () => {
   const auth = getAuth();
-  const [user] = useAuthState(auth);
+  const [currentUser] = useAuthState(auth);
   const { theme, setTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -40,8 +40,10 @@ const NavBar = () => {
           Hitchlog
         </span>
       </Navbar.Brand>
-      <div className="flex md:order-2">
-        {user ? (
+
+      <div className="flex gap-3 md:order-2">
+        <Navbar.Toggle />
+        {currentUser ? (
           <>
             <Dropdown
               arrowIcon={false}
@@ -49,15 +51,15 @@ const NavBar = () => {
               label={
                 <Avatar
                   alt="User settings"
-                  img={user?.photoURL as string}
+                  img={currentUser?.photoURL as string}
                   rounded={true}
                 />
               }
             >
               <Dropdown.Header className="bg-slate-400">
-                <span className="block text-sm">{user.displayName}</span>
+                <span className="block text-sm">{currentUser.displayName}</span>
                 <span className="block text-sm font-medium truncate">
-                  {user.email ? user.email : ''}
+                  {currentUser.email ? currentUser.email : ''}
                 </span>
               </Dropdown.Header>
               <Dropdown.Item>
@@ -67,14 +69,13 @@ const NavBar = () => {
 
               <Dropdown.Item onClick={logOut}>Sign out</Dropdown.Item>
             </Dropdown>
-            <Navbar.Toggle />
           </>
         ) : (
-          <Button onClick={signInWithGoogle}>Sign in with Google</Button>
+          <Button size="sm" onClick={signInWithGoogle}>
+            Sign in
+          </Button>
         )}
-        <div className="ml-2">
-          <DarkThemeToggle onClick={handleThemeSwitch} />
-        </div>
+        <DarkThemeToggle onClick={handleThemeSwitch} />
       </div>
       <Navbar.Collapse>
         <li>
