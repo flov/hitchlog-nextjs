@@ -35,9 +35,13 @@ export const vehicleToIcon = (vehicle: VEHICLES) => {
 export const vehicleIconsForRides = (rides: Ride[]) =>
   removeDuplicates(rides.map((ride, index) => ride.vehicle)).map(
     (vehicle, index) => (
-      <Tooltip key={`${index}Vehicles`} content={`${vehicle} ride`}>
-        {vehicle && vehicleToIcon(vehicle)}
-      </Tooltip>
+      <>
+        {vehicle && (
+          <Tooltip key={`${index}Vehicles`} content={`${vehicle} ride`}>
+            {vehicleToIcon(vehicle)}
+          </Tooltip>
+        )}
+      </>
     )
   );
 
@@ -59,14 +63,19 @@ export const countryFlagsForTrip = (trip: Trip) =>
   ));
 
 export const experiencesForRides = (rides: Ride[]) => (
-  <Tooltip content={`${rides.length} ${pluralize(rides.length, 'ride')}`}>
-    <div className="flex -space-x-2 items-center">
+  <Tooltip
+    content={`${rides.length} ${pluralize(
+      rides.length,
+      'ride'
+    )}: ${removeDuplicates(rides.map((x) => x.experience)).join(', ')}`}
+  >
+    <div className="flex items-center -space-x-3">
       {rides.map((ride, index) => {
         if (index >= 5) return;
         return (
           <div
             key={`${index}RideNumber`}
-            className="flex items-center -space-x-2"
+            className="flex items-center space-x-3"
           >
             <div className="relative">
               <div
@@ -76,7 +85,7 @@ export const experiencesForRides = (rides: Ride[]) => (
                     : ride.experience === 'good'
                     ? 'bg-green-500'
                     : ride.experience === 'bad'
-                    ? 'bg-red-500'
+                    ? 'bg-red-400'
                     : ride.experience === 'very bad'
                     ? 'bg-red-600'
                     : 'bg-yellow-300'
@@ -87,7 +96,7 @@ export const experiencesForRides = (rides: Ride[]) => (
         );
       })}
       {rides.length > 5 && (
-        <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-gray-700 text-xs font-sm ring-2 ring-gray-300 hover:bg-gray-600  dark:ring-gray-500 ">
+        <div className="relative flex items-center justify-center w-5 h-5 text-xs bg-gray-700 rounded-full font-sm ring-2 ring-gray-300 hover:bg-gray-600 dark:ring-gray-500 ">
           {rides.length}
         </div>
       )}
