@@ -92,6 +92,25 @@ export const getRidesForTrip = async (id: string) => {
   return rides;
 };
 
+export const getTripsByLocation = async (
+  northLat: number,
+  southLat: number
+) => {
+  const tripsRef = query(
+    collection(db, 'trips'),
+    where('origin.lat', '<', northLat),
+    where('origin.lat', '>', southLat),
+    limit(24)
+  );
+  const querySnapshot = await getDocs(tripsRef);
+  const trips: Trip[] = [];
+  querySnapshot.forEach((doc) => {
+    trips.push({ id: doc.id, ...doc.data() } as Trip);
+  });
+
+  return trips;
+};
+
 export const getTripsByExperience = async (experience: string) => {
   const tripsRef = query(
     collectionGroup(db, 'trips'),
@@ -99,7 +118,6 @@ export const getTripsByExperience = async (experience: string) => {
     limit(limitNumber)
   );
   const querySnapshot = await getDocs(tripsRef);
-  console.log(querySnapshot.docs.length);
   const trips = await Promise.all(
     querySnapshot.docs.map(async (doc) => {
       return { ...doc.data(), id: doc.id };

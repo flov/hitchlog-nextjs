@@ -4,7 +4,11 @@ import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import { Status } from '@googlemaps/react-wrapper';
 import OverlayContainer from '../../src/components/OverlayContainer';
 import OverlayBubble from '../../src/components/OverlayBubble';
-import { getTrips, getTripsByExperience } from '../../src/db/trips';
+import {
+  getTrips,
+  getTripsByExperience,
+  getTripsByLocation,
+} from '../../src/db/trips';
 import { Experiences, Trip } from '../../src/types';
 import { Select } from 'flowbite-react';
 import { ListTrips } from '../../src/components/ListTrips';
@@ -38,10 +42,23 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
     if (ref.current) {
       let createdMap = new google.maps.Map(ref.current, {
         center: {
-          lat: trips[1]?.origin?.lat as number,
-          lng: trips[1]?.origin?.lng as number,
+          lat: trips[0]?.origin?.lat as number,
+          lng: trips[0]?.origin?.lng as number,
         },
-        zoom: 2,
+        zoom: 5,
+      });
+      google.maps.event.addListener(createdMap, 'bounds_changed', function () {
+        var bounds = createdMap.getBounds();
+        var ne = bounds?.getNorthEast();
+        var sw = bounds?.getSouthWest();
+        //do whatever you want with those bounds
+
+        if (!ne || !sw) return;
+        setIsLoading(true);
+        getTripsByLocation(ne.lat(), sw.lat()).then((trips: Trip[]) => {
+          setIsLoading(false);
+          setTrips(trips);
+        });
       });
       setMap(createdMap);
     }
@@ -71,7 +88,7 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
         ))}
       </div>
 
-      <div className="mx-auto p-4 max-w-7xl">
+      <div className="p-4 mx-auto max-w-7xl">
         <div className="flex justify-between pb-4 ">
           <div className="w-48">
             <Select

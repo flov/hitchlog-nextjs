@@ -57,7 +57,6 @@ export function HitchhikingTrip({
                     <div className="flex text-gray-600 items-center gap-4">
                       <span>Ride {index + 1} </span>
                       <Badge
-                        className="inline"
                         color={experienceToColor(
                           ride.experience as EXPERIENCES
                         )}

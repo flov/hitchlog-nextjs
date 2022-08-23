@@ -3,7 +3,7 @@ import { Ride, Trip, User } from '../../types';
 import Image from 'next/image';
 import { timeAgoInWords } from '../../utils/timeAgoInWords';
 import RightArrow from '../svg/RightArrow';
-import { Badge, Button, Tooltip } from 'flowbite-react';
+import { Avatar, Badge, Button, Tooltip } from 'flowbite-react';
 import { deleteTrip, getRidesForTrip } from '../../db/trips';
 import {
   countryFlagsForTrip,
@@ -14,6 +14,8 @@ import {
 import { getUser } from '../../db/users';
 import { photoForUser } from '../../utils';
 import Link from 'next/link';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../utils/firebase';
 
 const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
   const [rides, setRides] = useState<Ride[]>([]);
@@ -44,6 +46,8 @@ const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
 
   return (
     <article className="p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+      <div className="invisible space-x-3 bg-green-500 bg-green-400 bg-red-400 bg-red-600 bg-yellow-300 -space-x-3" />
+
       <div className="flex items-center justify-between mb-5 text-gray-500">
         <div className="flex items-center dark:text-white gap-2">
           <Badge color="purple">Trip</Badge>
@@ -52,23 +56,19 @@ const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
           {countryFlagsForTrip(trip)}
           {tripDurationIcons(trip)}
         </div>
+
         <span className="text-sm">
           <Tooltip content={`Hitchhiked ${timeAgoInWords(trip.departure)}`}>
             {timeAgoInWords(trip.departure)}
           </Tooltip>
         </span>
       </div>
-      <h3 className="mb-4 font-bold flex justify-between items-center text-1xl">
+      <h3 className="flex items-center justify-between mb-4 font-bold text-1xl">
         <span>
           From {trip.origin?.city} to {trip.destination?.city}
         </span>
-        {user?.admin && (
-          <Button color="failure" size="xs" onClick={handleDelete}>
-            Delete Trip
-          </Button>
-        )}
       </h3>
-      {rides.map((ride, index) => (
+      {rides.map((ride) => (
         <Fragment key={ride.id}>
           <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
             {ride.title
