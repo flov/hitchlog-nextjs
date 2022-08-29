@@ -54,7 +54,7 @@ export function HitchhikingTrip({
                 <Timeline.Point />
                 <Timeline.Content>
                   <Timeline.Time>
-                    <div className="flex text-gray-600 items-center gap-4">
+                    <div className="flex items-center text-gray-600 gap-4">
                       <span>Ride {index + 1} </span>
                       <Badge
                         color={experienceToColor(

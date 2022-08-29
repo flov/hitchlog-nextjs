@@ -226,6 +226,9 @@ const theme = {
       end: 'rounded-l-none border-l-0 pl-0',
     },
   },
+  blogCard: {
+    base: 'p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700',
+  },
   card: {
     base: 'flex rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800',
     children: 'flex h-full flex-col justify-center gap-4 p-4',

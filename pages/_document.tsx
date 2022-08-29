@@ -8,13 +8,13 @@ export default function Document() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Lexend&family=Roboto:wght@300&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Lexend&family=Open+Sans:wght@300&display=swap"
           rel="stylesheet"
         />
       </Head>
 
+      <Main />
       <body>
-        <Main />
         <NextScript />
         <Script
           src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"

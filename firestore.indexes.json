@@ -40,7 +40,7 @@
     },
     {
       "collectionGroup": "rides",
-      "fieldPath": "trip_id",
+      "fieldPath": "tripId",
       "indexes": [
         {
           "order": "ASCENDING",

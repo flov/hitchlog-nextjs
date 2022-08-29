@@ -55,6 +55,15 @@ const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
           {vehicleIconsForRides(rides)}
           {countryFlagsForTrip(trip)}
           {tripDurationIcons(trip)}
+          <div className="flex items-center -space-x-3">
+            {[].map((i) => (
+              <div key={i} className="flex items-center space-x-3">
+                <div className="relative">
+                  <div className="w-5 h-5 bg-green-500 border rounded-full"></div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <span className="text-sm">

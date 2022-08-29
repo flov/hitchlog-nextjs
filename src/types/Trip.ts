@@ -1,5 +1,5 @@
 import { QueryDocumentSnapshot } from 'firebase/firestore';
-import { Ride } from './Ride';
+import { EXPERIENCES, Ride } from './Ride';
 
 export type Location = {
   lat?: number;
@@ -13,6 +13,8 @@ export type Location = {
 export type Timestamp = { seconds: number; nanoseconds: number };
 
 export type Trip = {
+  experiences: EXPERIENCES[];
+  hasStory: boolean;
   arrival: Timestamp;
   createdAt: Timestamp;
   destination?: Location;
