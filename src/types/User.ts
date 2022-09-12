@@ -14,6 +14,12 @@ export type User = {
   location?: UserLocation;
 };
 
+export type NewUser = {
+  user_id: number;
+  username: string;
+  gender: string;
+};
+
 export type UserLocation = {
   lng: number;
   lat: number;

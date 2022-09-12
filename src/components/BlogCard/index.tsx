@@ -18,52 +18,20 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../utils/firebase';
 
 const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
-  const [rides, setRides] = useState<Ride[]>([]);
-  const [user, setUser] = useState<User>();
-
-  useEffect(() => {
-    getUser(trip?.uid as string).then((user) => {
-      setUser(user as User);
-    });
-    getRidesForTrip(trip.id as string)
-      .then((rides) => {
-        setRides(rides);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [trip.id, trip?.uid]);
-
-  const handleDelete = () => {
-    deleteTrip(trip.id as string)
-      .then(() => {
-        console.log('Trip deleted');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  const { rides, user } = trip;
+  console.log({ rides });
 
   return (
     <article className="p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-      <div className="invisible space-x-3 bg-green-500 bg-green-400 bg-red-400 bg-red-600 bg-yellow-300 -space-x-3" />
+      <div className="invisible bg-red-400 bg-red-600 bg-yellow-300 bg-green-400 bg-green-500 space-x-3 -space-x-3" />
 
       <div className="flex items-center justify-between mb-5 text-gray-500">
-        <div className="flex items-center dark:text-white gap-2">
+        <div className="flex items-center gap-2 dark:text-white">
           <Badge color="purple">Trip</Badge>
           {experiencesForRides(rides)}
           {vehicleIconsForRides(rides)}
           {countryFlagsForTrip(trip)}
           {tripDurationIcons(trip)}
-          <div className="flex items-center -space-x-3">
-            {[].map((i) => (
-              <div key={i} className="flex items-center space-x-3">
-                <div className="relative">
-                  <div className="w-5 h-5 bg-green-500 border rounded-full"></div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
 
         <span className="text-sm">
@@ -77,17 +45,21 @@ const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
           From {trip.origin?.city} to {trip.destination?.city}
         </span>
       </h3>
-      {rides.map((ride) => (
-        <Fragment key={ride.id}>
-          <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-            {ride.title
-              ? ride.title
-              : `${trip.origin?.city} to ${trip.destination?.city}`}
-          </h2>
+      {rides.map((ride, index) => (
+        <Fragment key={`ride${index}`}>
           {ride.story && (
-            <p className="mb-5 font-light text-gray-500 dark:text-gray-400">
-              {ride.story}
-            </p>
+            <>
+              <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+                {ride.title
+                  ? ride.title
+                  : `${trip.origin?.city} to ${trip.destination?.city}`}
+              </h2>
+              {ride.story && (
+                <p className="mb-5 font-light text-gray-500 dark:text-gray-400">
+                  {ride.story}
+                </p>
+              )}
+            </>
           )}
         </Fragment>
       ))}
@@ -101,11 +73,11 @@ const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
                 width={28}
                 height={28}
                 src={photoForUser(user, '28x28')}
-                alt={`${user?.displayName}'s profile picture'`}
+                alt={`${user.username}'s profile picture'`}
               />
 
               <span className="font-medium dark:text-white">
-                {user.displayName}
+                {user.username}
               </span>
             </>
           )}

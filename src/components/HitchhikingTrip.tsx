@@ -17,7 +17,7 @@ export function HitchhikingTrip({
   trip: Trip;
   rides: Ride[];
 }) {
-  const createdAt = timestampToDate(trip.createdAt as Timestamp);
+  const createdAt = timestampToDate(trip.created_at as Timestamp);
   const departure = timestampToDate(trip.departure as Timestamp);
   const arrival = timestampToDate(trip.arrival as Timestamp);
 

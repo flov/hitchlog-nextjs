@@ -1,5 +1,6 @@
 import { QueryDocumentSnapshot } from 'firebase/firestore';
 import { EXPERIENCES, Ride } from './Ride';
+import { NewUser } from './User';
 
 export type Location = {
   lat?: number;
@@ -13,20 +14,17 @@ export type Location = {
 export type Timestamp = { seconds: number; nanoseconds: number };
 
 export type Trip = {
-  experiences: EXPERIENCES[];
-  hasStory: boolean;
-  arrival: Timestamp;
-  createdAt: Timestamp;
-  destination?: Location;
-  googleDuration?: number;
-  id?: number | string;
-  origin?: Location;
-  rides?: Ride[];
-  departure: Timestamp;
-  totalDistance?: number;
-  uid?: string | number;
-  travellingWith?: number;
-  updatedAt?: Timestamp;
+  id: number | string;
+  arrival: Date;
+  departure: Date;
+  created_at: Date;
+  origin: Location;
+  destination: Location;
+  google_duration?: number;
+  rides: Ride[];
+  distance?: number;
+  travelling_with: number;
+  user: NewUser;
 };
 
 export const tripConverter = {

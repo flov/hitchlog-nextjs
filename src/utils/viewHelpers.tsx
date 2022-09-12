@@ -63,55 +63,59 @@ export const countryFlagsForTrip = (trip: Trip) =>
   ));
 
 export const experiencesForRides = (rides: Ride[]) => (
-  <Tooltip
-    content={`${rides.length} ${pluralize(
-      rides.length,
-      'ride'
-    )}: ${removeDuplicates(rides.map((x) => x.experience)).join(', ')}`}
-  >
-    <div className="flex items-center -space-x-3">
-      {rides.map((ride, index) => {
-        if (index >= 5) return;
-        return (
-          <div
-            key={`${index}RideNumber`}
-            className="flex items-center space-x-3"
-          >
-            <div className="relative">
+  <>
+    {!!rides?.length && (
+      <Tooltip
+        content={`${rides.length} ${pluralize(
+          rides.length,
+          'ride'
+        )}: ${removeDuplicates(rides.map((x) => x.experience)).join(', ')}`}
+      >
+        <div className="flex items-center -space-x-3">
+          {rides.map((ride, index) => {
+            if (index >= 5) return;
+            return (
               <div
-                className={`rounded-full border h-5 w-5 ${
-                  ride.experience === 'very good'
-                    ? 'bg-green-400'
-                    : ride.experience === 'good'
-                    ? 'bg-green-500'
-                    : ride.experience === 'bad'
-                    ? 'bg-red-400'
-                    : ride.experience === 'very bad'
-                    ? 'bg-red-600'
-                    : 'bg-yellow-300'
-                }`}
-              ></div>
+                key={`${index}RideNumber`}
+                className="flex items-center space-x-3"
+              >
+                <div className="relative">
+                  <div
+                    className={`rounded-full border h-5 w-5 ${
+                      ride.experience === 'very good'
+                        ? 'bg-green-400'
+                        : ride.experience === 'good'
+                        ? 'bg-green-500'
+                        : ride.experience === 'bad'
+                        ? 'bg-red-400'
+                        : ride.experience === 'very bad'
+                        ? 'bg-red-600'
+                        : 'bg-yellow-300'
+                    }`}
+                  ></div>
+                </div>
+              </div>
+            );
+          })}
+          {rides.length > 5 && (
+            <div className="relative flex items-center justify-center w-5 h-5 text-xs bg-gray-700 rounded-full font-sm ring-2 ring-gray-300 hover:bg-gray-600 dark:ring-gray-500 ">
+              {rides.length}
             </div>
-          </div>
-        );
-      })}
-      {rides.length > 5 && (
-        <div className="relative flex items-center justify-center w-5 h-5 text-xs bg-gray-700 rounded-full font-sm ring-2 ring-gray-300 hover:bg-gray-600 dark:ring-gray-500 ">
-          {rides.length}
+          )}
         </div>
-      )}
-    </div>
-  </Tooltip>
+      </Tooltip>
+    )}
+  </>
 );
 
 export const durationFromGoogle = (trip: Trip) => {
   const tripDuration = trip.arrival.seconds - trip.departure.seconds;
-  const durationDiff = trip.googleDuration
-    ? trip.googleDuration - tripDuration
+  const durationDiff = trip.google_duration
+    ? trip.google_duration - tripDuration
     : 0;
 
   return `Google Duration: ${
-    trip.googleDuration && secondsToTime(trip.googleDuration)
+    trip.google_duration && secondsToTime(trip.google_duration)
   }`;
 };
 

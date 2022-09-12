@@ -10,6 +10,7 @@ specifiers:
   autoprefixer: ^10.4.7
   canvas-confetti: ^1.5.1
   classnames: ^2.3.1
+  cookie: ^0.5.0
   eslint: 8.18.0
   eslint-config-next: 12.2.0
   firebase: ^9.8.4
@@ -43,6 +44,7 @@ dependencies:
   autoprefixer: 10.4.7_postcss@8.4.14
   canvas-confetti: 1.5.1
   classnames: 2.3.1
+  cookie: 0.5.0
   firebase: 9.8.4
   flowbite: 1.5.2
   flowbite-react: 0.1.10_x4tb7fh7w5lq6i4mz6dbbpd6jy
@@ -1502,6 +1504,11 @@ packages:
 
   /conventional-commit-types/3.0.0:
     resolution: {integrity: sha512-SmmCYnOniSsAa9GqWOeLqc179lfr5TRu5b4QFDkbsrJ5TZjPJx85wtOr3zn+1dbeNiXDKGPbZ72IKbPhLXh/Lg==}
+    dev: false
+
+  /cookie/0.5.0:
+    resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
+    engines: {node: '>= 0.6'}
     dev: false
 
   /core-js-pure/3.23.3:

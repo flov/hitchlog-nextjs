@@ -4,15 +4,12 @@ import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import { Status } from '@googlemaps/react-wrapper';
 import OverlayContainer from '../../src/components/OverlayContainer';
 import OverlayBubble from '../../src/components/OverlayBubble';
-import {
-  getTrips,
-  getTripsByExperience,
-  getTripsByLocation,
-} from '../../src/db/trips';
+import { getTripsByExperience } from '../../src/db/trips';
 import { Experiences, Trip } from '../../src/types';
 import { Select } from 'flowbite-react';
 import { ListTrips } from '../../src/components/ListTrips';
 import { PuffLoader } from 'react-spinners';
+import { getTrips, getTripsByLocation } from '../../src/db/trips_new';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const trips = await getTrips();
@@ -38,6 +35,8 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
   const [trips, setTrips] = useState<Trip[]>(props.trips);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  console.log({ trips });
+
   useEffect(() => {
     if (ref.current) {
       let createdMap = new google.maps.Map(ref.current, {
@@ -45,20 +44,26 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
           lat: trips[0]?.origin?.lat as number,
           lng: trips[0]?.origin?.lng as number,
         },
-        zoom: 5,
+        zoom: 7,
       });
-      google.maps.event.addListener(createdMap, 'bounds_changed', function () {
-        var bounds = createdMap.getBounds();
-        var ne = bounds?.getNorthEast();
-        var sw = bounds?.getSouthWest();
+      google.maps.event.addListener(createdMap, 'dragend', function () {
+        const bounds = createdMap.getBounds();
+        const ne = bounds?.getNorthEast();
+        const sw = bounds?.getSouthWest();
+        const northLat = ne?.lat() as number;
+        const southLat = sw?.lat() as number;
+        const westLng = sw?.lng() as number;
+        const eastLng = ne?.lng() as number;
         //do whatever you want with those bounds
 
         if (!ne || !sw) return;
         setIsLoading(true);
-        getTripsByLocation(ne.lat(), sw.lat()).then((trips: Trip[]) => {
-          setIsLoading(false);
-          setTrips(trips);
-        });
+        getTripsByLocation(northLat, southLat, westLng, eastLng).then(
+          (trips: Trip[]) => {
+            setIsLoading(false);
+            setTrips(trips);
+          }
+        );
       });
       setMap(createdMap);
     }
@@ -111,7 +116,9 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
             <PuffLoader color="blue" />
           </div>
         ) : (
-          <ListTrips trips={trips} />
+          <>
+            <ListTrips trips={trips} />
+          </>
         )}
       </div>
     </>

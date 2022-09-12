@@ -1,12 +1,9 @@
 export type Ride = {
-  id?: string;
-  tripId?: string;
   title?: string;
   story?: string;
   experience?: EXPERIENCES;
-  tagList?: string[];
   vehicle?: VEHICLES;
-  waitingTime?: number;
+  waiting_time?: number;
   youtube?: string;
   gender?: GENDERS;
 };
