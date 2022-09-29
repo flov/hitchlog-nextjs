@@ -1,6 +1,12 @@
 import { Tooltip } from 'flowbite-react';
+import md5 from 'md5';
 import ReactCountryFlag from 'react-country-flag';
-import { BsSpeedometer } from 'react-icons/bs';
+import {
+  BsGenderAmbiguous,
+  BsGenderFemale,
+  BsGenderMale,
+  BsSpeedometer,
+} from 'react-icons/bs';
 import { CgSandClock } from 'react-icons/cg';
 import {
   FaBus,
@@ -8,6 +14,7 @@ import {
   FaGoogle,
   FaMotorcycle,
   FaPlane,
+  FaRoad,
   FaScroll,
   FaShip,
   FaTruck,
@@ -179,9 +186,9 @@ export const showAgeAtTrip = (trip: Trip, user: User) => {
   );
 };
 
-export const showNumberOfRides = (rides: Ride[]) => (
-  <Tooltip content={`${rides.length} ${pluralize(rides.length, 'ride')}`}>
-    <FiThumbsUp className="inline " /> {rides.length}
+export const showNumberOfRides = (ridesLength: number) => (
+  <Tooltip content={`${ridesLength} ${pluralize(ridesLength, 'ride')}`}>
+    <FiThumbsUp className="inline " /> {ridesLength}
   </Tooltip>
 );
 
@@ -225,3 +232,29 @@ export const showTripGoogleDuration = (trip: Trip) => {
     );
   }
 };
+
+export const showUserGender = (gender: 'male' | 'female' | 'non-binary') => (
+  <Tooltip content={gender}>
+    {gender == 'male' ? (
+      <BsGenderMale className="inline" />
+    ) : gender == 'female' ? (
+      <BsGenderFemale className="inline" />
+    ) : (
+      <BsGenderAmbiguous className="inline" />
+    )}
+  </Tooltip>
+);
+
+export const showNumberOfTrips = (tripsLength: number) => (
+  <Tooltip content={`${tripsLength} ${pluralize(tripsLength, 'trip')}`}>
+    <FaRoad className="inline " /> {tripsLength}
+  </Tooltip>
+);
+
+export const photoForUser = (user: User, size = '96x96') =>
+  `https://robohash.org/${user.username}?size=${size}&set=${
+    user?.gender === 'male' ? 'set1' : 'set4'
+  }`;
+
+export const profilePicture = (user: User, size = 64) =>
+  `https://www.gravatar.com/avatar/${md5(user?.email)}?s=${size}`;

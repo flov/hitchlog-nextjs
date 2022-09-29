@@ -84,6 +84,9 @@ const NavBar = () => {
         <li>
           <Link href="/trips">Trips</Link>
         </li>
+        <li>
+          <Link href="/hitchhikers">Hitchhikers</Link>
+        </li>
       </Navbar.Collapse>
     </Navbar>
   );

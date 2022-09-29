@@ -53,7 +53,7 @@ export function HitchhikingTrip({
             {showVehiclesForRides(trip.rides)}
             {showTotalWaitingTimeForRides(trip.rides)}
             {showAgeAtTrip(trip, user)}
-            {showNumberOfRides(trip.rides)}
+            {showNumberOfRides(trip.rides.length)}
             {showTripGoogleDuration(trip)}
             {showTripDistance(trip)}
             {showNumberOfStories(trip.rides)}

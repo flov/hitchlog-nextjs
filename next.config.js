@@ -2,8 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['lh3.googleusercontent.com', 'robohash.org'],
+    domains: ['lh3.googleusercontent.com', 'www.gravatar.com', 'robohash.org'],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
