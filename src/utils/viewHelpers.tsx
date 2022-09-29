@@ -1,15 +1,20 @@
 import { Tooltip } from 'flowbite-react';
 import ReactCountryFlag from 'react-country-flag';
+import { BsSpeedometer } from 'react-icons/bs';
+import { CgSandClock } from 'react-icons/cg';
 import {
   FaBus,
   FaCarSide,
+  FaGoogle,
   FaMotorcycle,
   FaPlane,
+  FaScroll,
   FaShip,
   FaTruck,
 } from 'react-icons/fa';
-import { pluralize, removeDuplicates } from '.';
-import { Ride, Trip, VEHICLES } from '../types';
+import { FiThumbsUp, FiUser } from 'react-icons/fi';
+import { capitalize, pluralize, removeDuplicates } from '.';
+import { Ride, Trip, User, VEHICLES } from '../types';
 import { countries } from '../utils/country_codes';
 import { secondsToTime } from './secondsToTime';
 
@@ -47,17 +52,17 @@ export const vehicleIconsForRides = (rides: Ride[]) =>
 
 export const countryFlagsForTrip = (trip: Trip) =>
   removeDuplicates([
-    trip.origin?.countryCode,
-    trip.destination?.countryCode,
-  ]).map((countryCode, index) => (
+    trip.origin?.country_code,
+    trip.destination?.country_code,
+  ]).map((country_code, index) => (
     <Tooltip
       //@ts-ignore
-      content={`${countries[countryCode]}`}
+      content={`${countries[country_code]}`}
       key={`${index}CountryCode`}
     >
       <ReactCountryFlag
         style={{ fontSize: '1.5rem' }}
-        countryCode={countryCode}
+        countryCode={country_code}
       />
     </Tooltip>
   ));
@@ -129,4 +134,94 @@ export const tripDurationIcons = (trip: Trip) => {
       </Tooltip>
     </>
   );
+};
+
+export const showErrors = (errors: Record<string, string[]>) =>
+  Object.keys(errors).map((key) => (
+    <ul key={key}>
+      <li>
+        {key}: {errors[key].join(' ')}{' '}
+      </li>
+    </ul>
+  ));
+
+export const showVehiclesForRides = (rides: Ride[]) =>
+  removeDuplicates(rides.map((ride) => ride.vehicle))
+    .filter((x) => x != null)
+    .map((ride) => vehicleToIcon(ride));
+
+export const showTotalWaitingTimeForRides = (rides: Ride[]) => {
+  const totalWaitingTime = rides
+    .map((ride) => ride.waiting_time)
+    .filter((x) => x)
+    .reduce((a, b) => a + b, 0);
+
+  if (!totalWaitingTime) return;
+  return (
+    <Tooltip content={`Total waiting time: ${totalWaitingTime} minutes`}>
+      <CgSandClock className="inline" />
+      {totalWaitingTime}m
+    </Tooltip>
+  );
+};
+
+export const showAgeAtTrip = (trip: Trip, user: User) => {
+  if (!trip.age_at_trip) return;
+  return (
+    <Tooltip
+      content={`${capitalize(user.username)} was ${trip.age_at_trip} when ${
+        user.gender === 'male' ? 'he' : 'she'
+      } did the trip`}
+    >
+      <FiUser className="inline" />
+      {trip.age_at_trip} years
+    </Tooltip>
+  );
+};
+
+export const showNumberOfRides = (rides: Ride[]) => (
+  <Tooltip content={`${rides.length} ${pluralize(rides.length, 'ride')}`}>
+    <FiThumbsUp className="inline " /> {rides.length}
+  </Tooltip>
+);
+
+export const showNumberOfStories = (rides: Ride[]) => {
+  const numberOfStories = rides
+    .map((x) => x.story)
+    .filter((story) => story != null || story == '').length;
+  console.log({ numberOfStories });
+  return (
+    <Tooltip
+      content={`${numberOfStories} ${pluralize(numberOfStories, 'story')}`}
+    >
+      <FaScroll className="inline" /> {numberOfStories}
+    </Tooltip>
+  );
+};
+
+export const showTripDistance = (trip: Trip) => {
+  if (trip.distance) {
+    return (
+      <Tooltip
+        content={`travelled ${trip.distance} kms with an average speed of ${trip.average_speed}`}
+      >
+        <BsSpeedometer className="inline" />
+        {trip.distance} kms/{trip.average_speed} km/h
+      </Tooltip>
+    );
+  }
+};
+
+export const showTripGoogleDuration = (trip: Trip) => {
+  const google_duration = trip.google_duration;
+  if (google_duration) {
+    return (
+      <Tooltip
+        content={`Google Maps duration: ${secondsToTime(google_duration)}`}
+      >
+        <FaGoogle />
+        {secondsToTime(google_duration)}
+      </Tooltip>
+    );
+  }
 };

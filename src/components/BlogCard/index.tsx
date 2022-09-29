@@ -1,25 +1,20 @@
-import React, { FC, Fragment, useEffect, useState } from 'react';
-import { Ride, Trip, User } from '../../types';
+import React, { FC, Fragment } from 'react';
+import { Trip } from '../../types';
 import Image from 'next/image';
 import { timeAgoInWords } from '../../utils/timeAgoInWords';
 import RightArrow from '../svg/RightArrow';
-import { Avatar, Badge, Button, Tooltip } from 'flowbite-react';
-import { deleteTrip, getRidesForTrip } from '../../db/trips';
+import { Badge, Tooltip } from 'flowbite-react';
 import {
   countryFlagsForTrip,
   experiencesForRides,
   tripDurationIcons,
   vehicleIconsForRides,
 } from '../../utils/viewHelpers';
-import { getUser } from '../../db/users';
 import { photoForUser } from '../../utils';
 import Link from 'next/link';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../utils/firebase';
 
 const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
   const { rides, user } = trip;
-  console.log({ rides });
 
   return (
     <article className="p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">

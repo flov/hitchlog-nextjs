@@ -1,7 +1,4 @@
-import { Loader } from '@googlemaps/js-api-loader';
-import {
-  Accordion,
-} from 'flowbite-react';
+import { Accordion } from 'flowbite-react';
 import { Formik } from 'formik';
 import {
   GetServerSideProps,
@@ -9,13 +6,16 @@ import {
   NextPage,
 } from 'next';
 import Head from 'next/head';
-import { useEffect } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { addRideData, getTrip } from '../../../src/db/trips';
-import { Ride } from '../../../src/types';
+import { useEffect, useState } from 'react';
+import { Ride, Trip } from '../../../src/types';
 import { displayRoute } from '../../../src/utils/DirectionsHandler';
-import { auth } from '../../../src/utils/firebase';
 import { RideForm } from '../../../src/components/RideForm';
+import { useAuth } from '../../../src/components/contexts/AuthContext';
+import { getTrip, updateRide } from '../../../src/db/trips_new';
+import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
+import LoadingContainer from '../../../src/components/LoadingContainer';
+import { useRouter } from 'next/router';
+import { HitchhikingTrip } from '../../../src/components/HitchhikingTrip';
 
 declare global {
   interface Window {
@@ -27,47 +27,71 @@ const randomInRange = (min: number, max: number) =>
   Math.random() * (max - min) + min;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const trip = await getTrip(params?.id as string);
+  const { data } = await getTrip(params?.id);
   return {
     props: {
-      trip: JSON.parse(JSON.stringify(trip)),
+      trip: JSON.parse(JSON.stringify(data)),
       googleMapsKey: process.env.GOOGLE_MAPS_KEY,
     },
   };
 };
 
-const ShowTrip: NextPage = ({
-  googleMapsKey,
+const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
+  google,
   trip,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [user] = useAuthState(auth);
+  const { currentUser } = useAuth();
+  const router = useRouter();
+
+  const [rides, setRides] = useState<Ride[]>(trip?.rides);
 
   useEffect(() => {
-    const loader = new Loader({
-      apiKey: googleMapsKey,
-      version: 'weekly',
+    if (currentUser?.id !== trip.user_id) router.push('/login');
+    const mapElement = document.getElementById('map') as HTMLDivElement;
+    if (!mapElement) return;
+    const map = new google.maps.Map(mapElement, {
+      mapTypeControl: false,
+      zoom: 11,
+      center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
     });
-    loader.load().then((google) => {
-      const mapElement = document.getElementById('map') as HTMLDivElement;
-      if (!mapElement) return;
-      const map = new google.maps.Map(mapElement, {
-        mapTypeControl: false,
-        zoom: 11,
-        center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
-      });
-      const directionsService = new google.maps.DirectionsService();
-      const directionsRenderer = new google.maps.DirectionsRenderer({
-        draggable: true,
-        map,
-      });
-      displayRoute(
-        trip.origin,
-        trip.destination,
-        directionsService,
-        directionsRenderer
-      );
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer({
+      draggable: true,
+      map,
     });
-  }, [googleMapsKey, trip]);
+    displayRoute(
+      trip.origin,
+      trip.destination,
+      directionsService,
+      directionsRenderer
+    );
+  }, [
+    currentUser?.id,
+    google.maps.DirectionsRenderer,
+    google.maps.DirectionsService,
+    google.maps.Map,
+    router,
+    trip.destination,
+    trip.origin,
+    trip.user_id,
+  ]);
+
+  console.log({ rides });
+
+  // const changeRides = (values: Ride[]) => {
+  // const rideIndex = rides.findIndex((ride: Ride) => ride.id === values.id);
+  // let newRides = [...rides];
+  // if (rideIndex !== -1) {
+  // newRides[rideIndex] = {
+  // ...newRides[rideIndex],
+  // ...values,
+  // };
+  // }
+  // setRides(newRides);
+  // };
+  //
+
+  const [hello, setHello] = useState('');
 
   return (
     <>
@@ -76,36 +100,61 @@ const ShowTrip: NextPage = ({
       </Head>
 
       <div className="w-full bg-gray-200 h-96" id="map"></div>
-      <div className="max-w-4xl mx-auto">
-        <h1 className="my-4 text-2xl font-medium">
-          Edit Trip from {trip?.origin?.city} to {trip?.destination?.city}
-        </h1>
-        <Accordion alwaysOpen={true}>
-          {new Array(Number(trip?.rides.length)).fill(null).map((x, index) => (
-            <Accordion.Panel key={`ride${index}`}>
-              <Accordion.Title>Ride {index + 1}</Accordion.Title>
-              <Accordion.Content>
-                <Formik
-                  component={RideForm}
-                  initialValues={{ story: '', title: '', experience: '' }}
-                  onSubmit={async (values) => {
-                    await addRideData(trip, values as Ride, index);
-                    window.confetti({
-                      angle: randomInRange(55, 125),
-                      spread: randomInRange(50, 70),
-                      particleCount: randomInRange(50, 100),
-                      origin: { y: 0.6 },
-                    });
-                    console.log(values);
-                  }}
-                />
-              </Accordion.Content>
-            </Accordion.Panel>
-          ))}
-        </Accordion>
+      <div className="px-4 py-8 mx-auto max-w-7xl">
+        <div className="grid-edit-trip">
+          <div>
+            <Accordion alwaysOpen={true}>
+              {trip?.rides &&
+                trip?.rides.map((ride: Ride, index: number) => (
+                  <Accordion.Panel key={`ride${index}`}>
+                    <Accordion.Title>Ride {index + 1}</Accordion.Title>
+                    <Accordion.Content>
+                      <Formik
+                        component={(props) => (
+                          <RideForm
+                            {...props}
+                            setHello={setHello}
+                            rides={trip.rides}
+                            ride={ride}
+                          />
+                        )}
+                        initialValues={{
+                          id: ride.id,
+                          vehicle: ride.vehicle,
+                          waiting_time: ride.waiting_time,
+                          story: ride.story,
+                          title: ride.title,
+                          experience: ride.experience,
+                        }}
+                        onSubmit={async (values) => {
+                          await updateRide(values);
+                          window.confetti({
+                            angle: randomInRange(55, 125),
+                            spread: randomInRange(50, 70),
+                            particleCount: randomInRange(50, 100),
+                            origin: { y: 0.6 },
+                          });
+                          console.log(values);
+                        }}
+                      />
+                    </Accordion.Content>
+                  </Accordion.Panel>
+                ))}
+            </Accordion>
+          </div>
+          <div>
+            {hello}
+            {currentUser && (
+              <HitchhikingTrip trip={trip} rides={rides} user={currentUser} />
+            )}
+          </div>
+        </div>
       </div>
     </>
   );
 };
 
-export default ShowTrip;
+export default GoogleApiWrapper(({ googleMapsKey }) => ({
+  apiKey: googleMapsKey,
+  LoadingContainer: LoadingContainer,
+}))(ShowTrip);

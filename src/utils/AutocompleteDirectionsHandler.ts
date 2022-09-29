@@ -75,7 +75,7 @@ export class AutocompleteDirectionsHandler {
     return {
       city: city ? city.long_name : '',
       country: country ? country.long_name : '',
-      countryCode: country ? country.short_name : '',
+      country_code: country ? country.short_name : '',
     };
   }
 
@@ -103,7 +103,7 @@ export class AutocompleteDirectionsHandler {
   ) {
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace();
-      const { city, country, countryCode } = this.getDataFromAddressComponent(
+      const { city, country, country_code } = this.getDataFromAddressComponent(
         place.address_components as google.maps.GeocoderAddressComponent[]
       );
       const lat = place.geometry?.location?.lat();
@@ -128,7 +128,7 @@ export class AutocompleteDirectionsHandler {
         lng,
         city,
         country,
-        countryCode,
+        country_code,
       });
       this.route();
     });

@@ -144,37 +144,37 @@ export const TripForm = ({
         <div className="">
           <TextInput
             color={
-              touched.numberOfRides && errors.numberOfRides
+              touched.number_of_rides && errors.number_of_rides
                 ? 'failure'
-                : touched.numberOfRides
+                : touched.number_of_rides
                 ? 'success'
                 : 'primary'
             }
-            id="numberOfRides"
+            id="number_of_rides"
             type="number"
             required={true}
             placeholder="Number of rides"
             onChange={handleChange}
             onBlur={handleBlur}
-            value={values.numberOfRides}
-            name="numberOfRides"
+            value={values.number_of_rides}
+            name="number_of_rides"
           />
         </div>
         <Select
-          id="travellingWith"
+          id="travelling_with"
           defaultValue={0}
           required={true}
           onChange={handleChange}
           onBlur={handleBlur}
-          value={values.travellingWith}
-          name="travellingWith"
+          value={values.travelling_with}
+          name="travelling_with"
         >
           <option value="0">Travelling by yourself</option>
-          <option value="1">Travelling in twosome</option>
-          <option value="2">Travelling in threesome</option>
-          <option value="3">Travelling in foursome</option>
+          <option value="1">Travelling with one other person</option>
+          <option value="2">Travelling with two other persons</option>
+          <option value="3">Travelling with three other persons</option>
         </Select>
-        <div className="col-span-2 my-4 flex justify-center">
+        <div className="flex justify-center my-4 col-span-2">
           <Button disabled={isSubmitting} type="submit">
             Submit Trip
           </Button>

@@ -1,45 +1,36 @@
-import { AuthProvider, getAuth, signInWithPopup, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db, googleProvider } from '../utils/firebase';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { API_URL } from '../config';
 
-export const createUser = async (userData: any, uid: string) => {
-  console.log({ userData });
-  const d = await setDoc(doc(db, 'users', uid), userData);
+export const getUser = async (id: number | string) => {
+  return axios.get(`${API_URL}/users/${id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
+    },
+  });
 };
 
-export const getUser = async (id: string) => {
-  const userSnapshot = await getDoc(doc(db, 'users', String(id)));
-  return userSnapshot.data();
+export const getUserByUsername = async (id: number | string) => {
+  return axios.get(`${API_URL}/users/${id}`, {
+    params: {
+      username: true,
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
+    },
+  });
 };
 
-export const writeUserToFirebase = async (user: any) => {
-  if (user) {
-    const userData = user.providerData[0];
-    const firebaseUser = await getUser(userData.uid);
-    if (!firebaseUser) {
-      createUser(userData, user.uid);
-    }
-  }
-};
-
-export const signInWithGoogle = () => {
-  return loginWithProvider(googleProvider);
-};
-
-export const loginWithProvider = async (provider: AuthProvider) => {
-  const auth = getAuth();
-  try {
-    const { user } = await signInWithPopup(auth, provider);
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const logOut = async () => {
-  const auth = getAuth();
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.log(error);
-  }
+export const getUsers = async () => {
+  return axios.get(`${API_URL}/users`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
+    },
+  });
 };

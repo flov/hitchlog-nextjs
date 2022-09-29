@@ -7,7 +7,7 @@ export type Location = {
   lng?: number;
   city?: string;
   country?: string;
-  countryCode?: string;
+  country_code?: string;
   placeId?: string;
 };
 
@@ -25,6 +25,8 @@ export type Trip = {
   distance?: number;
   travelling_with: number;
   user: NewUser;
+  age_at_trip: number;
+  average_speed: number;
 };
 
 export const tripConverter = {

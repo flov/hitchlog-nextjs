@@ -1,25 +1,36 @@
-import { Badge, Card, Timeline, Tooltip } from 'flowbite-react';
+import { Badge, Button, Card, Timeline, Tooltip } from 'flowbite-react';
 import moment from 'moment';
 import Image from 'next/image';
 import { BsArrowRight } from 'react-icons/bs';
-import { experienceToColor, timestampToDate } from '../utils';
-import { vehicleToIcon } from '../utils/viewHelpers';
+import { experienceToColor, removeDuplicates } from '../utils';
+import {
+  showAgeAtTrip,
+  showNumberOfRides,
+  showNumberOfStories,
+  showTotalWaitingTimeForRides,
+  showTripDistance,
+  showTripGoogleDuration,
+  showVehiclesForRides,
+  vehicleToIcon,
+} from '../utils/viewHelpers';
 import ReactMarkdown from 'react-markdown';
-import { User, EXPERIENCES, Ride, Timestamp, Trip } from '../types';
+import { User, EXPERIENCES, Ride, Trip } from '../types';
 import { CgSandClock } from 'react-icons/cg';
+import { useAuth } from './contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 export function HitchhikingTrip({
   user,
   trip,
   rides,
 }: {
+  rides: Ride[];
   user: User;
   trip: Trip;
-  rides: Ride[];
 }) {
-  const createdAt = timestampToDate(trip.created_at as Timestamp);
-  const departure = timestampToDate(trip.departure as Timestamp);
-  const arrival = timestampToDate(trip.arrival as Timestamp);
+  const departure = trip.departure;
+  const { currentUser } = useAuth();
+  const router = useRouter();
 
   return (
     <div className="shadow-lg">
@@ -29,24 +40,43 @@ export function HitchhikingTrip({
             className="w-24 h-24 rounded-full"
             width={96}
             height={96}
-            src={
-              user?.photoURL ||
-              `https://robohash.org/${user?.displayName}?size=96x96&set=${
-                user.gender === 'male' ? 'set1' : 'set4'
-              }`
-            }
-            alt={`${user?.displayName}'s profile picture'`}
+            src={`https://robohash.org/${user?.username}?size=96x96&set=${
+              user.gender === 'male' ? 'set1' : 'set4'
+            }`}
+            alt={`${user?.username}'s profile picture'`}
           />
           <h5 className="mt-2 mb-1 text-xl font-medium text-gray-900 dark:text-white"></h5>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            Hitchhiked by {user?.displayName?.split(' ')[0]}
+            Hitchhiked {moment(departure).fromNow()} by {user?.username}
           </span>
+          <div className="flex items-center mt-4 gap-2 dark:text-white">
+            {showVehiclesForRides(trip.rides)}
+            {showTotalWaitingTimeForRides(trip.rides)}
+            {showAgeAtTrip(trip, user)}
+            {showNumberOfRides(trip.rides)}
+            {showTripGoogleDuration(trip)}
+            {showTripDistance(trip)}
+            {showNumberOfStories(trip.rides)}
+          </div>
         </div>
 
-        <h5 className="mb-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          {trip.origin?.city} <BsArrowRight className="inline" />{' '}
-          {trip.destination?.city} hitchhiked {moment(departure).fromNow()}
-        </h5>
+        <div className="flex items-center justify-center ">
+          <h5 className="text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-white">
+            {trip.origin?.city} <BsArrowRight className="inline" />{' '}
+            {trip.destination?.city}
+          </h5>
+          {currentUser && currentUser.username === user.username && (
+            <div className="ml-4">
+              <Button
+                size="sm"
+                onClick={() => router.push(`/trips/${trip.id}/edit`)}
+                color="light"
+              >
+                Edit
+              </Button>
+            </div>
+          )}
+        </div>
         <Timeline>
           {rides.map((ride, index) => {
             return (
@@ -54,7 +84,7 @@ export function HitchhikingTrip({
                 <Timeline.Point />
                 <Timeline.Content>
                   <Timeline.Time>
-                    <div className="flex items-center text-gray-600 gap-4">
+                    <div className="flex items-center text-gray-600 dark:text-white gap-4">
                       <span>Ride {index + 1} </span>
                       <Badge
                         color={experienceToColor(
@@ -65,13 +95,13 @@ export function HitchhikingTrip({
                       </Badge>
                       {ride.vehicle && vehicleToIcon(ride.vehicle)}
                       {ride.gender && <span>{ride.gender}</span>}
-                      {ride.waitingTime ? (
+                      {ride.waiting_time ? (
                         <span>
                           <Tooltip
-                            content={`Waiting time: ${ride.waitingTime} minutes`}
+                            content={`Waiting time: ${ride.waiting_time} minutes`}
                           >
                             <CgSandClock className="inline" />{' '}
-                            {ride.waitingTime}m
+                            {ride.waiting_time}m
                           </Tooltip>
                         </span>
                       ) : (

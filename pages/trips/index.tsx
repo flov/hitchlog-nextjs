@@ -1,15 +1,14 @@
 import { GetServerSideProps } from 'next';
-import React, { FC, ReactElement, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
-import { Status } from '@googlemaps/react-wrapper';
 import OverlayContainer from '../../src/components/OverlayContainer';
 import OverlayBubble from '../../src/components/OverlayBubble';
-import { getTripsByExperience } from '../../src/db/trips';
 import { Experiences, Trip } from '../../src/types';
 import { Select } from 'flowbite-react';
 import { ListTrips } from '../../src/components/ListTrips';
 import { PuffLoader } from 'react-spinners';
 import { getTrips, getTripsByLocation } from '../../src/db/trips_new';
+import LoadingContainer from '../../src/components/LoadingContainer';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const trips = await getTrips();
@@ -20,12 +19,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
       trips: JSON.parse(JSON.stringify(trips)),
     },
   };
-};
-
-const LoadingContainer = (status: Status): ReactElement => {
-  if (status === Status.LOADING) return <h3>{status} ..</h3>;
-  if (status === Status.FAILURE) return <h3>{status} ...</h3>;
-  return <></>;
 };
 
 const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
@@ -71,8 +64,8 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
 
   const handleExperienceChange = async (e: any) => {
     setIsLoading(true);
-    const newTrips = await getTripsByExperience(e.target.value);
-    setTrips(newTrips as Trip[]);
+    // const newTrips = await getTripsByExperience(e.target.value);
+    // setTrips(newTrips as Trip[]);
     setIsLoading(false);
   };
 

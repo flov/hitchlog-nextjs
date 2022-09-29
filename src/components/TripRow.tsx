@@ -12,8 +12,8 @@ import {
 
 const TripRow: FC<{ trip: Trip }> = ({ trip }) => {
   const tripDuration = trip.arrival.seconds - trip.departure.seconds;
-  const durationDiff = trip.googleDuration
-    ? trip.googleDuration - tripDuration
+  const durationDiff = trip.google_duration
+    ? trip.google_duration - tripDuration
     : 0;
   const [rides, setRides] = useState<Ride[]>([]);
 
@@ -42,7 +42,8 @@ const TripRow: FC<{ trip: Trip }> = ({ trip }) => {
         <div className="flex flex-col">
           <p>Trip duration: {secondsToTime(tripDuration)}</p>
           <p className="text-xs text-gray-500">
-            google: {trip.googleDuration && secondsToTime(trip.googleDuration)}
+            google:{' '}
+            {trip.google_duration && secondsToTime(trip.google_duration)}
           </p>
           {durationDiff && (
             <p className="text-xs text-gray-500">

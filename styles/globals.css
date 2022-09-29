@@ -8,6 +8,10 @@ body {
   margin: 0;
   font-family: 'Lexend', sans-serif;
   height: 100%;
+  /* bg-gray-900: */
+}
+.dark body {
+  background: rgb(17 24 39);
 }
 h1,
 h2,
@@ -80,9 +84,10 @@ a {
 * {
   box-sizing: border-box;
 }
-
-.content-area {
-  height: calc(100vh - theme(spacing.96));
+@media (min-width: 768px) {
+  .md-full-screen {
+    height: calc(100vh - 4rem);
+  }
 }
 
 .card-grid {
@@ -91,3 +96,10 @@ a {
   grid-gap: theme(spacing.4);
   margin-bottom: theme(spacing.4);
 }
+
+.grid-edit-trip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(323px, 1fr));
+  grid-gap: theme(spacing.4);
+}
+

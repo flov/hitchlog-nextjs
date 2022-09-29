@@ -4,81 +4,77 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from 'next';
-import { useEffect } from 'react';
-import { getRidesForTrip, getTrip } from '../../src/db/trips';
-import { getUser } from '../../src/db/users';
+import { useEffect, useState } from 'react';
 import { displayRoute } from '../../src/utils/DirectionsHandler';
 import { HitchhikingTrip } from '../../src/components/HitchhikingTrip';
-import { Trip, User, Ride } from '../../src/types';
+import { Trip, User } from '../../src/types';
+import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
+import LoadingContainer from '../../src/components/LoadingContainer';
+import { getTrip } from '../../src/db/trips_new';
+import { getUser } from '../../src/db/users';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const trip = await getTrip(params?.id as string);
-  const user = await getUser(trip?.uid as string);
-  const rides = await getRidesForTrip(trip?.id as string);
+  const trip = await getTrip(params?.id);
+  if (!trip.data) {
+    return {
+      notFound: true,
+    };
+  }
+  const user = await getUser(trip.data.user_id);
+
   return {
     props: {
       googleMapsKey: process.env.GOOGLE_MAPS_KEY,
-      trip: JSON.parse(JSON.stringify(trip)),
-      user: JSON.parse(JSON.stringify(user)),
-      rides: JSON.parse(JSON.stringify(rides)),
+      trip: JSON.parse(JSON.stringify(trip.data)),
+      user: JSON.parse(JSON.stringify(user.data)),
     },
   };
 };
 
 const ShowTrip: NextPage<{
-  googleMapsKey: string;
+  google: GoogleAPI;
   trip: Trip;
   user: User;
-  rides: Ride[];
 }> = ({
   googleMapsKey,
   trip,
   user,
-  rides,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  console.log({ user });
   useEffect(() => {
-    const loader = new Loader({
-      apiKey: googleMapsKey,
-      version: 'weekly',
-      libraries: ['places'],
+    const map = new google.maps.Map(
+      document.getElementById('map') as HTMLElement,
+      {
+        mapTypeControl: false,
+        zoom: 11,
+        center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
+      }
+    );
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer({
+      draggable: true,
+      map,
+      panel: document.getElementById('panel') as HTMLElement,
     });
-
-    loader.load().then((google) => {
-      const map = new google.maps.Map(
-        document.getElementById('map') as HTMLElement,
-        {
-          mapTypeControl: false,
-          zoom: 11,
-          center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
-        }
-      );
-      const directionsService = new google.maps.DirectionsService();
-      const directionsRenderer = new google.maps.DirectionsRenderer({
-        draggable: true,
-        map,
-        panel: document.getElementById('panel') as HTMLElement,
-      });
-      displayRoute(
-        trip.origin,
-        trip.destination,
-        directionsService,
-        directionsRenderer
-      );
-    });
-  }, [googleMapsKey, trip.destination, trip.origin]);
+    displayRoute(
+      trip.origin,
+      trip.destination,
+      directionsService,
+      directionsRenderer
+    );
+  }, [googleMapsKey, trip.destination, trip.origin, trip.user_id]);
 
   return (
     <div>
-      <div className="w-full bg-gray-200 h-96" id="map"></div>
-      <div className="max-w-4xl py-8 mx-auto">
-        <HitchhikingTrip
-          rides={rides}
-          trip={trip}
-          user={user}
-        ></HitchhikingTrip>
+      <div className="max-w-4xl px-4 py-8 mx-auto">
+        <div className="w-full h-48 bg-gray-200" id="map"></div>
+        {user && <HitchhikingTrip trip={trip} rides={trip.rides} user={user} />}
       </div>
     </div>
   );
 };
 
-export default ShowTrip;
+export default GoogleApiWrapper(({ googleMapsKey }) => ({
+  apiKey: googleMapsKey,
+  LoadingContainer: LoadingContainer,
+}))(ShowTrip);

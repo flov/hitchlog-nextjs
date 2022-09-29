@@ -1,4 +1,3 @@
-import { getAuth } from 'firebase/auth';
 import {
   Avatar,
   Button,
@@ -8,13 +7,12 @@ import {
 } from 'flowbite-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { logOut, signInWithGoogle } from '../db/users';
 import { useTheme } from 'next-themes';
+import { useAuth } from './contexts/AuthContext';
+import { profilePicture } from '../utils';
 
 const NavBar = () => {
-  const auth = getAuth();
-  const [currentUser] = useAuthState(auth);
+  const { currentUser, logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -51,13 +49,13 @@ const NavBar = () => {
               label={
                 <Avatar
                   alt="User settings"
-                  img={currentUser?.photoURL as string}
+                  img={profilePicture(currentUser)}
                   rounded={true}
                 />
               }
             >
               <Dropdown.Header className="bg-slate-400">
-                <span className="block text-sm">{currentUser.displayName}</span>
+                <span className="block text-sm">{currentUser.username}</span>
                 <span className="block text-sm font-medium truncate">
                   {currentUser.email ? currentUser.email : ''}
                 </span>
@@ -67,13 +65,15 @@ const NavBar = () => {
               </Dropdown.Item>
               <Dropdown.Divider />
 
-              <Dropdown.Item onClick={logOut}>Sign out</Dropdown.Item>
+              <Dropdown.Item onClick={logout}>Sign out</Dropdown.Item>
             </Dropdown>
           </>
         ) : (
-          <Button size="sm" onClick={signInWithGoogle}>
-            Sign in
-          </Button>
+          <Link passHref href="/login">
+            <a>
+              <Button>Login</Button>
+            </a>
+          </Link>
         )}
         <DarkThemeToggle onClick={handleThemeSwitch} />
       </div>

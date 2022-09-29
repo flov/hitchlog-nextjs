@@ -1,5 +1,10 @@
-import { EXPERIENCES, Trip, IpLocation, User, NewUser } from '../types';
-import { Timestamp } from 'firebase/firestore';
+import { EXPERIENCES, Trip, IpLocation, User } from '../types';
+import md5 from 'md5';
+
+export const capitalize = (s: string) => {
+  if (typeof s !== 'string') return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
 
 export const experienceToColor = (experience: EXPERIENCES) => {
   switch (experience) {
@@ -20,14 +25,6 @@ export const experienceToColor = (experience: EXPERIENCES) => {
 
 export const tripToString = (trip: Trip) =>
   `Trip from {trip.origin.city} <BsArrowRight className="inline" />{' '} {trip.destination.city}`;
-
-export const timestampToDate = ({
-  seconds,
-  nanoseconds,
-}: {
-  seconds: number;
-  nanoseconds: number;
-}) => new Timestamp(seconds, nanoseconds).toDate();
 
 export const fetchIpAddressOfClient = async () => {
   const response = await fetch('https://api.ipify.org?format=json');
@@ -60,7 +57,10 @@ export const pluralize = (count: number, word: string) => {
 export const staticGoogleMapUrl = (trip: Trip) =>
   `https://maps.googleapis.com/maps/api/staticmap?size=300x200&maptype=roadmap&markers=color:red|label:A|${trip.origin?.lat},${trip.origin?.lng}&markers=color:red|label:B|${trip.destination?.lat},${trip.destination?.lng}&key=AIzaSyD3jCmxfmJm9Mm-XS9zSGZ-4eGAh-vqDs0`;
 
-export const photoForUser = (user: NewUser, size = '96x96') =>
+export const photoForUser = (user: User, size = '96x96') =>
   `https://robohash.org/${user.username}?size=${size}&set=${
     user?.gender === 'male' ? 'set1' : 'set4'
   }`;
+
+export const profilePicture = (user: User, size = 64) =>
+  `https://www.gravatar.com/avatar/${md5(user?.email)}?s=${size}`;

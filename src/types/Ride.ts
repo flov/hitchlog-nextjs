@@ -1,4 +1,5 @@
 export type Ride = {
+  id: number;
   title?: string;
   story?: string;
   experience?: EXPERIENCES;
@@ -18,5 +19,6 @@ export type VEHICLES =
   | 'motorcycle'
   | 'plane'
   | 'boat';
+export const Vehicles = ['car', 'bus', 'truck', 'motorcycle', 'plane', 'boat'];
 
 export type GENDERS = 'male' | 'female' | 'mixed';

@@ -1,17 +1,11 @@
 export type User = {
-  displayName: string;
-  admin?: boolean;
-  providerId?: string;
+  id: number;
+  username: string;
   email: string;
-  createdAt?: string;
-  gender?: string;
-  uid?: string;
-  dateOfBirth?: string;
-  name?: string;
-  beWelcomeUser?: string;
+  gender: string;
+  about_you: string;
   languages?: string;
-  photoURL?: string;
-  location?: UserLocation;
+  // location?: UserLocation;
 };
 
 export type NewUser = {
@@ -25,5 +19,5 @@ export type UserLocation = {
   lat: number;
   country: string;
   city: string;
-  countryCode: string;
+  country_code: string;
 };

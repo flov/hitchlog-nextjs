@@ -1,19 +1,18 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { FirebaseAppProvider } from 'reactfire';
-import { firebaseConfig } from '../src/utils/firebase';
 import Layout from '../src/components/Layout';
 import { ThemeProvider } from 'next-themes';
+import { AuthProvider } from '../src/components/contexts/AuthContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+    <AuthProvider>
       <ThemeProvider attribute="class">
         <Layout>
           <Component {...pageProps} />
         </Layout>
       </ThemeProvider>
-    </FirebaseAppProvider>
+    </AuthProvider>
   );
 }
 
