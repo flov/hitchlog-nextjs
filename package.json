@@ -21,7 +21,7 @@
     "classnames": "^2.3.1",
     "cookie": "^0.5.0",
     "flowbite": "^1.5.2",
-    "flowbite-react": "^0.1.8",
+    "flowbite-react": "^0.1.11",
     "formik": "^2.2.9",
     "google-maps-react": "^2.0.6",
     "js-cookie": "^3.0.1",
