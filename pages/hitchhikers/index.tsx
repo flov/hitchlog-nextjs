@@ -1,4 +1,4 @@
-import { Pagination, Spinner, Table } from 'flowbite-react';
+import { Pagination, Table } from 'flowbite-react';
 import Image from 'next/image';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
@@ -7,11 +7,13 @@ import { getUsers } from '../../src/db/users';
 import { User } from '../../src/types';
 import { profilePicture } from '../../src/utils';
 import {
+  countryFlag,
   showNumberOfRides,
   showNumberOfTrips,
   showUserGender,
 } from '../../src/utils/viewHelpers';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
+import { FaStar } from 'react-icons/fa';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const users = await getUsers(Number(query?.page) || 1);
@@ -78,17 +80,17 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
       <Table striped>
         <Table.Head>
           <Table.HeadCell>
-            <div className="flex justify-between">
-              Username
-              {isLoading && <Spinner />}
-            </div>
+            <div className="flex justify-between">Username</div>
           </Table.HeadCell>
+          <Table.HeadCell>
+            <FaStar className="inline-block" />
+          </Table.HeadCell>
+
           <Table.HeadCell>Member since</Table.HeadCell>
-          <Table.HeadCell>View Profile</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
           {users.map((user: User, index) => (
-            <Table.Row key={`user${index}`}>
+            <Table.Row className="dark:text-white" key={`user${index}`}>
               <Table.Cell>
                 <div className="flex items-center text-md gap-2 dark:text-white">
                   <Link href={`/hitchhikers/${user.username}`}>
@@ -102,19 +104,21 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
                       />
                       {user.username}
                     </a>
-                  </Link>{' '}
+                  </Link>
+                </div>
+              </Table.Cell>
+              <Table.Cell>
+                <div className="flex gap-2">
                   <div className="flex items-center">
                     ({user.age}
                     {showUserGender(user.gender)})
                   </div>
                   {showNumberOfRides(user.number_of_rides)}
                   {showNumberOfTrips(user.number_of_trips)}
+                  {countryFlag(user.location?.country_code)}
                 </div>
               </Table.Cell>
               <Table.Cell>{user.created_at}</Table.Cell>
-              <Table.Cell>
-                <Link href={`/hitchhikers/${user.username}`}>View Profile</Link>
-              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

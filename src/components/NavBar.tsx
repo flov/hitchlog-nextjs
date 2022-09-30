@@ -9,7 +9,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { useAuth } from './contexts/AuthContext';
-import { profilePicture } from '../utils';
+import { capitalize, profilePicture } from '../utils';
 
 const NavBar = () => {
   const { currentUser, logout } = useAuth();
@@ -55,7 +55,13 @@ const NavBar = () => {
               }
             >
               <Dropdown.Header className="bg-slate-400">
-                <span className="block text-sm">{currentUser.username}</span>
+                <span className="block text-sm">
+                  <Link href={`/hitchhikers/${currentUser.username}`}>
+                    <a className="hover:underline">
+                      {capitalize(currentUser.username)}
+                    </a>
+                  </Link>
+                </span>
                 <span className="block text-sm font-medium truncate">
                   {currentUser.email ? currentUser.email : ''}
                 </span>

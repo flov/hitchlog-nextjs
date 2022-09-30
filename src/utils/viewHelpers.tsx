@@ -55,22 +55,31 @@ export const vehicleIconsForRides = (rides: Ride[]) =>
     )
   );
 
+export const showCountryFlagForUser = (user: User) => {
+  if (!user.location?.country_code) return null;
+  return countryFlag(user.location.country_code);
+};
+
+export const countryFlag = (countryCode: string | undefined) => {
+  if (!countryCode) return null;
+  return (
+    <Tooltip
+      //@ts-ignore
+      content={`${countries[countryCode.toUpperCase()]}`}
+    >
+      <ReactCountryFlag
+        style={{ fontSize: '1.5rem' }}
+        countryCode={countryCode}
+      />
+    </Tooltip>
+  );
+};
+
 export const countryFlagsForTrip = (trip: Trip) =>
   removeDuplicates([
     trip.origin?.country_code,
     trip.destination?.country_code,
-  ]).map((country_code, index) => (
-    <Tooltip
-      //@ts-ignore
-      content={`${countries[country_code]}`}
-      key={`${index}CountryCode`}
-    >
-      <ReactCountryFlag
-        style={{ fontSize: '1.5rem' }}
-        countryCode={country_code}
-      />
-    </Tooltip>
-  ));
+  ]).map((country_code, index) => countryFlag(country_code));
 
 export const experiencesForRides = (rides: Ride[]) => (
   <>

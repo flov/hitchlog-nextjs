@@ -10,6 +10,9 @@ export type User = {
   number_of_rides: number;
   created_at: string;
   age: number;
+  cs_user?: string;
+  be_welcome_user?: string;
+  trustroots?: string;
   location: UserLocation;
 };
 

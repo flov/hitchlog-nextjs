@@ -64,3 +64,24 @@ export const photoForUser = (user: User, size = '96x96') =>
 
 export const profilePicture = (user: User, size = 64) =>
   `https://www.gravatar.com/avatar/${md5(user?.email)}?s=${size}`;
+
+// execute function x times with 1 second in between
+export const executeNTimes = (fn: () => void, n: number) => {
+  if (!n) return;
+  fn();
+  const interval = setTimeout(() => {
+    executeNTimes(fn, n - 1);
+  }, 1000);
+};
+
+const randomInRange = (min: number, max: number) =>
+  Math.random() * (max - min) + min;
+
+export const randomConfetti = () => {
+  window.confetti({
+    angle: randomInRange(55, 125),
+    spread: randomInRange(50, 70),
+    particleCount: randomInRange(50, 100),
+    origin: { y: 0.6 },
+  });
+};

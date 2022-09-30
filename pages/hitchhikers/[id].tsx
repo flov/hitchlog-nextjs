@@ -1,15 +1,21 @@
-import { Avatar } from 'flowbite-react';
+import { Avatar, Button } from 'flowbite-react';
 import { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import { useAuth } from '../../src/components/contexts/AuthContext';
 import { getUserByUsername } from '../../src/db/users';
 import { User } from '../../src/types';
 import { capitalize, profilePicture } from '../../src/utils';
+import {
+  countryFlag,
+  showCountryFlagForUser,
+} from '../../src/utils/viewHelpers';
 
 const divStyle = {};
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const user = await getUserByUsername(params?.id as string);
+
   if (user.data?.error) {
     return {
       notFound: true,
@@ -26,7 +32,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 const Show: NextPage<{
   user: User;
 }> = ({ user }) => {
-  console.log(user);
+  const { currentUser } = useAuth();
+  const router = useRouter();
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -37,7 +45,7 @@ const Show: NextPage<{
                 <div className="flex justify-center w-full px-4 lg:w-3/12 lg:order-3">
                   <div className="relative">
                     <img
-                      alt="..."
+                      alt="Profile picture"
                       src={profilePicture(user, 150)}
                       className="absolute h-auto -ml-20 align-middle border-none rounded-full shadow-xl -m-28 lg:-ml-16"
                       style={{ maxWidth: '150px' }}
@@ -46,9 +54,23 @@ const Show: NextPage<{
                 </div>
               </>
             )}
-            <h1 className="pt-8 text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
-              {!!user && capitalize(user.username)}
-            </h1>
+            <div className="flex items-center pt-8 gap-2">
+              <h1 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
+                {!!user && capitalize(user.username)}
+              </h1>
+              {showCountryFlagForUser(user)}
+              {user.username === currentUser?.username && (
+                <Button
+                  size="xs"
+                  onClick={() =>
+                    router.push(`/hitchhikers/${currentUser.username}/edit`)
+                  }
+                >
+                  Edit profile
+                </Button>
+              )}
+            </div>
+            <p>{!!user && user.about_you}</p>
           </div>
         </div>
       </div>

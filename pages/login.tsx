@@ -20,7 +20,7 @@ const Login: FC = () => {
   };
   const router = useRouter();
   const { setUser } = useAuth();
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -41,7 +41,7 @@ const Login: FC = () => {
                   .post('http://localhost:3005/users/sign_in', { user: values })
                   .then((res) => {
                     setUser(res.data.user);
-                    setError('');
+                    setError(null);
                     Cookies.set(
                       'authToken',
                       res.headers.authorization.split(' ')[1]

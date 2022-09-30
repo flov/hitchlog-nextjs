@@ -12,8 +12,8 @@ export const getUser = async (id: number | string) => {
   });
 };
 
-export const getUserByUsername = async (id: number | string) => {
-  return axios.get(`${API_URL}/users/${id}`, {
+export const getUserByUsername = async (username: string) => {
+  return axios.get(`${API_URL}/users/${username}`, {
     params: {
       username: true,
     },
@@ -34,4 +34,18 @@ export const getUsers = async (page = 1) => {
       Authorization: `Bearer ${Cookies.get('authToken')}`,
     },
   });
+};
+
+export const updateUser = async (username: string, values: any) => {
+  return axios.patch(
+    `${API_URL}/users/${username}`,
+    { user: values },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${Cookies.get('authToken')}`,
+      },
+    }
+  );
 };

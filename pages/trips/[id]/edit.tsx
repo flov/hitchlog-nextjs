@@ -23,9 +23,6 @@ declare global {
   }
 }
 
-const randomInRange = (min: number, max: number) =>
-  Math.random() * (max - min) + min;
-
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { data } = await getTrip(params?.id);
   return {
@@ -128,13 +125,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                         }}
                         onSubmit={async (values) => {
                           await updateRide(values);
-                          window.confetti({
-                            angle: randomInRange(55, 125),
-                            spread: randomInRange(50, 70),
-                            particleCount: randomInRange(50, 100),
-                            origin: { y: 0.6 },
-                          });
-                          console.log(values);
+                          randomConfetti();
                         }}
                       />
                     </Accordion.Content>
