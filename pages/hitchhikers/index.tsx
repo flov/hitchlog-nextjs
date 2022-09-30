@@ -1,8 +1,8 @@
-import { Table } from 'flowbite-react';
+import { Pagination, Spinner, Table } from 'flowbite-react';
 import Image from 'next/image';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getUsers } from '../../src/db/users';
 import { User } from '../../src/types';
 import { profilePicture } from '../../src/utils';
@@ -11,9 +11,10 @@ import {
   showNumberOfTrips,
   showUserGender,
 } from '../../src/utils/viewHelpers';
+import { Router, useRouter } from 'next/router';
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const users = await getUsers();
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const users = await getUsers(Number(query?.page) || 1);
   if (users.data?.error) {
     return {
       notFound: true,
@@ -22,24 +23,71 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   return {
     props: {
-      users: JSON.parse(JSON.stringify(users.data)),
+      users: JSON.parse(JSON.stringify(users.data.users)),
+      page: Number(query?.page) || 1,
+      totalPages: JSON.parse(JSON.stringify(users.data.total_pages)),
     },
   };
 };
 
-const Index: NextPage<{ users: User[] }> = ({ users }) => {
-  console.log({ users });
+const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
+  props
+) => {
+  const [page, setPage] = useState(props.page);
+  const [users, setUsers] = useState(props.users);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  const handlePageChange = async (p: number) => {
+    router.push(
+      {
+        pathname: '/hitchhikers',
+        query: { page: p },
+      },
+      undefined,
+      { shallow: true }
+    );
+    setPage(p);
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setIsLoading(true);
+      const { data } = await getUsers(page);
+      setUsers(data.users);
+      setIsLoading(false);
+    };
+    fetchUsers();
+  }, [page]);
+
   return (
-    <div className="mx-auto text-center max-w-screen-lg lg:mb-16">
-      <h1 className="my-8 text-2xl">Hitchhikers</h1>
+    <div className="px-4 mx-auto text-center max-w-screen-lg lg:mb-16">
+      <h1 className="mt-8 text-4xl">
+        The Glorious Hitchhikers Of The Hitchlog
+      </h1>
+
+      <div className="mb-4">
+        <Pagination
+          onPageChange={handlePageChange}
+          currentPage={page}
+          layout="table"
+          showIcons={true}
+          totalPages={props.totalPages}
+        />
+      </div>
       <Table striped>
         <Table.Head>
-          <Table.HeadCell>Username</Table.HeadCell>
+          <Table.HeadCell>
+            <div className="flex justify-between">
+              Username
+              {isLoading && <Spinner />}
+            </div>
+          </Table.HeadCell>
           <Table.HeadCell>Member since</Table.HeadCell>
           <Table.HeadCell>View Profile</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
-          {users.map((user: any, index) => (
+          {users.map((user: User, index) => (
             <Table.Row key={`user${index}`}>
               <Table.Cell>
                 <div className="flex items-center text-md gap-2 dark:text-white">
@@ -71,6 +119,15 @@ const Index: NextPage<{ users: User[] }> = ({ users }) => {
           ))}
         </Table.Body>
       </Table>
+      <div className="my-4">
+        <Pagination
+          onPageChange={handlePageChange}
+          currentPage={page}
+          layout="table"
+          showIcons={true}
+          totalPages={props.totalPages}
+        />
+      </div>
     </div>
   );
 };

@@ -25,8 +25,9 @@ export const getUserByUsername = async (id: number | string) => {
   });
 };
 
-export const getUsers = async () => {
+export const getUsers = async (page = 1) => {
   return axios.get(`${API_URL}/users`, {
+    params: { page },
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',

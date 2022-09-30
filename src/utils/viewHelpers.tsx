@@ -1,23 +1,21 @@
 import { Tooltip } from 'flowbite-react';
 import md5 from 'md5';
 import ReactCountryFlag from 'react-country-flag';
-import {
-  BsGenderAmbiguous,
-  BsGenderFemale,
-  BsGenderMale,
-  BsSpeedometer,
-} from 'react-icons/bs';
+import { BsSpeedometer } from 'react-icons/bs';
 import { CgSandClock } from 'react-icons/cg';
 import {
   FaBus,
   FaCarSide,
   FaGoogle,
+  FaMars,
+  FaMarsStrokeV,
   FaMotorcycle,
   FaPlane,
   FaRoad,
   FaScroll,
   FaShip,
   FaTruck,
+  FaVenus,
 } from 'react-icons/fa';
 import { FiThumbsUp, FiUser } from 'react-icons/fi';
 import { capitalize, pluralize, removeDuplicates } from '.';
@@ -236,11 +234,11 @@ export const showTripGoogleDuration = (trip: Trip) => {
 export const showUserGender = (gender: 'male' | 'female' | 'non-binary') => (
   <Tooltip content={gender}>
     {gender == 'male' ? (
-      <BsGenderMale className="inline" />
+      <FaMars className="inline" />
     ) : gender == 'female' ? (
-      <BsGenderFemale className="inline" />
+      <FaVenus className="inline" />
     ) : (
-      <BsGenderAmbiguous className="inline" />
+      <FaMarsStrokeV className="inline" />
     )}
   </Tooltip>
 );
