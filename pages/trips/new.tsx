@@ -10,6 +10,7 @@ import { useAuth } from '../../src/components/contexts/AuthContext';
 import LoadingContainer from '../../src/components/LoadingContainer';
 import { TripForm } from '../../src/components/TripForm';
 import { createTrip } from '../../src/db/trips_new';
+import FlowbiteWindow from '../../src/flowbite/FlowbiteWindow';
 import { showErrors } from '../../src/utils/viewHelpers';
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -95,9 +96,9 @@ const New: NextPage<{ google: GoogleAPI }> = ({ google }) => {
         <meta name="description" content="Log a new hitchhiking trip" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="h-96" ref={googlemap} id="map"></div>
-      <div className="max-w-2xl px-4 mx-auto">
-        <h2 className="my-6 text-3xl font-extrabold tracking-tight text-center lg:text-4xl">
+      <div className="h-48 md:h-96" ref={googlemap} id="map"></div>
+      <FlowbiteWindow>
+        <h2 className="text-3xl font-extrabold tracking-tight text-center lg:text-4xl">
           Log a new hitchhiking adventure
         </h2>
         {errors && (
@@ -119,7 +120,7 @@ const New: NextPage<{ google: GoogleAPI }> = ({ google }) => {
         ) : (
           <></>
         )}
-      </div>
+      </FlowbiteWindow>
     </div>
   );
 };

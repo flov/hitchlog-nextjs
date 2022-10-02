@@ -1,7 +1,7 @@
 import { Tooltip } from 'flowbite-react';
 import md5 from 'md5';
 import ReactCountryFlag from 'react-country-flag';
-import { BsSpeedometer } from 'react-icons/bs';
+import { BsArrowRight, BsSpeedometer } from 'react-icons/bs';
 import { CgSandClock } from 'react-icons/cg';
 import {
   FaBus,
@@ -55,8 +55,8 @@ export const vehicleIconsForRides = (rides: Ride[]) =>
     )
   );
 
-export const showCountryFlagForUser = (user: User) => {
-  if (!user.location?.country_code) return null;
+export const showCountryFlagForUser = (user: User | undefined | null) => {
+  if (!user?.location?.country_code) return null;
   return countryFlag(user.location.country_code);
 };
 
@@ -150,14 +150,16 @@ export const tripDurationIcons = (trip: Trip) => {
   );
 };
 
-export const showErrors = (errors: Record<string, string[]>) =>
-  Object.keys(errors).map((key) => (
+export const showErrors = (errors: Record<string, string[]> | string) => {
+  if (typeof errors === 'string') return errors;
+  return Object.keys(errors).map((key) => (
     <ul key={key}>
       <li>
         {key}: {errors[key].join(' ')}{' '}
       </li>
     </ul>
   ));
+};
 
 export const showVehiclesForRides = (rides: Ride[]) =>
   removeDuplicates(rides.map((ride) => ride.vehicle))
@@ -187,23 +189,26 @@ export const showAgeAtTrip = (trip: Trip, user: User) => {
         user.gender === 'male' ? 'he' : 'she'
       } did the trip`}
     >
-      <FiUser className="inline" />
-      {trip.age_at_trip} years
+      <div className="flex items-center gap-1">
+        <FiUser className="inline" />({trip.age_at_trip})
+      </div>
     </Tooltip>
   );
 };
 
 export const showNumberOfRides = (ridesLength: number) => (
   <Tooltip content={`${ridesLength} ${pluralize(ridesLength, 'ride')}`}>
-    <FiThumbsUp className="inline " /> {ridesLength}
+    <div className="flex items-center gap-1">
+      <FiThumbsUp className="inline " /> {ridesLength}
+    </div>
   </Tooltip>
 );
 
 export const showNumberOfStories = (rides: Ride[]) => {
   const numberOfStories = rides
     .map((x) => x.story)
-    .filter((story) => story != null || story == '').length;
-  console.log({ numberOfStories });
+    .filter((story) => story != null && story != '').length;
+  if (!numberOfStories) return;
   return (
     <Tooltip
       content={`${numberOfStories} ${pluralize(numberOfStories, 'story')}`}
@@ -213,17 +218,29 @@ export const showNumberOfStories = (rides: Ride[]) => {
   );
 };
 
-export const showTripDistance = (trip: Trip) => {
-  if (trip.distance) {
-    return (
-      <Tooltip
-        content={`travelled ${trip.distance} kms with an average speed of ${trip.average_speed}`}
-      >
+export const showTripSpeed = (trip: Trip) => {
+  if (!trip?.average_speed) return null;
+  return (
+    <Tooltip content={`Average speed ${trip.average_speed}`}>
+      <div className="flex items-center gap-1">
         <BsSpeedometer className="inline" />
-        {trip.distance} kms/{trip.average_speed} km/h
-      </Tooltip>
-    );
-  }
+        {trip.average_speed}
+      </div>
+    </Tooltip>
+  );
+};
+
+export const showTripDistance = (trip: Trip) => {
+  if (!trip?.distance) return null;
+  const kilometers = Math.round(trip.distance / 1000);
+  return (
+    <Tooltip content={`travelled ${kilometers} kms`}>
+      <div className="flex items-center gap-1">
+        <BsArrowRight className="inline" />
+        {kilometers} kms
+      </div>
+    </Tooltip>
+  );
 };
 
 export const showTripGoogleDuration = (trip: Trip) => {
@@ -233,8 +250,10 @@ export const showTripGoogleDuration = (trip: Trip) => {
       <Tooltip
         content={`Google Maps duration: ${secondsToTime(google_duration)}`}
       >
-        <FaGoogle />
-        {secondsToTime(google_duration)}
+        <div className="flex items-center gap-1">
+          <FaGoogle className="inline-block" />
+          {secondsToTime(google_duration)}
+        </div>
       </Tooltip>
     );
   }

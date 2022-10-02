@@ -40,7 +40,6 @@ const ShowTrip: NextPage<{
   trip,
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.log({ user });
   useEffect(() => {
     const map = new google.maps.Map(
       document.getElementById('map') as HTMLElement,

@@ -2,6 +2,14 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { API_URL } from '../config';
 
+export const authenticateToken = async (token: string | undefined) =>
+  axios.get(`${API_URL}/users/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      accept: 'application/json',
+    },
+  });
+
 export const getUser = async (id: number | string) => {
   return axios.get(`${API_URL}/users/${id}`, {
     headers: {
@@ -14,9 +22,6 @@ export const getUser = async (id: number | string) => {
 
 export const getUserByUsername = async (username: string) => {
   return axios.get(`${API_URL}/users/${username}`, {
-    params: {
-      username: true,
-    },
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',

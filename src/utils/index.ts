@@ -85,3 +85,20 @@ export const randomConfetti = () => {
     origin: { y: 0.6 },
   });
 };
+
+export const getDataFromAddressComponents = (
+  address_components: google.maps.GeocoderAddressComponent[] | undefined
+) => {
+  if (!address_components) return {};
+  const city = address_components.find((component) =>
+    component.types.includes('locality')
+  );
+  const country = address_components.find((component) =>
+    component.types.includes('country')
+  );
+  return {
+    city: city ? city.long_name : '',
+    country: country ? country.long_name : '',
+    country_code: country ? country.short_name : '',
+  };
+};

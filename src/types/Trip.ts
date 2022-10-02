@@ -26,7 +26,7 @@ export type Trip = {
   travelling_with: number;
   user: NewUser;
   age_at_trip: number;
-  average_speed: number;
+  average_speed: string;
 };
 
 export const tripConverter = {

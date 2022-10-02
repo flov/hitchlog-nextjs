@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Alert, Label, TextInput } from 'flowbite-react';
 import Link from 'next/link';
 import { FiKey, FiMail } from 'react-icons/fi';
+import { API_URL } from '../src/config';
 
 interface Values {
   password: string;
@@ -19,7 +20,7 @@ const Login: FC = () => {
     password: '',
   };
   const router = useRouter();
-  const { setUser } = useAuth();
+  const { setCurrentUser } = useAuth();
   const [error, setError] = useState(null);
 
   return (
@@ -38,9 +39,9 @@ const Login: FC = () => {
                 { setSubmitting }: FormikHelpers<Values>
               ) => {
                 axios
-                  .post('http://localhost:3005/users/sign_in', { user: values })
+                  .post(`${API_URL}/users/sign_in`, { user: values })
                   .then((res) => {
-                    setUser(res.data.user);
+                    setCurrentUser(res.data.user);
                     setError(null);
                     Cookies.set(
                       'authToken',
@@ -50,7 +51,6 @@ const Login: FC = () => {
                   })
                   .catch((err) => {
                     setError(err.response.data);
-                    console.log(err);
                   });
 
                 setSubmitting(false);

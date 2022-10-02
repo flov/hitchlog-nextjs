@@ -17,7 +17,7 @@ export type User = {
 };
 
 export type UserLocation = {
-  name?: string;
+  formatted_address?: string;
   country_code?: string;
   lng?: number;
   lat?: number;

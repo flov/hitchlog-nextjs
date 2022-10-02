@@ -2,7 +2,6 @@ import {
   createContext,
   Dispatch,
   FC,
-  ReactElement,
   SetStateAction,
   useContext,
   useEffect,
@@ -12,41 +11,37 @@ import Cookies from 'js-cookie';
 import { User } from '../../types';
 import axios from 'axios';
 import { API_URL } from '../../config';
+import { authenticateToken } from '../../db/users';
 
 type AuthProps = {
   currentUser: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   logout: () => void;
-  setUser: Dispatch<SetStateAction<null>>;
+  setCurrentUser: Dispatch<SetStateAction<null>>;
 };
+
 const AuthContext = createContext<AuthProps>({
   currentUser: null,
   isAuthenticated: false,
   isLoading: false,
   logout: () => {},
-  setUser: () => {},
+  setCurrentUser: () => {},
 });
 
 export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
   children,
 }) => {
-  const [user, setUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const token = Cookies.get('authToken');
-    if (token && user === null) {
+    if (token && currentUser === null) {
       setIsLoading(true);
-      axios
-        .get(`${API_URL}/users/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            accept: 'application/json',
-          },
-        })
+      authenticateToken(token)
         .then((res) => {
-          setUser(res.data);
+          setCurrentUser(res.data);
         })
         .catch((err) => {
           Cookies.remove('authToken');
@@ -54,7 +49,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
 
       setIsLoading(false);
     }
-  }, []);
+  }, [currentUser]);
 
   const logout = () => {
     const token = Cookies.get('authToken');
@@ -68,7 +63,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
       })
       .then(() => {
         Cookies.remove('authToken');
-        setUser(null);
+        setCurrentUser(null);
       })
       .catch((error) => {
         console.log(error);
@@ -78,9 +73,9 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated: !!user,
-        setUser,
-        currentUser: user,
+        isAuthenticated: !!currentUser,
+        setCurrentUser,
+        currentUser,
         isLoading,
         logout,
       }}
@@ -90,7 +85,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
   );
 };
 
-export const ProtectRoute: FC<{ children: JSX.Element }> = ({ children }) => {
+export const ProtectedRoute: FC<{ children: JSX.Element }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
   if (
     isLoading ||

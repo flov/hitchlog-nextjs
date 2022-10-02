@@ -5,6 +5,7 @@ import { ChangeEvent, MutableRefObject, useEffect, useRef } from 'react';
 import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
 import { calculateTimeBetweenDates } from '../utils/calculateTimeBetweenDates';
 import { secondsToTime } from '../utils/secondsToTime';
+import { showTripGoogleDuration } from '../utils/viewHelpers';
 
 export const TripForm = ({
   handleSubmit,
@@ -60,7 +61,7 @@ export const TripForm = ({
               ? 'failure'
               : touched.originName
               ? 'success'
-              : 'primary'
+              : 'info'
           }
           required={true}
           placeholder="Enter origin"
@@ -125,7 +126,7 @@ export const TripForm = ({
           <>
             <p className="text-center">
               {values.departure && values.arrival
-                ? `Your trip duration: ${calculateTimeBetweenDates(
+                ? `our trip duration: ${calculateTimeBetweenDates(
                     values.departure,
                     values.arrival
                   )}`
@@ -133,7 +134,7 @@ export const TripForm = ({
             </p>
             <p className="text-center">
               {values.googleDuration
-                ? `Google Maps Duration ${secondsToTime(values.googleDuration)}`
+                ? showTripGoogleDuration(values.googleDuration)
                 : ''}
             </p>
           </>
@@ -174,9 +175,9 @@ export const TripForm = ({
           <option value="2">Travelling with two other persons</option>
           <option value="3">Travelling with three other persons</option>
         </Select>
-        <div className="flex justify-center my-4 col-span-2">
+        <div className="flex justify-center col-span-2">
           <Button disabled={isSubmitting} type="submit">
-            Submit Trip
+            Save Trip
           </Button>
         </div>
       </div>

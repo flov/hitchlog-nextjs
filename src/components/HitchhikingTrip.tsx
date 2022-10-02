@@ -8,16 +8,18 @@ import {
   showNumberOfRides,
   showNumberOfStories,
   showTotalWaitingTimeForRides,
-  showTripDistance,
+  showTripSpeed,
   showTripGoogleDuration,
   showVehiclesForRides,
   vehicleToIcon,
+  showTripDistance,
 } from '../utils/viewHelpers';
 import ReactMarkdown from 'react-markdown';
 import { User, EXPERIENCES, Ride, Trip } from '../types';
 import { CgSandClock } from 'react-icons/cg';
 import { useAuth } from './contexts/AuthContext';
 import { useRouter } from 'next/router';
+import { FaThumbsUp } from 'react-icons/fa';
 
 export function HitchhikingTrip({
   user,
@@ -31,6 +33,7 @@ export function HitchhikingTrip({
   const departure = trip.departure;
   const { currentUser } = useAuth();
   const router = useRouter();
+  console.log(rides);
 
   return (
     <div className="shadow-lg">
@@ -55,6 +58,7 @@ export function HitchhikingTrip({
             {showAgeAtTrip(trip, user)}
             {showNumberOfRides(trip.rides.length)}
             {showTripGoogleDuration(trip)}
+            {showTripSpeed(trip)}
             {showTripDistance(trip)}
             {showNumberOfStories(trip.rides)}
           </div>
@@ -77,47 +81,51 @@ export function HitchhikingTrip({
             </div>
           )}
         </div>
-        <Timeline>
-          {rides.map((ride, index) => {
-            return (
-              <Timeline.Item key={`ride${index}`}>
-                <Timeline.Point />
-                <Timeline.Content>
-                  <Timeline.Time>
-                    <div className="flex items-center text-gray-600 dark:text-white gap-4">
-                      <span>Ride {index + 1} </span>
-                      <Badge
-                        color={experienceToColor(
-                          ride.experience as EXPERIENCES
+        <div className="p-4">
+          <Timeline>
+            {rides.map((ride, index) => {
+              return (
+                <Timeline.Item key={`ride${index}`}>
+                  <Timeline.Point icon={FaThumbsUp} />
+                  <Timeline.Content>
+                    <Timeline.Time>
+                      <div className="flex items-center text-gray-600 dark:text-white gap-4">
+                        <span>Ride {index + 1} </span>
+                        <Badge
+                          color={experienceToColor(
+                            ride.experience as EXPERIENCES
+                          )}
+                        >
+                          {ride.experience}
+                        </Badge>
+                        {ride.vehicle && vehicleToIcon(ride.vehicle)}
+                        {ride.gender && <span>{ride.gender}</span>}
+                        {ride.waiting_time ? (
+                          <span>
+                            <Tooltip
+                              content={`Waiting time: ${ride.waiting_time} minutes`}
+                            >
+                              <CgSandClock className="inline" />{' '}
+                              {ride.waiting_time}m
+                            </Tooltip>
+                          </span>
+                        ) : (
+                          ''
                         )}
-                      >
-                        {ride.experience}
-                      </Badge>
-                      {ride.vehicle && vehicleToIcon(ride.vehicle)}
-                      {ride.gender && <span>{ride.gender}</span>}
-                      {ride.waiting_time ? (
-                        <span>
-                          <Tooltip
-                            content={`Waiting time: ${ride.waiting_time} minutes`}
-                          >
-                            <CgSandClock className="inline" />{' '}
-                            {ride.waiting_time}m
-                          </Tooltip>
-                        </span>
-                      ) : (
-                        ''
+                      </div>
+                    </Timeline.Time>
+                    <Timeline.Title className="">{ride.title}</Timeline.Title>
+                    <Timeline.Body className="max-w-2xl mt-2">
+                      {ride.story && (
+                        <ReactMarkdown>{ride.story}</ReactMarkdown>
                       )}
-                    </div>
-                  </Timeline.Time>
-                  <Timeline.Title className="mt-2">{ride.title}</Timeline.Title>
-                  <Timeline.Body className="max-w-2xl mt-2">
-                    {ride.story && <ReactMarkdown>{ride.story}</ReactMarkdown>}
-                  </Timeline.Body>
-                </Timeline.Content>
-              </Timeline.Item>
-            );
-          })}
-        </Timeline>
+                    </Timeline.Body>
+                  </Timeline.Content>
+                </Timeline.Item>
+              );
+            })}
+          </Timeline>
+        </div>
       </Card>
     </div>
   );

@@ -4,23 +4,8 @@ import type {
   NextPage,
 } from 'next';
 import Head from 'next/head';
-import { ListTrips } from '../src/components/ListTrips';
-import { getTrips } from '../src/db/trips_new';
-import { Trip } from '../src/types/Trip';
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const trips = await getTrips();
-
-  return {
-    props: {
-      trips: JSON.parse(JSON.stringify(trips)) as Trip[],
-    },
-  };
-};
-
-const Home: NextPage<{ trips: Trip[] }> = ({
-  trips,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Home: NextPage = () => {
   return (
     <>
       <Head>

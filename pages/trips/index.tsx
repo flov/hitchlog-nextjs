@@ -28,8 +28,6 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
   const [trips, setTrips] = useState<Trip[]>(props.trips);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  console.log({ trips });
-
   useEffect(() => {
     if (ref.current) {
       let createdMap = new google.maps.Map(ref.current, {
@@ -71,7 +69,7 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
 
   return (
     <>
-      <div className="h-96" ref={ref} id="map">
+      <div className="h-48 md:h-96" ref={ref} id="map">
         {trips.map((trip, index) => (
           <OverlayContainer
             map={map}

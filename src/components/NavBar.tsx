@@ -69,6 +69,9 @@ const NavBar = () => {
               <Dropdown.Item>
                 <Link href="/trips/new">Log new trip</Link>
               </Dropdown.Item>
+              <Dropdown.Item>
+                <Link href="/hitchhikers/edit_profile">Edit Profile</Link>
+              </Dropdown.Item>
               <Dropdown.Divider />
 
               <Dropdown.Item onClick={logout}>Sign out</Dropdown.Item>

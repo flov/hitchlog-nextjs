@@ -1,17 +1,12 @@
 import { Avatar, Button } from 'flowbite-react';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { FC } from 'react';
+import React from 'react';
 import { useAuth } from '../../src/components/contexts/AuthContext';
 import { getUserByUsername } from '../../src/db/users';
 import { User } from '../../src/types';
 import { capitalize, profilePicture } from '../../src/utils';
-import {
-  countryFlag,
-  showCountryFlagForUser,
-} from '../../src/utils/viewHelpers';
-
-const divStyle = {};
+import { showCountryFlagForUser } from '../../src/utils/viewHelpers';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const user = await getUserByUsername(params?.id as string);
@@ -62,9 +57,7 @@ const Show: NextPage<{
               {user.username === currentUser?.username && (
                 <Button
                   size="xs"
-                  onClick={() =>
-                    router.push(`/hitchhikers/${currentUser.username}/edit`)
-                  }
+                  onClick={() => router.push(`/hitchhikers/edit_profile`)}
                 >
                   Edit profile
                 </Button>

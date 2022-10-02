@@ -6,7 +6,7 @@ export const secondsToTime = (seconds: number | null) => {
   const array = [];
   hours > 0 ? array.push(hours + 'h') : null;
   minutes > 0 ? array.push(minutes + 'm') : null;
-  secondsLeft > 0 ? array.push(secondsLeft + 's') : null;
+  secondsLeft > 0 && !hours && !minutes ? array.push(secondsLeft + 's') : null;
   return array.join(' ');
 };
 
