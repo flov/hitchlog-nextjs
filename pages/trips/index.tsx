@@ -6,11 +6,12 @@ import OverlayBubble from '../../src/components/OverlayBubble';
 import { Trip } from '../../src/types';
 import { ListTrips } from '../../src/components/ListTrips';
 import { PuffLoader } from 'react-spinners';
-import { getTrips, getTripsWithQuery } from '../../src/db/trips_new';
+import { getTripsWithQuery } from '../../src/db/trips_new';
 import LoadingContainer from '../../src/components/LoadingContainer';
 import { AxiosResponse } from 'axios';
-import SearchInterface from '../../src/components/SearchInterface';
 import { useRouter } from 'next/router';
+import { Formik } from 'formik';
+import SearchForm from '../../src/components/SearchForm';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const tripsResponse = await getTripsWithQuery({ q: query.q });
@@ -89,6 +90,7 @@ const Index: FC<{
     }
   }, []);
 
+  console.log({ query, q });
   return (
     <>
       <div className="h-48 lg:h-96" ref={ref} id="map">
@@ -107,10 +109,31 @@ const Index: FC<{
       </div>
 
       <div className="p-4 mx-auto max-w-7xl">
-        <SearchInterface
-          query={query}
-          setQuery={setQuery}
-          setTrips={setTrips}
+        <Formik
+          onSubmit={(values, { setSubmitting }) => {
+            setQuery(Object.assign(query, values));
+            getTripsWithQuery({ q: Object.assign(query, values) })
+              .then((res: AxiosResponse) => {
+                router.push(
+                  {
+                    pathname: '/trips',
+                    query: { q: JSON.stringify(res.config.params.q) },
+                  },
+                  undefined,
+                  { shallow: true }
+                );
+
+                setTrips(res.data);
+              })
+              .catch((err) => {
+                console.log(err);
+              })
+              .finally(() => {
+                setSubmitting(false);
+              });
+          }}
+          initialValues={{ ...Object.assign(query, q) }}
+          component={(p) => <SearchForm {...p} />}
         />
 
         {isLoading ? (
