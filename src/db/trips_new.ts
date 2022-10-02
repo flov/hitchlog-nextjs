@@ -12,6 +12,18 @@ export const getTrips = async () => {
   return data;
 };
 
+export const getTripsWithQuery = async (
+  query: Record<'q', Record<string, any>>
+) => {
+  return axios.get(`${API_URL}/trips`, {
+    params: query,
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+  });
+};
+
 export const getTrip = async (trip_id: any) => {
   return axios.get(`${API_URL}/trips/${trip_id}`, {
     headers: {
@@ -26,13 +38,21 @@ export const getTripsByLocation = async (
   south_lat: number,
   west_lng: number,
   east_lng: number
-) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/trips?north_lat=${north_lat}&south_lat=${south_lat}&west_lng=${west_lng}&east_lng=${east_lng}`
-  );
-  const trips = await res.json();
-  return trips;
-};
+) =>
+  axios.get(`${API_URL}/trips`, {
+    params: {
+      q: {
+        from_lat_gt: south_lat,
+        from_lat_lt: north_lat,
+        from_lng_gt: west_lng,
+        from_lng_lt: east_lng,
+      },
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+  });
 
 export const createTrip = (payload: any) => {
   return axios.post(`${API_URL}/trips`, payload, {
@@ -46,7 +66,6 @@ export const createTrip = (payload: any) => {
 
 export const updateRide = async (values: any) => {
   const payload = { ride: values };
-  console.log({ payload });
   return axios
     .patch(`${API_URL}/rides/${values.id}`, payload, {
       headers: {
@@ -56,7 +75,6 @@ export const updateRide = async (values: any) => {
       },
     })
     .then((res) => {
-      console.log({ res });
       return res;
     });
 };

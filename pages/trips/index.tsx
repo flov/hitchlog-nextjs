@@ -3,32 +3,45 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import OverlayContainer from '../../src/components/OverlayContainer';
 import OverlayBubble from '../../src/components/OverlayBubble';
-import { Experiences, Trip } from '../../src/types';
-import { Select } from 'flowbite-react';
+import { Trip } from '../../src/types';
 import { ListTrips } from '../../src/components/ListTrips';
 import { PuffLoader } from 'react-spinners';
-import { getTrips, getTripsByLocation } from '../../src/db/trips_new';
+import { getTrips, getTripsWithQuery } from '../../src/db/trips_new';
 import LoadingContainer from '../../src/components/LoadingContainer';
+import { AxiosResponse } from 'axios';
+import SearchInterface from '../../src/components/SearchInterface';
+import { useRouter } from 'next/router';
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const trips = await getTrips();
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const tripsResponse = await getTripsWithQuery({ q: query.q });
+  const q = query.q ? JSON.parse(query.q as string) : {};
 
   return {
     props: {
       googleMapsKey: process.env.GOOGLE_MAPS_KEY,
-      trips: JSON.parse(JSON.stringify(trips)),
+      trips: JSON.parse(JSON.stringify(tripsResponse.data)),
+      q,
     },
   };
 };
 
-const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
+const Index: FC<{
+  trips: Trip[];
+  google: GoogleAPI;
+  q: any;
+}> = (props) => {
   const { google } = props;
+  let q = props.q;
+  if (typeof q === 'string') q = JSON.parse(q);
   const ref = useRef<HTMLDivElement>(null);
+  const [query, setQuery] = useState({});
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [trips, setTrips] = useState<Trip[]>(props.trips);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
+    setQuery(q);
     if (ref.current) {
       let createdMap = new google.maps.Map(ref.current, {
         center: {
@@ -37,6 +50,8 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
         },
         zoom: 7,
       });
+      setMap(createdMap);
+
       google.maps.event.addListener(createdMap, 'dragend', function () {
         const bounds = createdMap.getBounds();
         const ne = bounds?.getNorthEast();
@@ -46,30 +61,37 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
         const westLng = sw?.lng() as number;
         const eastLng = ne?.lng() as number;
         //do whatever you want with those bounds
-
         if (!ne || !sw) return;
         setIsLoading(true);
-        getTripsByLocation(northLat, southLat, westLng, eastLng).then(
-          (trips: Trip[]) => {
-            setIsLoading(false);
-            setTrips(trips);
-          }
-        );
+        getTripsWithQuery({
+          q: Object.assign(query, {
+            from_lat_lt: northLat,
+            from_lat_gt: southLat,
+            from_lng_gt: westLng,
+            from_lng_lt: eastLng,
+          }),
+        }).then((res: AxiosResponse) => {
+          setIsLoading(false);
+          setTrips(res.data);
+          setQuery(Object.assign(query, res.config.params.q));
+          router.push(
+            {
+              pathname: '/trips',
+              query: {
+                q: JSON.stringify(res.config.params.q),
+              },
+            },
+            undefined,
+            { shallow: true }
+          );
+        });
       });
-      setMap(createdMap);
     }
   }, []);
 
-  const handleExperienceChange = async (e: any) => {
-    setIsLoading(true);
-    // const newTrips = await getTripsByExperience(e.target.value);
-    // setTrips(newTrips as Trip[]);
-    setIsLoading(false);
-  };
-
   return (
     <>
-      <div className="h-48 md:h-96" ref={ref} id="map">
+      <div className="h-48 lg:h-96" ref={ref} id="map">
         {trips.map((trip, index) => (
           <OverlayContainer
             map={map}
@@ -77,7 +99,7 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
               lat: trip?.origin?.lat as number,
               lng: trip?.origin?.lng as number,
             }}
-            key={index}
+            key={`uniqueKey${index}`}
           >
             <OverlayBubble trip={trip} />
           </OverlayContainer>
@@ -85,31 +107,18 @@ const Index: FC<{ trips: Trip[]; google: GoogleAPI }> = (props) => {
       </div>
 
       <div className="p-4 mx-auto max-w-7xl">
-        <div className="flex justify-between pb-4 ">
-          <div className="w-48">
-            <Select
-              id="countries"
-              onChange={handleExperienceChange}
-              required={true}
-            >
-              <option>Select Experience</option>
-              {Experiences.map((experience) => (
-                <option key={experience} value={experience}>
-                  {experience}
-                </option>
-              ))}
-            </Select>
-          </div>
-        </div>
+        <SearchInterface
+          query={query}
+          setQuery={setQuery}
+          setTrips={setTrips}
+        />
 
         {isLoading ? (
           <div className="p-8 grid place-items-center">
             <PuffLoader color="blue" />
           </div>
         ) : (
-          <>
-            <ListTrips trips={trips} />
-          </>
+          <ListTrips trips={trips} />
         )}
       </div>
     </>
