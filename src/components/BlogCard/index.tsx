@@ -74,16 +74,22 @@ const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
         <div className="flex items-center space-x-4">
           {user && (
             <>
-              <Image
-                className="w-6 h-6 rounded-full"
-                width={28}
-                height={28}
-                src={photoForUser(user, '28x28')}
-                alt={`${user.username}'s profile picture'`}
-              />
+              <Link href={`/hitchhikers/${user.username}`}>
+                <a className="flex items-center space-x-2">
+                  <Image
+                    className="w-6 h-6 rounded-full"
+                    width={28}
+                    height={28}
+                    src={photoForUser(user, '28x28')}
+                    alt={`${user.username}'s profile picture'`}
+                  />
+                </a>
+              </Link>
 
               <span className="font-medium dark:text-white">
-                {user.username}
+                <Link href={`/hitchhikers/${user.username}`}>
+                  <a className="no-underline">{user.username}</a>
+                </Link>
               </span>
             </>
           )}
