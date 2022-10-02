@@ -10,7 +10,7 @@ import {
   tripDurationIcons,
   vehicleIconsForRides,
 } from '../../utils/viewHelpers';
-import { photoForUser } from '../../utils';
+import { getOrdinalNumber, photoForUser } from '../../utils';
 import Link from 'next/link';
 
 const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
@@ -44,10 +44,10 @@ const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
         <Fragment key={`ride${index}`}>
           {ride.story && (
             <>
-              <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                 {ride.title
                   ? ride.title
-                  : `${trip.origin?.city} to ${trip.destination?.city}`}
+                  : `${getOrdinalNumber(ride.number)} ride`}
               </h2>
               {ride.story && (
                 <p className="mb-5 font-light text-gray-500 dark:text-gray-400">

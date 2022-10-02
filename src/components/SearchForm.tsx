@@ -1,6 +1,5 @@
 import { Button, Checkbox, Label, Select } from 'flowbite-react';
-import { Field, Form, FormikProps, FormikValues } from 'formik';
-import React, { FC } from 'react';
+import { Field, Form, FormikValues } from 'formik';
 import { Experiences } from '../types';
 
 const SearchForm = ({ isSubmitting }: FormikValues) => {

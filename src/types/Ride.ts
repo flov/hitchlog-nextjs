@@ -7,6 +7,7 @@ export type Ride = {
   waiting_time?: number;
   youtube?: string;
   gender?: GENDERS;
+  number: number;
 };
 
 export type EXPERIENCES = 'very good' | 'good' | 'neutral' | 'bad' | 'very bad';

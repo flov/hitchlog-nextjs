@@ -141,7 +141,13 @@ const Index: FC<{
             <PuffLoader color="blue" />
           </div>
         ) : (
-          <ListTrips trips={trips} />
+          <>
+            {!!trips.length ? (
+              <ListTrips trips={trips} />
+            ) : (
+              <h1 className="mt-4 mb-8 text-2xl text-center">No trips found</h1>
+            )}
+          </>
         )}
       </div>
     </>
