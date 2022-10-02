@@ -54,6 +54,17 @@ const BlogCard: FC<{ trip: Trip }> = ({ trip }) => {
                   {ride.story}
                 </p>
               )}
+              {ride.youtube && (
+                <div className="w-full my-4">
+                  <iframe
+                    className="w-full h-64"
+                    src={`https://www.youtube.com/embed/${ride.youtube}`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              )}
             </>
           )}
         </Fragment>

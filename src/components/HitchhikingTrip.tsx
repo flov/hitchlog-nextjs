@@ -33,7 +33,6 @@ export function HitchhikingTrip({
   const departure = trip.departure;
   const { currentUser } = useAuth();
   const router = useRouter();
-  console.log(rides);
 
   return (
     <div className="shadow-lg">
