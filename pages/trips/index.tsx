@@ -12,16 +12,22 @@ import { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { Formik } from 'formik';
 import SearchForm from '../../src/components/SearchForm';
+import { Button, Pagination } from 'flowbite-react';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const tripsResponse = await getTripsWithQuery({ q: query.q });
+  const res = await getTripsWithQuery({ q: query.q as Record<string, any> });
+  const trips = JSON.parse(JSON.stringify(res.data.trips));
   const q = query.q ? JSON.parse(query.q as string) : {};
+  const page = query.page ? JSON.parse(query.page as string) : 1;
+  const totalPages = JSON.parse(JSON.stringify(res.data.total_pages));
 
   return {
     props: {
       googleMapsKey: process.env.GOOGLE_MAPS_KEY,
-      trips: JSON.parse(JSON.stringify(tripsResponse.data)),
+      trips,
       q,
+      page,
+      totalPages,
     },
   };
 };
@@ -30,6 +36,8 @@ const Index: FC<{
   trips: Trip[];
   google: GoogleAPI;
   q: any;
+  page: number;
+  totalPages: number;
 }> = (props) => {
   const { google } = props;
   let q = props.q;
@@ -39,7 +47,26 @@ const Index: FC<{
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [trips, setTrips] = useState<Trip[]>(props.trips);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [page, setPage] = useState(props.page);
+  const [totalPages, setTotalPages] = useState(props.totalPages);
   const router = useRouter();
+
+  const setTripsData = (res: AxiosResponse) => {
+    setTrips(res.data.trips);
+    setTotalPages(res.data.total_pages);
+  };
+
+  const handlePageChange = async (p: number) => {
+    router.push(
+      {
+        pathname: '/trips',
+        query: { page: p, q: JSON.stringify(query) },
+      },
+      undefined,
+      { shallow: true }
+    );
+    setPage(p);
+  };
 
   useEffect(() => {
     setQuery(q);
@@ -73,7 +100,7 @@ const Index: FC<{
           }),
         }).then((res: AxiosResponse) => {
           setIsLoading(false);
-          setTrips(res.data);
+          setTripsData(res);
           setQuery(Object.assign(query, res.config.params.q));
           router.push(
             {
@@ -90,7 +117,19 @@ const Index: FC<{
     }
   }, []);
 
-  console.log({ query, q });
+  useEffect(() => {
+    const fetchTrips = async () => {
+      setIsLoading(true);
+      const res = await getTripsWithQuery({
+        q: Object.assign(query),
+        page,
+      });
+      setTripsData(res);
+      setIsLoading(false);
+    };
+    fetchTrips();
+  }, [page]);
+
   return (
     <>
       <div className="h-48 lg:h-96" ref={ref} id="map">
@@ -123,7 +162,7 @@ const Index: FC<{
                   { shallow: true }
                 );
 
-                setTrips(res.data);
+                setTripsData(res);
               })
               .catch((err) => {
                 console.log(err);
@@ -135,6 +174,16 @@ const Index: FC<{
           initialValues={{ ...Object.assign(query, q) }}
           component={(p) => <SearchForm {...p} />}
         />
+
+        <div className="flex justify-center w-full mb-4 itmes-center">
+          <Pagination
+            onPageChange={handlePageChange}
+            currentPage={page}
+            showIcons={true}
+            layout="pagination"
+            totalPages={totalPages}
+          />
+        </div>
 
         {isLoading ? (
           <div className="p-8 grid place-items-center">

@@ -90,7 +90,7 @@ const EditProfile: NextPage = () => {
                 initialValues={{
                   username: currentUser.username,
                   about_you: currentUser.about_you,
-                  formatted_address: currentUser.location.formatted_address,
+                  formatted_address: currentUser.location?.formatted_address,
                   lat: currentUser.location.lat,
                   lng: currentUser.location.lng,
                   city: currentUser.location.city,

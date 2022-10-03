@@ -88,8 +88,6 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
   // };
   //
 
-  const [hello, setHello] = useState('');
-
   return (
     <>
       <Head>
@@ -108,12 +106,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                     <Accordion.Content>
                       <Formik
                         component={(props) => (
-                          <RideForm
-                            {...props}
-                            setHello={setHello}
-                            rides={trip.rides}
-                            ride={ride}
-                          />
+                          <RideForm {...props} rides={trip.rides} ride={ride} />
                         )}
                         initialValues={{
                           id: ride.id,
@@ -125,7 +118,6 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                         }}
                         onSubmit={async (values) => {
                           await updateRide(values);
-                          randomConfetti();
                         }}
                       />
                     </Accordion.Content>
@@ -134,7 +126,6 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
             </Accordion>
           </div>
           <div>
-            {hello}
             {currentUser && (
               <HitchhikingTrip trip={trip} rides={rides} user={currentUser} />
             )}

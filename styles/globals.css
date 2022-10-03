@@ -27,7 +27,7 @@ p {
 nav a {
   text-decoration: none;
 }
-a {
+a:hover { 
   text-decoration: underline;
 }
 #__next {
