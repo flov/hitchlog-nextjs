@@ -1,13 +1,16 @@
 import { FC } from 'react';
 import { Trip } from '../types';
-import BlogCard from './BlogCard';
+import TripCard from './TripCard';
 
-export const ListTrips: FC<{ trips: Trip[] }> = ({ trips }) => {
+export const ListTrips: FC<{
+  trips: Trip[];
+  map: google.maps.Map | null;
+}> = ({ map, trips }) => {
   return (
     <div className="mx-auto max-w-7xl">
       <div className="card-grid">
         {trips.map((trip) => (
-          <BlogCard trip={trip} key={trip.id} />
+          <TripCard trip={trip} map={map} key={trip.id} />
         ))}
       </div>
     </div>

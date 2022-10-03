@@ -1,6 +1,4 @@
-import { QueryDocumentSnapshot } from 'firebase/firestore';
-import { EXPERIENCES, Ride } from './Ride';
-import { NewUser } from './User';
+import { Ride } from './Ride';
 
 export type Location = {
   lat?: number;
@@ -18,18 +16,20 @@ export type Trip = {
   arrival: Date;
   departure: Date;
   created_at: Date;
-  origin: Location;
-  destination: Location;
   google_duration?: number;
-  rides: Ride[];
   distance?: number;
   travelling_with: number;
-  user: NewUser;
   age_at_trip: number;
   average_speed: string;
+  country_distances: Country[];
+  origin: Location;
+  destination: Location;
+  rides: Ride[];
+  user: { username: string; gender: string };
 };
 
-export const tripConverter = {
-  toFirestore: (data: Trip) => data,
-  fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as Trip,
+export type Country = {
+  country_code: string;
+  country: string;
+  distance: number;
 };

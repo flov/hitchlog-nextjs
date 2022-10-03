@@ -13,6 +13,7 @@ import {
   showVehiclesForRides,
   vehicleToIcon,
   showTripDistance,
+  showEmbeddedYoutubeVideo,
 } from '../utils/viewHelpers';
 import ReactMarkdown from 'react-markdown';
 import { User, EXPERIENCES, Ride, Trip } from '../types';
@@ -20,6 +21,7 @@ import { CgSandClock } from 'react-icons/cg';
 import { useAuth } from './contexts/AuthContext';
 import { useRouter } from 'next/router';
 import { FaThumbsUp } from 'react-icons/fa';
+import Link from 'next/link';
 
 export function HitchhikingTrip({
   user,
@@ -49,7 +51,12 @@ export function HitchhikingTrip({
           />
           <h5 className="mt-2 mb-1 text-xl font-medium text-gray-900 dark:text-white"></h5>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            Hitchhiked {moment(departure).fromNow()} by {user?.username}
+            Hitchhiked {moment(departure).fromNow()} by{' '}
+            <Link href={`/hitchhikers/${user.username}`}>
+              <a className="font-semibold text-gray-900 dark:text-white">
+                {user?.username}
+              </a>
+            </Link>
           </span>
           <div className="flex items-center mt-4 gap-2 dark:text-white">
             {showVehiclesForRides(trip.rides)}
@@ -85,7 +92,7 @@ export function HitchhikingTrip({
             {rides.map((ride, index) => {
               return (
                 <Timeline.Item key={`ride${index}`}>
-                  <Timeline.Point icon={FaThumbsUp} />
+                  <Timeline.Point icon={FaThumbsUp} className="text-white" />
                   <Timeline.Content>
                     <Timeline.Time>
                       <div className="flex items-center text-gray-600 dark:text-white gap-4">
@@ -113,11 +120,14 @@ export function HitchhikingTrip({
                         )}
                       </div>
                     </Timeline.Time>
-                    <Timeline.Title className="">{ride.title}</Timeline.Title>
+                    <Timeline.Title className="mt-2">
+                      {ride.title}
+                    </Timeline.Title>
                     <Timeline.Body className="max-w-2xl mt-2">
                       {ride.story && (
                         <ReactMarkdown>{ride.story}</ReactMarkdown>
                       )}
+                      {showEmbeddedYoutubeVideo(ride.youtube)}
                     </Timeline.Body>
                   </Timeline.Content>
                 </Timeline.Item>

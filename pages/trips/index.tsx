@@ -192,7 +192,7 @@ const Index: FC<{
         ) : (
           <>
             {!!trips.length ? (
-              <ListTrips trips={trips} />
+              <ListTrips map={map} trips={trips} />
             ) : (
               <h1 className="mt-4 mb-8 text-2xl text-center">No trips found</h1>
             )}

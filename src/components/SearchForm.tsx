@@ -5,7 +5,7 @@ import { Experiences } from '../types';
 const SearchForm = ({ isSubmitting }: FormikValues) => {
   return (
     <Form>
-      <div className="flex justify-between pb-4 ">
+      <div className="flex justify-between mb-2">
         <Field name="rides_experience_eq">
           {({ field }: FormikValues) => (
             <div className="w-48">

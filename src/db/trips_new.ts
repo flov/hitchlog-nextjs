@@ -12,9 +12,7 @@ export const getTrips = async () => {
   return data;
 };
 
-export const getTripsWithQuery = async (
-  query: Record<'q', Record<string, any>>
-) => {
+export const getTripsWithQuery = async (query: any) => {
   return axios.get(`${API_URL}/trips`, {
     params: query,
     headers: {

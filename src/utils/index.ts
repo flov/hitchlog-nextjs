@@ -35,7 +35,7 @@ export const fetchIpAddressOfClient = async () => {
 export const fetchLocationFromClient = async () => {
   const ipAddress = await fetchIpAddressOfClient();
   const response = await fetch(
-    `https://api.ipgeolocation.io/ipgeo?apiKey=632c15294cec4b7480bbebad1136a9a9&ip=${ipAddress}`
+    `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPLOCATION}&ip=${ipAddress}`
   );
   const data = await response.json();
   return data as IpLocation;

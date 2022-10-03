@@ -60,12 +60,12 @@ export const showCountryFlagForUser = (user: User | undefined | null) => {
   return countryFlag(user.location.country_code);
 };
 
-export const countryFlag = (countryCode: string | undefined) => {
+export const countryFlag = (countryCode: string | undefined, tip = '') => {
   if (!countryCode) return null;
   return (
     <Tooltip
       //@ts-ignore
-      content={`${countries[countryCode.toUpperCase()]}`}
+      content={`${tip ? tip : countries[countryCode.toUpperCase()]}`}
     >
       <ReactCountryFlag
         style={{ fontSize: '1.5rem' }}
@@ -76,10 +76,12 @@ export const countryFlag = (countryCode: string | undefined) => {
 };
 
 export const countryFlagsForTrip = (trip: Trip) =>
-  removeDuplicates([
-    trip.origin?.country_code,
-    trip.destination?.country_code,
-  ]).map((country_code, index) => countryFlag(country_code));
+  trip.country_distances.map((cd, index) =>
+    countryFlag(
+      cd.country_code,
+      `${cd.country}: ${Math.round(cd.distance / 1000)} km`
+    )
+  );
 
 export const experiencesForRides = (rides: Ride[]) => (
   <>
@@ -98,21 +100,7 @@ export const experiencesForRides = (rides: Ride[]) => (
                 key={`${index}RideNumber`}
                 className="flex items-center space-x-3"
               >
-                <div className="relative">
-                  <div
-                    className={`rounded-full border h-5 w-5 ${
-                      ride.experience === 'very good'
-                        ? 'bg-green-400'
-                        : ride.experience === 'good'
-                        ? 'bg-green-500'
-                        : ride.experience === 'bad'
-                        ? 'bg-red-400'
-                        : ride.experience === 'very bad'
-                        ? 'bg-red-600'
-                        : 'bg-yellow-300'
-                    }`}
-                  ></div>
-                </div>
+                <div className="relative">{experienceForRide(ride)}</div>
               </div>
             );
           })}
@@ -127,16 +115,21 @@ export const experiencesForRides = (rides: Ride[]) => (
   </>
 );
 
-export const durationFromGoogle = (trip: Trip) => {
-  const tripDuration = trip.arrival.seconds - trip.departure.seconds;
-  const durationDiff = trip.google_duration
-    ? trip.google_duration - tripDuration
-    : 0;
-
-  return `Google Duration: ${
-    trip.google_duration && secondsToTime(trip.google_duration)
-  }`;
-};
+export const experienceForRide = (ride: Ride) => (
+  <div
+    className={`rounded-full border h-5 w-5 ${
+      ride.experience === 'very good'
+        ? 'bg-green-400'
+        : ride.experience === 'good'
+        ? 'bg-green-500'
+        : ride.experience === 'bad'
+        ? 'bg-red-400'
+        : ride.experience === 'very bad'
+        ? 'bg-red-600'
+        : 'bg-yellow-300'
+    }`}
+  ></div>
+);
 
 export const tripDurationIcons = (trip: Trip) => {
   const tripDuration = trip.arrival.seconds - trip.departure.seconds;
@@ -232,7 +225,7 @@ export const showTripSpeed = (trip: Trip) => {
 
 export const showTripDistance = (trip: Trip) => {
   if (!trip?.distance) return null;
-  const kilometers = Math.round(trip.distance / 1000);
+  const kilometers = (trip.distance / 1000).toFixed(2);
   return (
     <Tooltip content={`travelled ${kilometers} kms`}>
       <div className="flex items-center gap-1">
@@ -284,3 +277,18 @@ export const photoForUser = (user: User, size = '96x96') =>
 
 export const profilePicture = (user: User, size = 64) =>
   `https://www.gravatar.com/avatar/${md5(user?.email)}?s=${size}`;
+
+export const showEmbeddedYoutubeVideo = (youtubeId: string | undefined) => {
+  if (!youtubeId) return null;
+  return (
+    <div className="w-full my-4">
+      <iframe
+        className="w-full h-64"
+        src={`https://www.youtube.com/embed/${youtubeId}`}
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    </div>
+  );
+};
