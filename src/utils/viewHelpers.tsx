@@ -1,4 +1,4 @@
-import { Tooltip } from 'flowbite-react';
+import { Badge, Tooltip } from 'flowbite-react';
 import md5 from 'md5';
 import ReactCountryFlag from 'react-country-flag';
 import { BsArrowRight, BsSpeedometer } from 'react-icons/bs';
@@ -115,9 +115,9 @@ export const experiencesForRides = (rides: Ride[]) => (
   </>
 );
 
-export const experienceForRide = (ride: Ride) => (
+export const experienceForRide = (ride: Ride, size = 5) => (
   <div
-    className={`rounded-full border h-5 w-5 ${
+    className={`rounded-full dark:border-gray-600 border-gray-200 border h-${size} w-${size} ${
       ride.experience === 'very good'
         ? 'bg-green-400'
         : ride.experience === 'good'
@@ -291,4 +291,13 @@ export const showEmbeddedYoutubeVideo = (youtubeId: string | undefined) => {
       />
     </div>
   );
+};
+
+export const tagsForTrip = (trip: Trip) => {
+  const tags = removeDuplicates(trip.rides.map((x) => x.tags).flat());
+  return tags.map((tag) => (
+    <Badge color="purple" key={tag}>
+      {tag}
+    </Badge>
+  ));
 };

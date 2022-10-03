@@ -9,6 +9,7 @@ import {
   experienceForRide,
   experiencesForRides,
   showEmbeddedYoutubeVideo,
+  tagsForTrip,
   tripDurationIcons,
   vehicleIconsForRides,
 } from '../utils/viewHelpers';
@@ -34,7 +35,7 @@ const TripCard: FC<{ map: google.maps.Map | null; trip: Trip }> = ({
     >
       <div className="invisible bg-red-400 bg-red-600 bg-yellow-300 bg-green-400 bg-green-500 space-x-3 -space-x-3" />
 
-      <div className="flex items-center justify-between mb-5 text-gray-500">
+      <div className="flex items-center justify-between mb-2 text-gray-500">
         <div className="flex items-center gap-2 dark:text-white">
           <Badge color="purple">Trip</Badge>
           {experiencesForRides(trip.rides)}
@@ -42,13 +43,16 @@ const TripCard: FC<{ map: google.maps.Map | null; trip: Trip }> = ({
           {countryFlagsForTrip(trip)}
           {tripDurationIcons(trip)}
         </div>
-
         <span className="text-sm">
           <Tooltip content={`Hitchhiked ${timeAgoInWords(trip.departure)}`}>
             {timeAgoInWords(trip.departure)}
           </Tooltip>
         </span>
       </div>
+      <div className="flex items-center mb-4 gap-2 dark:text-white">
+        {tagsForTrip(trip)}
+      </div>
+
       <h3 className="flex items-center justify-between mb-4 font-bold text-1xl">
         <span>
           From {trip.origin?.city} to {trip.destination?.city}
@@ -59,7 +63,9 @@ const TripCard: FC<{ map: google.maps.Map | null; trip: Trip }> = ({
           {ride.story && (
             <>
               <div className="flex items-center gap-2">
-                {experienceForRide(ride)}
+                <Tooltip content={`${ride.experience} Experience`}>
+                  {experienceForRide(ride, 3)}
+                </Tooltip>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                   {ride.title
                     ? ride.title

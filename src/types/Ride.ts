@@ -8,6 +8,7 @@ export type Ride = {
   youtube?: string;
   gender?: GENDERS;
   number: number;
+  tags: string[];
 };
 
 export type EXPERIENCES = 'very good' | 'good' | 'neutral' | 'bad' | 'very bad';
