@@ -92,8 +92,8 @@ a:hover {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(385px, 1fr));
   grid-gap: theme(spacing.4);
+  grid-template-columns: repeat(auto-fit, minmax(385px, 1fr));
   margin-bottom: theme(spacing.4);
 }
 
@@ -103,3 +103,6 @@ a:hover {
   grid-gap: theme(spacing.4);
 }
 
+.grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+}

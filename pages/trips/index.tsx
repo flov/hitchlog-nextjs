@@ -198,6 +198,16 @@ const Index: FC<{
             )}
           </>
         )}
+
+        <div className="flex justify-center w-full mb-4 itmes-center">
+          <Pagination
+            onPageChange={handlePageChange}
+            currentPage={page}
+            showIcons={true}
+            layout="pagination"
+            totalPages={totalPages}
+          />
+        </div>
       </div>
     </>
   );

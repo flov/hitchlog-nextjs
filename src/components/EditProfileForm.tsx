@@ -18,7 +18,7 @@ const EditProfileForm: FC<FormikValues> = ({
       const autocomplete = new window.google.maps.places.Autocomplete(
         locationRef.current as HTMLInputElement,
         {
-          types: ['(cities)'],
+          types: ['(regions)'],
         }
       );
       autocomplete.addListener('place_changed', () => {
@@ -72,7 +72,7 @@ const EditProfileForm: FC<FormikValues> = ({
                   ref={locationRef}
                   id="formatted_address"
                   name="formatted_address"
-                  placeholder="Enter your formatted_address"
+                  placeholder="Enter your city or country"
                   icon={FaFlag}
                   type="text"
                   {...field}

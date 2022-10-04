@@ -16,12 +16,11 @@ import {
 import { getOrdinalNumber, photoForUser } from '../utils';
 import Link from 'next/link';
 
-const TripCard: FC<{ map: google.maps.Map | null; trip: Trip }> = ({
+const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   map,
   trip,
 }) => {
   const centerMapToTrip = () => {
-    console.log('centerMapToTrip', map, trip.origin.lat, trip.origin.lng);
     if (map && trip.origin?.lat && trip.origin?.lng) {
       map.panTo(new google.maps.LatLng(trip.origin.lat, trip.origin.lng));
       map.setZoom(6);
@@ -37,7 +36,7 @@ const TripCard: FC<{ map: google.maps.Map | null; trip: Trip }> = ({
 
       <div className="flex items-center justify-between mb-2 text-gray-500">
         <div className="flex items-center gap-2 dark:text-white">
-          <Badge color="purple">Trip</Badge>
+          <Badge color="info">Trip</Badge>
           {experiencesForRides(trip.rides)}
           {vehicleIconsForRides(trip.rides)}
           {countryFlagsForTrip(trip)}
@@ -90,7 +89,7 @@ const TripCard: FC<{ map: google.maps.Map | null; trip: Trip }> = ({
               <Link href={`/hitchhikers/${trip.user.username}`}>
                 <a className="flex items-center space-x-2">
                   <Image
-                    className="w-6 h-6 rounded-full"
+                    className="w-6 h-6 border border-gray-600 rounded-full"
                     width={28}
                     height={28}
                     src={photoForUser(trip.user, '28x28')}

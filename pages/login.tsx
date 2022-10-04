@@ -9,10 +9,10 @@ import Link from 'next/link';
 import { FiKey, FiMail } from 'react-icons/fi';
 import { API_URL } from '../src/config';
 
-interface Values {
+type Values = {
   password: string;
   email: string;
-}
+};
 
 const Login: FC = () => {
   const initialValues = {

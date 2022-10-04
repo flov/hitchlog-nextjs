@@ -1,9 +1,10 @@
 import { Badge, Tooltip } from 'flowbite-react';
 import md5 from 'md5';
 import ReactCountryFlag from 'react-country-flag';
-import { BsArrowRight, BsSpeedometer } from 'react-icons/bs';
+import { BsArrowRight, BsChat, BsSpeedometer } from 'react-icons/bs';
 import { CgSandClock } from 'react-icons/cg';
 import {
+  FaArrowRight,
   FaBus,
   FaCarSide,
   FaGoogle,
@@ -14,12 +15,13 @@ import {
   FaRoad,
   FaScroll,
   FaShip,
+  FaThumbsUp,
   FaTruck,
   FaVenus,
 } from 'react-icons/fa';
 import { FiThumbsUp, FiUser } from 'react-icons/fi';
 import { capitalize, pluralize, removeDuplicates } from '.';
-import { Ride, Trip, User, VEHICLES } from '../types';
+import { Profile, Ride, Trip, User, VEHICLES } from '../types';
 import { countries } from '../utils/country_codes';
 import { secondsToTime } from './secondsToTime';
 
@@ -55,9 +57,11 @@ export const vehicleIconsForRides = (rides: Ride[]) =>
     )
   );
 
-export const showCountryFlagForUser = (user: User | undefined | null) => {
+export const showCountryFlagForUser = (
+  user: User | Profile | undefined | null
+) => {
   if (!user?.location?.country_code) return null;
-  return countryFlag(user.location.country_code);
+  return countryFlag(user.location.country_code, user.location.city);
 };
 
 export const countryFlag = (countryCode: string | undefined, tip = '') => {
@@ -72,6 +76,33 @@ export const countryFlag = (countryCode: string | undefined, tip = '') => {
         countryCode={countryCode}
       />
     </Tooltip>
+  );
+};
+
+export const countryFlagsForProfile = (
+  hitchhiked_countries: Record<string, number>
+) => {
+  if (!hitchhiked_countries) return null;
+  return (
+    <>
+      {Object.keys(hitchhiked_countries).map((countryCode, index) => {
+        if (!countryCode) return null;
+        return (
+          <Tooltip
+            key={`${index}CountryFlag`}
+            //@ts-ignore
+            content={`${countries[countryCode.toUpperCase()]}: ${Math.round(
+              hitchhiked_countries[countryCode] / 1000
+            )} kms`}
+          >
+            <ReactCountryFlag
+              style={{ fontSize: '1.5rem' }}
+              countryCode={countryCode}
+            />
+          </Tooltip>
+        );
+      })}
+    </>
   );
 };
 
@@ -197,6 +228,14 @@ export const showNumberOfRides = (ridesLength: number) => (
   </Tooltip>
 );
 
+export const showHitchhikedKms = (size: number) => (
+  <Tooltip content={`${size} hitchhiked kms`}>
+    <div className="flex items-center gap-1">
+      <FaArrowRight className="inline " /> {size} km
+    </div>
+  </Tooltip>
+);
+
 export const showNumberOfStories = (rides: Ride[]) => {
   const numberOfStories = rides
     .map((x) => x.story)
@@ -211,13 +250,36 @@ export const showNumberOfStories = (rides: Ride[]) => {
   );
 };
 
-export const showTripSpeed = (trip: Trip) => {
-  if (!trip?.average_speed) return null;
+export const viewAverageSpeed = (speed: string) => {
+  if (!speed) return null;
   return (
-    <Tooltip content={`Average speed ${trip.average_speed}`}>
+    <Tooltip content={`Average speed ${speed}`}>
       <div className="flex items-center gap-1">
         <BsSpeedometer className="inline" />
-        {trip.average_speed}
+        {speed}
+      </div>
+    </Tooltip>
+  );
+};
+
+export const viewAverageWaitingTime = (waitingTime: number) => {
+  if (!waitingTime) return null;
+  return (
+    <Tooltip content={`Average waiting time ${waitingTime}`}>
+      <div className="flex items-center gap-1">
+        <CgSandClock className="inline" />
+        {waitingTime}
+      </div>
+    </Tooltip>
+  );
+};
+
+export const viewNumberOfComments = (size: number) => {
+  if (!size) return null;
+  return (
+    <Tooltip content={`${size} ${pluralize(size, 'comment')}`}>
+      <div className="flex items-center gap-1">
+        <BsChat className="inline" /> {size}
       </div>
     </Tooltip>
   );
@@ -264,9 +326,27 @@ export const showUserGender = (gender: 'male' | 'female' | 'non-binary') => (
   </Tooltip>
 );
 
-export const showNumberOfTrips = (tripsLength: number) => (
-  <Tooltip content={`${tripsLength} ${pluralize(tripsLength, 'trip')}`}>
-    <FaRoad className="inline " /> {tripsLength}
+export const viewNumberOfTrips = (tripsSize: number) => (
+  <Tooltip content={`${tripsSize} ${pluralize(tripsSize, 'trip')}`}>
+    <div className="flex items-center gap-1">
+      <FaRoad className="inline " /> {tripsSize}
+    </div>
+  </Tooltip>
+);
+
+export const viewNumberOfRides = (ridesSize: number) => (
+  <Tooltip content={`${ridesSize} ${pluralize(ridesSize, 'ride')}`}>
+    <div className="flex items-center gap-1">
+      <FaThumbsUp className="inline " /> {ridesSize}
+    </div>
+  </Tooltip>
+);
+
+export const viewNumberOfStories = (size: number) => (
+  <Tooltip content={`${size} ${pluralize(size, 'story')}`}>
+    <div className="flex items-center gap-1">
+      <FaScroll className="inline " /> {size}
+    </div>
   </Tooltip>
 );
 

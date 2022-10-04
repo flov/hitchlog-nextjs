@@ -9,7 +9,7 @@ import { profilePicture } from '../../src/utils';
 import {
   countryFlag,
   showNumberOfRides,
-  showNumberOfTrips,
+  viewNumberOfTrips,
   showUserGender,
 } from '../../src/utils/viewHelpers';
 import { useRouter } from 'next/router';
@@ -114,7 +114,7 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
                     {showUserGender(user.gender)})
                   </div>
                   {showNumberOfRides(user.number_of_rides)}
-                  {showNumberOfTrips(user.number_of_trips)}
+                  {viewNumberOfTrips(user.number_of_trips)}
                   {countryFlag(user.location?.country_code)}
                 </div>
               </Table.Cell>

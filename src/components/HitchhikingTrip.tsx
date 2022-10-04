@@ -8,7 +8,7 @@ import {
   showNumberOfRides,
   showNumberOfStories,
   showTotalWaitingTimeForRides,
-  showTripSpeed,
+  viewAverageSpeed,
   showTripGoogleDuration,
   showVehiclesForRides,
   vehicleToIcon,
@@ -64,7 +64,7 @@ export function HitchhikingTrip({
             {showAgeAtTrip(trip, user)}
             {showNumberOfRides(trip.rides.length)}
             {showTripGoogleDuration(trip)}
-            {showTripSpeed(trip)}
+            {viewAverageSpeed(trip.average_speed)}
             {showTripDistance(trip)}
             {showNumberOfStories(trip.rides)}
           </div>
