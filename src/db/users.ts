@@ -20,7 +20,7 @@ export const getUser = async (id: number | string) => {
   });
 };
 
-export const getProfile = async (id: number | string) => {
+export const fetchProfile = async (id: number | string) => {
   return axios.get(`${API_URL}/users/${id}/profile`, {
     headers: {
       'Content-Type': 'application/json',
