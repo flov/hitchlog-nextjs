@@ -10,6 +10,13 @@ export const authenticateToken = async (token: string | undefined) =>
     },
   });
 
+export const getGeomap = async (id: string | number) =>
+  axios.get(`${API_URL}/users/${id}/geomap`, {
+    headers: {
+      accept: 'application/json',
+    },
+  });
+
 export const postLogin = async (values: {
   email: string;
   password: string;

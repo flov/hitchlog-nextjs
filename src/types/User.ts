@@ -28,6 +28,11 @@ export type UserLocation = {
   city?: string;
 };
 
+export type Geomap = {
+  distances: Record<string, number>;
+  trip_count: Record<string, number>;
+};
+
 export type Profile = {
   id: number;
   age: number;

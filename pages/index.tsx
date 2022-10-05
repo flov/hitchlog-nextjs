@@ -1,11 +1,17 @@
-import type {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from 'next';
+import dynamic from 'next/dynamic';
+import type { NextPage } from 'next';
 import Head from 'next/head';
+import worldMill from '@react-jvectormap/world/worldMill.json';
+
+const VectorMap = dynamic(
+  // @ts-ignore
+  () => import('@react-jvectormap/core').then((m) => m.VectorMap),
+  { ssr: false }
+);
 
 const Home: NextPage = () => {
+  const ssr = typeof window === 'undefined';
+
   return (
     <>
       <Head>
@@ -27,6 +33,10 @@ const Home: NextPage = () => {
           </p>
         </div>
       </main>
+
+      <div style={{ width: 500, height: 500 }}>
+        {<VectorMap map={worldMill} />}
+      </div>
     </>
   );
 };

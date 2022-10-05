@@ -98,7 +98,7 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
                       <Image
                         alt={`${user.username}'s profile picture`}
                         className="rounded-full"
-                        src={profilePicture(user)}
+                        src={profilePicture(user.md5_email)}
                         width={40}
                         height={40}
                       />
