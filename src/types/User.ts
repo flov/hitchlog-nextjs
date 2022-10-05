@@ -3,6 +3,7 @@ import { EXPERIENCES, VEHICLES } from './Ride';
 export type User = {
   id: number;
   email: string;
+  md5_email: string;
   username: string;
   gender: 'male' | 'female' | 'non-binary';
   about_you?: string;
@@ -29,8 +30,10 @@ export type UserLocation = {
 
 export type Profile = {
   id: number;
+  age: number;
+  md5_email: string;
   username: string;
-  gender: string;
+  gender: 'male' | 'female' | 'non-binary';
   about_you: string;
   languages: string;
   hitchhiked_countries: Record<string, number>;

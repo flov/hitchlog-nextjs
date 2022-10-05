@@ -99,7 +99,7 @@ const NavBar = () => {
       </Navbar.Collapse>
 
       <React.Fragment>
-        <Modal show={showModal} onClose={toggleModal}>
+        <Modal size="md" show={showModal} onClose={toggleModal}>
           <Modal.Header>Sign in to your account</Modal.Header>
           <Modal.Body>
             <Login toggleModal={toggleModal} />

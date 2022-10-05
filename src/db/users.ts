@@ -10,6 +10,13 @@ export const authenticateToken = async (token: string | undefined) =>
     },
   });
 
+export const postLogin = async (values: {
+  email: string;
+  password: string;
+}) => {
+  axios.post(`${API_URL}/users/sign_in`, { user: values });
+};
+
 export const getUser = async (id: number | string) => {
   return axios.get(`${API_URL}/users/${id}`, {
     headers: {

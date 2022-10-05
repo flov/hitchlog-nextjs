@@ -127,7 +127,7 @@ const EditProfileForm: FC<FormikValues> = ({
           )}
         </Field>
       </div>
-      <h2 className="my-2 text-xl font-semibold">Social Networks:</h2>
+      <h2 className="my-2 text-xl font-semibold">Social Network:</h2>
       <div>
         <Label htmlFor="trustroots">Trustroots username</Label>
         <Field name="trustroots">
@@ -136,35 +136,6 @@ const EditProfileForm: FC<FormikValues> = ({
               <TextInput
                 name="trustroots"
                 placeholder="Your trustroot username"
-                {...field}
-              />
-            </div>
-          )}
-        </Field>
-      </div>
-      <div className="my-2">
-        <Label htmlFor="cs_user">Couchsurfing username</Label>
-        <Field name="cs_user">
-          {({ field }: FormikValues) => (
-            <div className="my-2">
-              <TextInput
-                name="cs_user"
-                placeholder="Enter your Couchsurfing username"
-                type="text"
-                {...field}
-              />
-            </div>
-          )}
-        </Field>
-      </div>
-      <div className="my-2">
-        <Label htmlFor="be_welcome_user">Be Welcome username</Label>
-        <Field name="be_welcome_user">
-          {({ field }: FormikValues) => (
-            <div className="my-2">
-              <TextInput
-                name="be_welcome_user"
-                placeholder="Enter your Be Welcome username"
                 {...field}
               />
             </div>

@@ -8,11 +8,15 @@ export const ListTrips: FC<{
 }> = ({ map, trips }) => {
   return (
     <div className="mx-auto max-w-7xl">
-      <div className="card-grid">
-        {trips.map((trip) => (
-          <TripCard trip={trip} map={map} key={trip.id} />
-        ))}
-      </div>
+      {!!trips.length ? (
+        <div className="card-grid">
+          {trips.map((trip) => (
+            <TripCard trip={trip} map={map} key={trip.id} />
+          ))}
+        </div>
+      ) : (
+        <h1 className="my-4 text-2xl text-center">No trips found</h1>
+      )}
     </div>
   );
 };

@@ -62,8 +62,8 @@ export const photoForUser = (user: User, size = '96x96') =>
     user?.gender === 'male' ? 'set1' : 'set4'
   }`;
 
-export const profilePicture = (user: User, size = 64) =>
-  `https://www.gravatar.com/avatar/${md5(user?.email)}?s=${size}`;
+export const profilePicture = (md5_email: string, size = 64) =>
+  `https://www.gravatar.com/avatar/${md5_email}?s=${size}`;
 
 // execute function x times with 1 second in between
 export const executeNTimes = (fn: () => void, n: number) => {

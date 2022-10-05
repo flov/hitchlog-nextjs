@@ -14,7 +14,7 @@ type Values = {
   email: string;
 };
 
-const Login: FC<{ toggleModal: () => {} }> = ({ toggleModal }) => {
+const Login: FC<{ toggleModal: () => void }> = ({ toggleModal }) => {
   const initialValues = {
     email: '',
     password: '',
@@ -24,110 +24,104 @@ const Login: FC<{ toggleModal: () => {} }> = ({ toggleModal }) => {
   const [error, setError] = useState(null);
 
   return (
-    <>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={(
-          values: Values,
-          { setSubmitting }: FormikHelpers<Values>
-        ) => {
-          axios
-            .post(`${API_URL}/users/sign_in`, { user: values })
-            .then((res) => {
-              setCurrentUser(res.data.user);
-              setError(null);
-              Cookies.set('authToken', res.headers.authorization.split(' ')[1]);
-              router.push(`/hitchhikers/${res.data.user.username}`);
-              toggleModal();
-            })
-            .catch((err) => {
-              setError(err.response.data);
-            });
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
+        axios
+          .post(`${API_URL}/users/sign_in`, { user: values })
+          .then((res) => {
+            setCurrentUser(res.data.user);
+            setError(null);
+            Cookies.set('authToken', res.headers.authorization.split(' ')[1]);
+            toggleModal();
+          })
+          .catch((err) => {
+            setError(err.response.data);
+          });
 
-          setSubmitting(false);
-        }}
-      >
-        <Form>
-          {error && (
-            <div className="mb-2">
-              <Alert color="failure">
-                <span>
-                  <span className="font-medium">{error}</span>
-                </span>
-              </Alert>
-            </div>
-          )}
-
-          <div className="block mb-2">
-            <Label htmlFor="email" value="Your email" />
+        setSubmitting(false);
+      }}
+    >
+      <Form>
+        {error && (
+          <div className="mb-2">
+            <Alert color="failure">
+              <span>
+                <span className="font-medium">{error}</span>
+              </span>
+            </Alert>
           </div>
+        )}
 
-          <Field name="email">
-            {({ field }: FormikValues) => (
-              <div>
-                <TextInput
-                  id="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  type="email"
-                  icon={FiMail}
-                  {...field}
-                />
-              </div>
-            )}
-          </Field>
-          <label
-            className="block my-2 text-sm font-medium text-gray-900 dark:text-white"
-            htmlFor="password"
-          >
-            Password
-          </label>
-          <Field name="password">
-            {({ field }: FormikValues) => (
+        <div className="block mb-2">
+          <Label htmlFor="email" value="Your email" />
+        </div>
+
+        <Field name="email">
+          {({ field }: FormikValues) => (
+            <div>
               <TextInput
-                id="password"
-                name="password"
-                placeholder="Enter password"
-                type="password"
-                icon={FiKey}
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                type="email"
+                icon={FiMail}
                 {...field}
               />
-            )}
-          </Field>
+            </div>
+          )}
+        </Field>
+        <label
+          className="block my-2 text-sm font-medium text-gray-900 dark:text-white"
+          htmlFor="password"
+        >
+          Password
+        </label>
+        <Field name="password">
+          {({ field }: FormikValues) => (
+            <TextInput
+              id="password"
+              name="password"
+              placeholder="Enter password"
+              type="password"
+              icon={FiKey}
+              {...field}
+            />
+          )}
+        </Field>
 
-          <div className="my-4">
-            <button
-              type="submit"
-              className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        <div className="my-4">
+          <button
+            type="submit"
+            className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          >
+            Sign in
+          </button>
+        </div>
+        <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+          Don’t have an account yet?{' '}
+          <Link href="/register">
+            <a
+              onClick={toggleModal}
+              className="font-medium text-primary-600 dark:text-primary-500"
             >
-              Sign in
-            </button>
-          </div>
-          <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-            Don’t have an account yet?{' '}
-            <Link href="/register">
-              <a
-                onClick={toggleModal}
-                className="font-medium text-primary-600 dark:text-primary-500"
-              >
-                Sign up
-              </a>
-            </Link>
-          </p>
-          <p className="m-0 text-sm font-light text-gray-500 dark:text-gray-400">
-            Forgot your password?{' '}
-            <Link href="/forgot_password">
-              <a
-                onClick={toggleModal}
-                className="mt-0 font-medium text-primary-600 dark:text-primary-500"
-              >
-                Reset password
-              </a>
-            </Link>
-          </p>
-        </Form>
-      </Formik>
-    </>
+              Sign up
+            </a>
+          </Link>
+        </p>
+        <p className="m-0 text-sm font-light text-gray-500 dark:text-gray-400">
+          Forgot your password?{' '}
+          <Link href="/forgot_password">
+            <a
+              onClick={toggleModal}
+              className="mt-0 font-medium text-primary-600 dark:text-primary-500"
+            >
+              Reset password
+            </a>
+          </Link>
+        </p>
+      </Form>
+    </Formik>
   );
 };
 

@@ -5,6 +5,7 @@ import { BsArrowRight, BsChat, BsSpeedometer } from 'react-icons/bs';
 import { CgSandClock } from 'react-icons/cg';
 import {
   FaArrowRight,
+  FaBirthdayCake,
   FaBus,
   FaCarSide,
   FaGoogle,
@@ -314,10 +315,13 @@ export const showTripGoogleDuration = (trip: Trip) => {
   }
 };
 
-export const showUserGender = (gender: 'male' | 'female' | 'non-binary') => (
+export const showUserGender = (
+  gender: 'male' | 'female' | 'non-binary',
+  size = 16
+) => (
   <Tooltip content={gender}>
     {gender == 'male' ? (
-      <FaMars className="inline" />
+      <FaMars className="inline" size={size} />
     ) : gender == 'female' ? (
       <FaVenus className="inline" />
     ) : (
@@ -355,8 +359,8 @@ export const photoForUser = (user: User, size = '96x96') =>
     user?.gender === 'male' ? 'set1' : 'set4'
   }`;
 
-export const profilePicture = (user: User, size = 64) =>
-  `https://www.gravatar.com/avatar/${md5(user?.email)}?s=${size}`;
+export const profilePicture = (md5_email: string, size = 64) =>
+  `https://www.gravatar.com/avatar/${md5_email}?s=${size}`;
 
 export const showEmbeddedYoutubeVideo = (youtubeId: string | undefined) => {
   if (!youtubeId) return null;

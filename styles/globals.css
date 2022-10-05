@@ -106,3 +106,7 @@ a:hover {
 .grid-auto-fit {
   grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
 }
+
+.image-shadow span {
+  overflow: visible !important;
+}
