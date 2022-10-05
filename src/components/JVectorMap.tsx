@@ -16,12 +16,11 @@ const VectorMap = dynamic(
 const JVectorMap: FC<{ geomap: Geomap }> = ({ geomap }) => {
   const { theme } = useTheme();
 
-  console.log(geomap);
   if (!geomap || !Object.keys(geomap.distances).length) return null;
 
   return (
     <>
-      <h2 className="mt-4 text-xl font-bold">Geomap of hitchhiking trips</h2>
+      <h2 className="mb-2 text-xl font-bold">Geomap of hitchhiking trips</h2>
       <div style={{ height: '20rem' }} className="w-full ">
         <VectorMap
           map={worldMill}
@@ -49,8 +48,16 @@ const JVectorMap: FC<{ geomap: Geomap }> = ({ geomap }) => {
             width: '100%',
             height: '100%',
           }}
-          onMarkerTipShow={(event, label, code) => {
-            console.log(event, label, code);
+          onRegionTipShow={(event, label, code) => {
+            if (geomap.distances[code]) {
+              // @ts-ignore
+              label.html(
+                // @ts-ignore
+                `<b>${label.html()}</b><br/>
+                <b>Number of Trips: </b>${geomap.trip_count[code]}<br/>
+                <b>Hitchhiked kms: </b>${geomap.distances[code]}`
+              );
+            }
           }}
           series={{
             regions: [

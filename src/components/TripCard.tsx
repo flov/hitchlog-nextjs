@@ -6,7 +6,7 @@ import RightArrow from './svg/RightArrow';
 import { Badge, Tooltip } from 'flowbite-react';
 import {
   countryFlagsForTrip,
-  experienceForRide,
+  experienceCircle,
   experiencesForRides,
   showEmbeddedYoutubeVideo,
   tagsForTrip,
@@ -63,7 +63,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
             <>
               <div className="flex items-center gap-2">
                 <Tooltip content={`${ride.experience} Experience`}>
-                  {experienceForRide(ride, 3)}
+                  {experienceCircle(ride.experience, 3)}
                 </Tooltip>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                   {ride.title

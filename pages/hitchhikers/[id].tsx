@@ -15,6 +15,7 @@ import { Geomap, Profile, Trip } from '../../src/types';
 import { capitalize, profilePicture } from '../../src/utils';
 import {
   countryFlagsForProfile,
+  experiencesForProfile,
   showCountryFlagForUser,
   showHitchhikedKms,
   showUserGender,
@@ -27,18 +28,17 @@ import {
 } from '../../src/utils/viewHelpers';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const user = await fetchProfile(params?.id as string);
+  const profile = await fetchProfile(params?.id as string);
   const geomap = await getGeomap(params?.id as string);
-  console.log({ geomap: geomap.data });
-  if (user.data?.error) {
+  if (profile.data?.error) {
     return {
       notFound: true,
     };
   }
-  const trips = await getTripsWithQuery({ q: { user_id_eq: user.data.id } });
+  const trips = await getTripsWithQuery({ q: { user_id_eq: profile.data.id } });
   return {
     props: {
-      user: JSON.parse(JSON.stringify(user.data)),
+      profile: JSON.parse(JSON.stringify(profile.data)),
       trips: JSON.parse(JSON.stringify(trips.data.trips)),
       geomap: JSON.parse(JSON.stringify(geomap.data)),
       totalPages: JSON.parse(JSON.stringify(trips.data.total_pages)),
@@ -47,12 +47,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 };
 
 const Show: NextPage<{
-  user: Profile;
+  profile: Profile;
   trips: Trip[];
   geomap: Geomap;
   totalPages: number;
 }> = (props) => {
-  const { user } = props;
+  const { profile } = props;
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -67,17 +67,20 @@ const Show: NextPage<{
   useEffect(() => {
     const fetchTrips = async () => {
       setIsLoading(true);
-      const res = await getTripsWithQuery({ q: { user_id_eq: user.id }, page });
+      const res = await getTripsWithQuery({
+        q: { user_id_eq: profile.id },
+        page,
+      });
       setTripsData(res);
       setIsLoading(false);
     };
     fetchTrips();
-  }, [page, user.id]);
+  }, [page, profile.id]);
 
   const handlePageChange = async (p: number) => {
     router.push(
       {
-        pathname: `/hitchhikers/${user.username}`,
+        pathname: `/hitchhikers/${profile.username}`,
         query: { page: p },
       },
       undefined,
@@ -92,15 +95,22 @@ const Show: NextPage<{
         <section className="w-full p-6 border rounded-lg dark:bg-gray-800 dark:border-gray-700">
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
-              {capitalize(user.username)}
+              {capitalize(profile.username)}
             </h1>
           </div>
 
-          {user.about_you && <p className="mt-4">{user.about_you}</p>}
-          <JVectorMap geomap={props.geomap} />
+          {profile.about_you && <p className="mt-2">{profile.about_you}</p>}
+
+          <div className="flex justify-between w-full mt-4">
+            {experiencesForProfile(profile.experiences)}
+          </div>
+
+          <div className="mt-4">
+            <JVectorMap geomap={props.geomap} />
+          </div>
         </section>
         <div className="w-full p-4 border rounded-lg sm:max-w-xs dark:border-gray-700 dark:bg-gray-800">
-          <UserStats user={user} />
+          <ProfileStats profile={profile} />
         </div>
       </div>
 
@@ -108,7 +118,7 @@ const Show: NextPage<{
         <div id="ListTrips">
           <div className="flex justify-center w-full mt-4">
             <h2 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
-              {capitalize(user.username)}&apos;s trips:
+              {capitalize(profile.username)}&apos;s trips:
             </h2>
           </div>
 
@@ -145,7 +155,7 @@ const Show: NextPage<{
   );
 };
 
-const UserStats: FC<{ user: Profile }> = ({ user }) => {
+const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
   const { currentUser } = useAuth();
   return (
     <>
@@ -155,14 +165,14 @@ const UserStats: FC<{ user: Profile }> = ({ user }) => {
           alt="Profile picture"
           width={128}
           height={128}
-          src={profilePicture(user.md5_email, 128)}
+          src={profilePicture(profile.md5_email, 128)}
         />
       </div>
       <div className="flex items-center justify-center mt-2 gap-2">
-        {capitalize(user.username)} ({user.age})
-        {showUserGender(user.gender, 20)}
-        {showCountryFlagForUser(user)}
-        {user.username === currentUser?.username && (
+        {capitalize(profile.username)} ({profile.age})
+        {showUserGender(profile.gender, 20)}
+        {showCountryFlagForUser(profile)}
+        {profile.username === currentUser?.username && (
           <Link passHref href={'/hitchhikers/edit_profile'}>
             <a>
               <Button size="xs">Edit profile</Button>
@@ -171,27 +181,27 @@ const UserStats: FC<{ user: Profile }> = ({ user }) => {
         )}
       </div>
       <div className="flex items-center justify-center pt-2 gap-2">
-        {viewNumberOfTrips(user.number_of_trips)}
-        {viewNumberOfRides(user.number_of_rides)}
-        {viewNumberOfStories(user.number_of_stories)}
-        {viewNumberOfComments(user.number_of_comments)}
+        {viewNumberOfTrips(profile.number_of_trips)}
+        {viewNumberOfRides(profile.number_of_rides)}
+        {viewNumberOfStories(profile.number_of_stories)}
+        {viewNumberOfComments(profile.number_of_comments)}
       </div>
       <div className="flex items-center justify-center pb-2 gap-2">
-        {viewAverageSpeed(user.average_speed)}
-        {viewAverageWaitingTime(user.average_waiting_time)}
-        {showHitchhikedKms(user.hitchhiked_kms)}
+        {viewAverageSpeed(profile.average_speed)}
+        {viewAverageWaitingTime(profile.average_waiting_time)}
+        {showHitchhikedKms(profile.hitchhiked_kms)}
       </div>
       <div className="grid grid-auto-fit gap-1">
-        {countryFlagsForProfile(user.hitchhiked_countries)}
+        {countryFlagsForProfile(profile.hitchhiked_countries)}
       </div>
-      {user.trustroots && (
+      {profile.trustroots && (
         <div className="mt-2">
           Trustroots:{' '}
           <a
             className="text-primary-500"
-            href={`https://www.trustroots.org/profile/${user.trustroots}`}
+            href={`https://www.trustroots.org/profile/${profile.trustroots}`}
           >
-            {user.trustroots}
+            {profile.trustroots}
           </a>
         </div>
       )}

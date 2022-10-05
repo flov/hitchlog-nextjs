@@ -22,7 +22,14 @@ import {
 } from 'react-icons/fa';
 import { FiThumbsUp, FiUser } from 'react-icons/fi';
 import { capitalize, pluralize, removeDuplicates } from '.';
-import { Profile, Ride, Trip, User, VEHICLES } from '../types';
+import {
+  ExperiencesRecord,
+  Profile,
+  Ride,
+  Trip,
+  User,
+  VEHICLES,
+} from '../types';
 import { countries } from '../utils/country_codes';
 import { secondsToTime } from './secondsToTime';
 
@@ -115,6 +122,41 @@ export const countryFlagsForTrip = (trip: Trip) =>
     )
   );
 
+export const experiencesForProfile = (experiences: ExperiencesRecord) =>
+  Object.keys(experiences).map((exp, index) => {
+    const replaced_exp = exp.replace(/_/g, ' ');
+    const experienceSize = experiences[exp];
+    const array = new Array(experienceSize).fill(0);
+    return (
+      <Tooltip
+        key={`${index}Experience`}
+        content={`${experienceSize} ${pluralize(
+          experienceSize,
+          `${replaced_exp} experience`
+        )}`}
+      >
+        <div className="flex items-center -space-x-3">
+          {array.map((_, index) => {
+            if (index > 5) return null;
+            return (
+              <div
+                key={`${index}RideNumber`}
+                className="flex items-center space-x-3"
+              >
+                <div className="relative">{experienceCircle(replaced_exp)}</div>
+              </div>
+            );
+          })}
+          {array.length > 0 && (
+            <div className="relative flex items-center justify-center w-5 h-5 text-xs text-white bg-gray-700 rounded-full font-sm ring-2 ring-gray-300 hover:bg-gray-600 dark:ring-gray-500 ">
+              {array.length}
+            </div>
+          )}
+        </div>
+      </Tooltip>
+    );
+  });
+
 export const experiencesForRides = (rides: Ride[]) => (
   <>
     {!!rides?.length && (
@@ -132,7 +174,9 @@ export const experiencesForRides = (rides: Ride[]) => (
                 key={`${index}RideNumber`}
                 className="flex items-center space-x-3"
               >
-                <div className="relative">{experienceForRide(ride)}</div>
+                <div className="relative">
+                  {experienceCircle(ride.experience)}
+                </div>
               </div>
             );
           })}
@@ -147,16 +191,16 @@ export const experiencesForRides = (rides: Ride[]) => (
   </>
 );
 
-export const experienceForRide = (ride: Ride, size = 5) => (
+export const experienceCircle = (experience: string | undefined, size = 5) => (
   <div
     className={`rounded-full dark:border-gray-600 border-gray-200 border h-${size} w-${size} ${
-      ride.experience === 'very good'
+      experience === 'very good'
         ? 'bg-green-400'
-        : ride.experience === 'good'
+        : experience === 'good'
         ? 'bg-green-500'
-        : ride.experience === 'bad'
+        : experience === 'bad'
         ? 'bg-red-400'
-        : ride.experience === 'very bad'
+        : experience === 'very bad'
         ? 'bg-red-600'
         : 'bg-yellow-300'
     }`}

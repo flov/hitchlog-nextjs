@@ -33,6 +33,11 @@ export type Geomap = {
   trip_count: Record<string, number>;
 };
 
+export type ExperiencesRecord = Record<
+  'very_good' | 'good' | 'neutral' | 'bad' | 'very_bad',
+  number
+>;
+
 export type Profile = {
   id: number;
   age: number;
@@ -55,7 +60,7 @@ export type Profile = {
   average_waiting_time: number;
   location: UserLocation;
   travelling_with: TravellingWith;
-  experiences: EXPERIENCES[];
+  experiences: ExperiencesRecord;
   vehicles: VEHICLES;
   age_of_trips: number[][];
 };

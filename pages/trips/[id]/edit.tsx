@@ -73,8 +73,6 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
     trip.user_id,
   ]);
 
-  console.log({ rides });
-
   // const changeRides = (values: Ride[]) => {
   // const rideIndex = rides.findIndex((ride: Ride) => ride.id === values.id);
   // let newRides = [...rides];

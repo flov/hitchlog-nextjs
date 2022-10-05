@@ -36,7 +36,6 @@ const Register: FC = () => {
               }}
               validationSchema={UserSchema}
               onSubmit={(values, { setSubmitting }) => {
-                console.log(values);
                 axios
                   .post(`${API_URL}/users`, {
                     user: values,
@@ -46,7 +45,6 @@ const Register: FC = () => {
                     router.push('/login');
                   })
                   .catch((error) => {
-                    console.log(error.response.data);
                     setError(error?.response?.data?.error);
                   })
                   .finally(() => {
