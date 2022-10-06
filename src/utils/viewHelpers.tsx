@@ -1,11 +1,9 @@
 import { Badge, Tooltip } from 'flowbite-react';
-import md5 from 'md5';
 import ReactCountryFlag from 'react-country-flag';
 import { BsArrowRight, BsChat, BsSpeedometer } from 'react-icons/bs';
 import { CgSandClock } from 'react-icons/cg';
 import {
   FaArrowRight,
-  FaBirthdayCake,
   FaBus,
   FaCarSide,
   FaGoogle,
@@ -23,6 +21,7 @@ import {
 import { FiThumbsUp, FiUser } from 'react-icons/fi';
 import { capitalize, pluralize, removeDuplicates } from '.';
 import {
+  ExperienceKey,
   ExperiencesRecord,
   Profile,
   Ride,
@@ -53,17 +52,15 @@ export const vehicleToIcon = (vehicle: VEHICLES) => {
 };
 
 export const vehicleIconsForRides = (rides: Ride[]) =>
-  removeDuplicates(rides.map((ride, index) => ride.vehicle)).map(
-    (vehicle, index) => (
-      <>
-        {vehicle && (
-          <Tooltip key={`${index}Vehicles`} content={`${vehicle} ride`}>
-            {vehicleToIcon(vehicle)}
-          </Tooltip>
-        )}
-      </>
-    )
-  );
+  removeDuplicates(rides.map((ride) => ride.vehicle)).map((vehicle, index) => (
+    <>
+      {vehicle && (
+        <Tooltip key={`${index}Vehicles`} content={`${vehicle} ride`}>
+          {vehicleToIcon(vehicle)}
+        </Tooltip>
+      )}
+    </>
+  ));
 
 export const showCountryFlagForUser = (
   user: User | Profile | undefined | null
@@ -115,17 +112,18 @@ export const countryFlagsForProfile = (
 };
 
 export const countryFlagsForTrip = (trip: Trip) =>
-  trip.country_distances.map((cd, index) =>
+  trip.country_distances.map((cd) =>
     countryFlag(
       cd.country_code,
       `${cd.country}: ${Math.round(cd.distance / 1000)} km`
     )
   );
 
-export const experiencesForProfile = (experiences: ExperiencesRecord) =>
-  Object.keys(experiences).map((exp, index) => {
+export const experiencesForProfile = (experiences: ExperiencesRecord) => {
+  if (!experiences) return null;
+  return Object.keys(experiences).map((exp, index) => {
     const replaced_exp = exp.replace(/_/g, ' ');
-    const experienceSize = experiences[exp];
+    const experienceSize = experiences[exp as ExperienceKey];
     const array = new Array(experienceSize).fill(0);
     return (
       <Tooltip
@@ -156,6 +154,7 @@ export const experiencesForProfile = (experiences: ExperiencesRecord) =>
       </Tooltip>
     );
   });
+};
 
 export const experiencesForRides = (rides: Ride[]) => (
   <>
@@ -207,18 +206,6 @@ export const experienceCircle = (experience: string | undefined, size = 5) => (
   ></div>
 );
 
-export const tripDurationIcons = (trip: Trip) => {
-  const tripDuration = trip.arrival.seconds - trip.departure.seconds;
-  const humanReadableTripDuration = secondsToTime(tripDuration);
-  return (
-    <>
-      <Tooltip content={`Trip duration: ${humanReadableTripDuration}`}>
-        {humanReadableTripDuration}
-      </Tooltip>
-    </>
-  );
-};
-
 export const showErrors = (errors: Record<string, string[]> | string) => {
   if (typeof errors === 'string') return errors;
   return Object.keys(errors).map((key) => (
@@ -239,6 +226,7 @@ export const showTotalWaitingTimeForRides = (rides: Ride[]) => {
   const totalWaitingTime = rides
     .map((ride) => ride.waiting_time)
     .filter((x) => x)
+    // @ts-ignore
     .reduce((a, b) => a + b, 0);
 
   if (!totalWaitingTime) return;

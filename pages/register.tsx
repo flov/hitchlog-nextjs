@@ -125,7 +125,12 @@ const Register: FC = () => {
 
                     <Field name="gender">
                       {({ field }: FormikValues) => (
-                        <Select id="gender" required={true} {...field}>
+                        <Select
+                          id="gender"
+                          name="gender"
+                          required={true}
+                          {...field}
+                        >
                           <option value="male">male</option>
                           <option value="female">female</option>
                           <option value="non-binary">non-binary</option>

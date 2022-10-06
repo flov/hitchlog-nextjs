@@ -10,7 +10,6 @@ import {
   experiencesForRides,
   showEmbeddedYoutubeVideo,
   tagsForTrip,
-  tripDurationIcons,
   vehicleIconsForRides,
 } from '../utils/viewHelpers';
 import { getOrdinalNumber, photoForUser } from '../utils';
@@ -40,7 +39,6 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
           {experiencesForRides(trip.rides)}
           {vehicleIconsForRides(trip.rides)}
           {countryFlagsForTrip(trip)}
-          {tripDurationIcons(trip)}
         </div>
         <span className="text-sm">
           <Tooltip content={`Hitchhiked ${timeAgoInWords(trip.departure)}`}>
@@ -52,11 +50,11 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
         {tagsForTrip(trip)}
       </div>
 
-      <h3 className="flex items-center justify-between mb-4 font-bold text-1xl">
-        <span>
+      <Link href={`/trips/${trip.id}`}>
+        <a className="flex items-center justify-between mb-4 font-bold text-1xl">
           From {trip.origin?.city} to {trip.destination?.city}
-        </span>
-      </h3>
+        </a>
+      </Link>
       {trip.rides.map((ride, index) => (
         <Fragment key={`ride${index}`}>
           {ride.story && (
@@ -92,6 +90,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
                     className="w-6 h-6 border border-gray-600 rounded-full"
                     width={28}
                     height={28}
+                    // @ts-ignore
                     src={photoForUser(trip.user, '28x28')}
                     alt={`${trip.user.username}'s profile picture'`}
                   />

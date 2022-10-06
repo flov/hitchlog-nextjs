@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Alert, Button, Label, TextInput, Toast } from 'flowbite-react';
+import { Alert, Label, TextInput } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import React, { FC, useState } from 'react';
 import { FiMail } from 'react-icons/fi';
@@ -17,7 +17,7 @@ const ForgotPassword: FC = () => {
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="mb-4 text-2xl">Forgot your Password?</h1>
             <p className="text-sm text-gray-700 dark:text-gray-300">
-              Enter your email address and we'll send you a link to reset your
+              Enter your email address and we will send you a link to reset your
               password
             </p>
 

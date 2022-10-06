@@ -33,10 +33,14 @@ export type Geomap = {
   trip_count: Record<string, number>;
 };
 
-export type ExperiencesRecord = Record<
-  'very_good' | 'good' | 'neutral' | 'bad' | 'very_bad',
-  number
->;
+export type ExperienceKey =
+  | 'very_good'
+  | 'good'
+  | 'neutral'
+  | 'bad'
+  | 'very_bad';
+
+export type ExperiencesRecord = Record<ExperienceKey, number>;
 
 export type Profile = {
   id: number;

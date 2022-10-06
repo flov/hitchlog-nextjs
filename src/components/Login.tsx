@@ -19,7 +19,6 @@ const Login: FC<{ toggleModal: () => void }> = ({ toggleModal }) => {
     email: '',
     password: '',
   };
-  const router = useRouter();
   const { setCurrentUser } = useAuth();
   const [error, setError] = useState(null);
 

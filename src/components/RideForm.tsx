@@ -1,7 +1,7 @@
-import { Button, Label, Select, Textarea, TextInput } from 'flowbite-react';
+import { Button, Label, Textarea, TextInput } from 'flowbite-react';
 import { Field, Form, FormikValues } from 'formik';
-import { ChangeEventHandler, useState } from 'react';
-import { Experiences, Ride, Vehicles } from '../types';
+import { ChangeEvent } from 'react';
+import { Experiences, Vehicles } from '../types';
 
 export const RideForm = ({
   handleSubmit,
@@ -10,7 +10,7 @@ export const RideForm = ({
   values,
   errors,
 }: FormikValues) => {
-  const handleOnChange = (e) => {
+  const handleOnChange = (e: ChangeEvent) => {
     handleChange(e);
   };
   return (

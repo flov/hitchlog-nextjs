@@ -53,7 +53,7 @@ const NavBar = () => {
               label={
                 <Avatar
                   alt="User settings"
-                  img={profilePicture(currentUser)}
+                  img={profilePicture(currentUser.username)}
                   rounded={true}
                 />
               }

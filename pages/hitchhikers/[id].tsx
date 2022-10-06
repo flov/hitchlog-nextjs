@@ -89,6 +89,8 @@ const Show: NextPage<{
     setPage(p);
   };
 
+  const { currentUser } = useAuth();
+
   return (
     <>
       <div className="flex flex-col-reverse items-start justify-center max-w-5xl px-6 py-8 mx-auto sm:flex-row gap-8">
@@ -97,17 +99,28 @@ const Show: NextPage<{
             <h1 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
               {capitalize(profile.username)}
             </h1>
+            {profile.username === currentUser?.username && (
+              <Link passHref href={'/hitchhikers/edit_profile'}>
+                <a>
+                  <Button size="xs">Edit profile</Button>
+                </a>
+              </Link>
+            )}
           </div>
 
           {profile.about_you && <p className="mt-2">{profile.about_you}</p>}
 
-          <div className="flex justify-between w-full mt-4">
-            {experiencesForProfile(profile.experiences)}
-          </div>
+          {!!profile.experiences && (
+            <div className="flex justify-between w-full mt-4">
+              {experiencesForProfile(profile.experiences)}
+            </div>
+          )}
 
-          <div className="mt-4">
-            <JVectorMap geomap={props.geomap} />
-          </div>
+          {props.geomap && !!Object.keys(props.geomap.distances).length && (
+            <div className="mt-4">
+              <JVectorMap geomap={props.geomap} />
+            </div>
+          )}
         </section>
         <div className="w-full p-4 border rounded-lg sm:max-w-xs dark:border-gray-700 dark:bg-gray-800">
           <ProfileStats profile={profile} />
@@ -168,17 +181,10 @@ const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
           src={profilePicture(profile.md5_email, 128)}
         />
       </div>
-      <div className="flex items-center justify-center mt-2 gap-2">
+      <div className="flex items-center justify-center mt-4 gap-2">
         {capitalize(profile.username)} ({profile.age})
         {showUserGender(profile.gender, 20)}
         {showCountryFlagForUser(profile)}
-        {profile.username === currentUser?.username && (
-          <Link passHref href={'/hitchhikers/edit_profile'}>
-            <a>
-              <Button size="xs">Edit profile</Button>
-            </a>
-          </Link>
-        )}
       </div>
       <div className="flex items-center justify-center pt-2 gap-2">
         {viewNumberOfTrips(profile.number_of_trips)}
@@ -199,9 +205,15 @@ const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
           Trustroots:{' '}
           <a
             className="text-primary-500"
-            href={`https://www.trustroots.org/profile/${profile.trustroots}`}
+            href={
+              profile.trustroots.includes('http')
+                ? profile.trustroots
+                : `https://www.trustroots.org/profile/${profile.trustroots}`
+            }
           >
-            {profile.trustroots}
+            {profile.trustroots.includes('http')
+              ? profile.trustroots.split('/').pop()
+              : profile.trustroots}
           </a>
         </div>
       )}

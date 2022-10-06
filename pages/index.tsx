@@ -10,8 +10,6 @@ const VectorMap = dynamic(
 );
 
 const Home: NextPage = () => {
-  const ssr = typeof window === 'undefined';
-
   return (
     <>
       <Head>

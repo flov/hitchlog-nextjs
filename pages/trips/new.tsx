@@ -97,7 +97,7 @@ const New: NextPage<{ google: GoogleAPI }> = ({ google }) => {
       </Head>
       <div className="h-48 md:h-96" ref={googlemap} id="map"></div>
       <FlowbiteWindow>
-        <h2 className="text-3xl font-extrabold tracking-tight text-center lg:text-4xl">
+        <h2 className="text-xl font-extrabold tracking-tight text-center md:tex-2xl lg:text-3xl lg:text-4xl">
           Log a new hitchhiking adventure
         </h2>
         {errors && (
@@ -106,6 +106,17 @@ const New: NextPage<{ google: GoogleAPI }> = ({ google }) => {
               <span className="font-medium">{showErrors(errors)}</span>
             </span>
           </Alert>
+        )}
+        {!currentUser && (
+          <div className="mt-4">
+            <Alert color="info">
+              <span>
+                <span className="font-medium">
+                  You need to be logged in to log a trip, please log in
+                </span>
+              </span>
+            </Alert>
+          </div>
         )}
         {map && currentUser ? (
           <div>

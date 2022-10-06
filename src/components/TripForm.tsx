@@ -1,5 +1,5 @@
-import { Button, Select, TextInput } from 'flowbite-react';
-import { FormikValues } from 'formik';
+import { Button, Label, Select, TextInput } from 'flowbite-react';
+import { Field, FormikValues } from 'formik';
 import moment from 'moment';
 import { ChangeEvent, MutableRefObject, useEffect, useRef } from 'react';
 import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
@@ -53,23 +53,32 @@ export const TripForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <div className="mt-4 grid grid-cols-2 gap-4">
-        <TextInput
-          ref={originRef}
-          type="text"
-          color={
-            touched.originName && errors.origin?.lat
-              ? 'failure'
-              : touched.originName
-              ? 'success'
-              : 'info'
-          }
-          required={true}
-          placeholder="Enter origin"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.originName}
-          name="originName"
-        />
+        <div>
+          <Label htmlFor="originName">origin</Label>
+          <Field name="name">
+            {({ field }: FormikValues) => (
+              <div className="">
+                <TextInput
+                  id="originName"
+                  name="originName"
+                  ref={originRef}
+                  placeholder="Enter origin"
+                  type="text"
+                  required
+                  color={
+                    touched.originName && errors.origin?.lat
+                      ? 'failure'
+                      : touched.originName
+                      ? 'success'
+                      : 'gray'
+                  }
+                  {...field}
+                />
+              </div>
+            )}
+          </Field>
+        </div>
+
         <TextInput
           ref={destinationRef}
           type="text"
@@ -80,7 +89,7 @@ export const TripForm = ({
               ? 'failure'
               : touched.destinationName
               ? 'success'
-              : 'primary'
+              : 'gray'
           }
           onChange={handleChange}
           onBlur={handleBlur}
