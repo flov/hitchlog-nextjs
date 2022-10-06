@@ -15,3 +15,4 @@ In order for the hitchlog to work, you need to run the rails backend:
 Clone the ruby on rails backend
 [http://github.com/flov/hitchlog-api](http://github.com/flov/hitchlog-api) and 
 follow the README instructions
+
