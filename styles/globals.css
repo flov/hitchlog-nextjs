@@ -86,7 +86,7 @@ a:hover {
 }
 @media (min-width: 768px) {
   .md-full-screen {
-    height: calc(100vh - 19rem);
+    height: calc(100vh - 8.6rem);
   }
 }
 

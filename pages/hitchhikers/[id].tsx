@@ -93,7 +93,7 @@ const Show: NextPage<{
 
   return (
     <>
-      <div className="flex flex-col-reverse items-start justify-center max-w-5xl px-6 py-8 mx-auto sm:flex-row gap-8">
+      <div className="flex flex-col-reverse items-start justify-center max-w-5xl px-6 pt-8 mx-auto sm:flex-row sm:gap-8 gap-4">
         <section className="w-full p-6 border rounded-lg dark:bg-gray-800 dark:border-gray-700">
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
@@ -129,13 +129,13 @@ const Show: NextPage<{
 
       {trips.length > 0 && (
         <div id="ListTrips">
-          <div className="flex justify-center w-full mt-4">
+          <div className="flex justify-center w-full mt-2 sm:mt-4">
             <h2 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
               {capitalize(profile.username)}&apos;s trips:
             </h2>
           </div>
 
-          <div className="flex justify-center my-4">
+          <div className="flex justify-center mb-4">
             <Pagination
               onPageChange={handlePageChange}
               currentPage={page}
