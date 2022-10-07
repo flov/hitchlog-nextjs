@@ -78,3 +78,6 @@ export const updateUser = async (username: string, values: any) => {
     }
   );
 };
+
+export const postResetPassword = async (values: { email: string }) =>
+  axios.post(`${API_URL}/users/password`, { user: values });

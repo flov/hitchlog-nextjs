@@ -24,7 +24,9 @@ export class AutocompleteDirectionsHandler {
     this.location = null;
     this.travelMode = google.maps.TravelMode.DRIVING;
     this.directionsService = new google.maps.DirectionsService();
-    this.directionsRenderer = new google.maps.DirectionsRenderer();
+    this.directionsRenderer = new google.maps.DirectionsRenderer({
+      draggable: true,
+    });
     this.directionsRenderer.setMap(map);
     this.marker = null;
 
@@ -49,6 +51,17 @@ export class AutocompleteDirectionsHandler {
       destinationInput,
       { fields }
     );
+
+    this.directionsRenderer.addListener('directions_changed', () => {
+      const directions = this.directionsRenderer.getDirections();
+
+      if (directions) {
+        const { totalDistance, googleDuration } =
+          this.computeTotalDistance(directions);
+        this.setFieldValue('totalDistance', totalDistance);
+        this.setFieldValue('googleDuration', googleDuration);
+      }
+    });
 
     this.setupPlaceChangedListener(originAutocomplete, 'origin');
     this.setupPlaceChangedListener(destinationAutocomplete, 'destination');

@@ -12,7 +12,7 @@ import { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { Formik } from 'formik';
 import SearchForm from '../../src/components/SearchForm';
-import { Button, Pagination } from 'flowbite-react';
+import { Pagination } from 'flowbite-react';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const res = await getTripsWithQuery({ q: query.q as Record<string, any> });
@@ -190,9 +190,7 @@ const Index: FC<{
             <PuffLoader color="blue" />
           </div>
         ) : (
-          <>
-            <ListTrips map={map} trips={trips} />
-          </>
+          <ListTrips map={map} trips={trips} />
         )}
 
         <div className="flex justify-center w-full mb-4 itmes-center">

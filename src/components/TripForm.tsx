@@ -1,11 +1,16 @@
-import { Button, Label, Select, TextInput } from 'flowbite-react';
+import { Alert, Button, Label, Select, TextInput } from 'flowbite-react';
 import { Field, FormikValues } from 'formik';
 import moment from 'moment';
 import { ChangeEvent, MutableRefObject, useEffect, useRef } from 'react';
+import { secondsToHumanReadable } from '../utils';
 import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
 import { calculateTimeBetweenDates } from '../utils/calculateTimeBetweenDates';
-import { secondsToTime } from '../utils/secondsToTime';
-import { showTripGoogleDuration } from '../utils/viewHelpers';
+import {
+  showErrors,
+  showTripDistance,
+  showTripDuration,
+  showTripGoogleDuration,
+} from '../utils/viewHelpers';
 
 export const TripForm = ({
   handleSubmit,
@@ -52,15 +57,27 @@ export const TripForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
+      <div className="flex items-center gap-2">
+        {showTripGoogleDuration(values.googleDuration)}
+        {showTripDistance(values.totalDistance)}
+        {showTripDuration(values.departure, values.arrival)}
+      </div>
+      {!!errors.length && (
+        <Alert color="failure">
+          <span>
+            <span className="font-medium">{showErrors(errors)}</span>
+          </span>
+        </Alert>
+      )}
+
       <div className="mt-4 grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="originName">origin</Label>
-          <Field name="name">
+          <Label htmlFor="originName">Starting point</Label>
+          <Field name="originName">
             {({ field }: FormikValues) => (
               <div className="">
                 <TextInput
                   id="originName"
-                  name="originName"
                   ref={originRef}
                   placeholder="Enter origin"
                   type="text"
@@ -70,7 +87,7 @@ export const TripForm = ({
                       ? 'failure'
                       : touched.originName
                       ? 'success'
-                      : 'gray'
+                      : 'info'
                   }
                   {...field}
                 />
@@ -79,79 +96,70 @@ export const TripForm = ({
           </Field>
         </div>
 
-        <TextInput
-          ref={destinationRef}
-          type="text"
-          required={true}
-          placeholder="Enter destination"
-          color={
-            touched.destinationName && errors.destination?.lat
-              ? 'failure'
-              : touched.destinationName
-              ? 'success'
-              : 'gray'
-          }
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.destinationName}
-          name="destinationName"
-        />
-        <TextInput
-          id="departure"
-          type="datetime-local"
-          required={true}
-          placeholder="departure"
-          color={
-            touched.departure && errors.departure
-              ? 'failure'
-              : touched.departure
-              ? 'success'
-              : 'primary'
-          }
-          onChange={handleChange}
-          onBlur={handleBlurArrivalDeparted}
-          value={values.departure}
-          name="departure"
-        />
-        <TextInput
-          id="arrival"
-          ref={arrivalRef}
-          type="datetime-local"
-          color={
-            touched.arrival && errors.arrival
-              ? 'failure'
-              : touched.arrival
-              ? 'success'
-              : 'primary'
-          }
-          required={true}
-          placeholder="arrival"
-          onChange={handleChange}
-          onBlur={handleBlurArrivalDeparted}
-          value={values.arrival}
-          name="arrival"
-        />
-        {(values?.arrival && values?.departure) || values.googleDuration ? (
-          <>
-            <p className="text-center">
-              {values.departure && values.arrival
-                ? `our trip duration: ${calculateTimeBetweenDates(
-                    values.departure,
-                    values.arrival
-                  )}`
-                : ''}
-            </p>
-            <p className="text-center">
-              {values.googleDuration
-                ? showTripGoogleDuration(values.googleDuration)
-                : ''}
-            </p>
-          </>
-        ) : (
-          ''
-        )}
+        <div>
+          <Label htmlFor="destinationName">Destination</Label>
+          <TextInput
+            ref={destinationRef}
+            type="text"
+            required={true}
+            placeholder="Enter destination"
+            color={
+              touched.destination && errors.destination?.lat
+                ? 'failure'
+                : touched.destinationName
+                ? 'success'
+                : 'info'
+            }
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.destinationName}
+            name="destinationName"
+          />
+        </div>
+        <div>
+          <Label htmlFor="departure">Departure</Label>
+          <TextInput
+            id="departure"
+            type="datetime-local"
+            required={true}
+            placeholder="departure"
+            color={
+              touched.departure && errors.departure
+                ? 'failure'
+                : touched.departure
+                ? 'success'
+                : 'primary'
+            }
+            onChange={handleChange}
+            onBlur={handleBlurArrivalDeparted}
+            value={values.departure}
+            name="departure"
+          />
+        </div>
+        <div>
+          <Label htmlFor="arrival">Arrival</Label>
 
-        <div className="">
+          <TextInput
+            id="arrival"
+            ref={arrivalRef}
+            type="datetime-local"
+            color={
+              touched.arrival && errors.arrival
+                ? 'failure'
+                : touched.arrival
+                ? 'success'
+                : 'primary'
+            }
+            required={true}
+            placeholder="arrival"
+            onChange={handleChange}
+            onBlur={handleBlurArrivalDeparted}
+            value={values.arrival}
+            name="arrival"
+          />
+        </div>
+        <div>
+          <Label htmlFor="number_of_rides">Number of rides</Label>
           <TextInput
             color={
               touched.number_of_rides && errors.number_of_rides
@@ -170,20 +178,26 @@ export const TripForm = ({
             name="number_of_rides"
           />
         </div>
-        <Select
-          id="travelling_with"
-          defaultValue={0}
-          required={true}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.travelling_with}
-          name="travelling_with"
-        >
-          <option value="0">Travelling by yourself</option>
-          <option value="1">Travelling with one other person</option>
-          <option value="2">Travelling with two other persons</option>
-          <option value="3">Travelling with three other persons</option>
-        </Select>
+
+        <div>
+          <Label htmlFor="travelling_with">Travelling with:</Label>
+          <Select
+            id="travelling_with"
+            color="info"
+            defaultValue={0}
+            required={true}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.travelling_with}
+            name="travelling_with"
+          >
+            <option value="0">Travelling by yourself</option>
+            <option value="1">Travelling with one other person</option>
+            <option value="2">Travelling with two other persons</option>
+            <option value="3">Travelling with three other persons</option>
+          </Select>
+        </div>
+
         <div className="flex justify-center col-span-2">
           <Button disabled={isSubmitting} type="submit">
             Save Trip

@@ -108,3 +108,14 @@ export const getOrdinalNumber = (n: number) => {
   const v = n % 100;
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 };
+
+export const secondsToHumanReadable = (seconds: number) => {
+  const days = Math.floor(seconds / (3600 * 24));
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds - hours * 3600) / 60);
+  const array = [];
+  if (days) array.push(`${days}d`);
+  if (hours) array.push(`${hours}h`);
+  if (minutes) array.push(`${minutes}m`);
+  return array.join(' ');
+};

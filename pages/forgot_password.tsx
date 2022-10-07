@@ -4,6 +4,7 @@ import { Field, Form, Formik, FormikValues } from 'formik';
 import React, { FC, useState } from 'react';
 import { FiMail } from 'react-icons/fi';
 import { API_URL } from '../src/config';
+import { postResetPassword } from '../src/db/users';
 import { showErrors } from '../src/utils/viewHelpers';
 
 const ForgotPassword: FC = () => {
@@ -23,8 +24,7 @@ const ForgotPassword: FC = () => {
 
             <Formik
               onSubmit={(values, { setSubmitting }) => {
-                axios
-                  .post(`${API_URL}/users/password`, { user: values })
+                postResetPassword(values)
                   .then((res) => {
                     setIsSuccessful(true);
                     setErrors(undefined);

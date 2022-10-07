@@ -63,9 +63,9 @@ export function HitchhikingTrip({
             {showTotalWaitingTimeForRides(trip.rides)}
             {showAgeAtTrip(trip, user)}
             {showNumberOfRides(trip.rides.length)}
-            {showTripGoogleDuration(trip)}
+            {showTripGoogleDuration(trip.google_duration)}
             {viewAverageSpeed(trip.average_speed)}
-            {showTripDistance(trip)}
+            {showTripDistance(trip.total_distance)}
             {showNumberOfStories(trip.rides)}
           </div>
         </div>

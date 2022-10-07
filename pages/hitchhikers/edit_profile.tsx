@@ -76,9 +76,9 @@ const EditProfile: NextPage = () => {
                   updateUser(currentUser?.username as string, values)
                     .then((response) => {
                       setCurrentUser(response.data);
-                      executeNTimes(() => randomConfetti(), 3);
                       setIsSuccessful(true);
                       setErrors(null);
+                      router.push(`/hitchhikers/${currentUser.username}`);
                     })
                     .catch((error) => {
                       setErrors(error?.response?.data);

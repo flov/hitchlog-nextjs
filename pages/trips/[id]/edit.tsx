@@ -95,7 +95,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
       <div className="w-full bg-gray-200 h-96" id="map"></div>
       <div className="px-4 py-8 mx-auto max-w-7xl">
         <div className="grid-edit-trip">
-          <div>
+          <div className="max-w-sm">
             <Accordion alwaysOpen={true}>
               {trip?.rides &&
                 trip?.rides.map((ride: Ride, index: number) => (

@@ -52,8 +52,8 @@ const NavBar = () => {
               inline={true}
               label={
                 <Avatar
-                  alt="User settings"
-                  img={profilePicture(currentUser.username)}
+                  alt="profile picture"
+                  img={profilePicture(currentUser.md5_email)}
                   rounded={true}
                 />
               }

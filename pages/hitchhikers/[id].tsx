@@ -27,9 +27,14 @@ import {
   viewNumberOfTrips,
 } from '../../src/utils/viewHelpers';
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  params,
+}) => {
   const profile = await fetchProfile(params?.id as string);
   const geomap = await getGeomap(params?.id as string);
+  const page = query.page ? JSON.parse(query.page as string) : 1;
+
   if (profile.data?.error) {
     return {
       notFound: true,
@@ -42,6 +47,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       trips: JSON.parse(JSON.stringify(trips.data.trips)),
       geomap: JSON.parse(JSON.stringify(geomap.data)),
       totalPages: JSON.parse(JSON.stringify(trips.data.total_pages)),
+      page,
     },
   };
 };
@@ -51,10 +57,11 @@ const Show: NextPage<{
   trips: Trip[];
   geomap: Geomap;
   totalPages: number;
+  page: number;
 }> = (props) => {
   const { profile } = props;
   const router = useRouter();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(props.page);
   const [isLoading, setIsLoading] = useState(false);
   const [trips, setTrips] = useState(props.trips);
   const [totalPages, setTotalPages] = useState(props.totalPages);

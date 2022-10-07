@@ -3,7 +3,7 @@ import { Trip } from '../types';
 import Image from 'next/image';
 import { timeAgoInWords } from '../utils/timeAgoInWords';
 import RightArrow from './svg/RightArrow';
-import { Badge, Tooltip } from 'flowbite-react';
+import { Badge, Button, Tooltip } from 'flowbite-react';
 import {
   countryFlagsForTrip,
   experienceCircle,
@@ -14,6 +14,7 @@ import {
 } from '../utils/viewHelpers';
 import { getOrdinalNumber, photoForUser } from '../utils';
 import Link from 'next/link';
+import { useAuth } from './contexts/AuthContext';
 
 const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   map,
@@ -25,6 +26,8 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
       map.setZoom(6);
     }
   };
+
+  const { currentUser } = useAuth();
 
   return (
     <article
@@ -50,11 +53,18 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
         {tagsForTrip(trip)}
       </div>
 
-      <Link href={`/trips/${trip.id}`}>
-        <a className="flex items-center justify-between mb-4 font-bold text-1xl">
-          From {trip.origin?.city} to {trip.destination?.city}
-        </a>
-      </Link>
+      <div className="flex items-center justify-between mb-2 align gap-2">
+        <Link href={`/trips/${trip.id}`}>
+          <a>
+            From {trip.origin?.city} to {trip.destination?.city}
+          </a>
+        </Link>
+        {currentUser && currentUser.username === trip.user.username && (
+          <Link href={`/trips/${trip.id}/edit`} passHref>
+            <Button size="xs">Edit</Button>
+          </Link>
+        )}
+      </div>
       {trip.rides.map((ride, index) => (
         <Fragment key={`ride${index}`}>
           {ride.story && (

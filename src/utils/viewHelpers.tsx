@@ -1,6 +1,6 @@
 import { Badge, Tooltip } from 'flowbite-react';
 import ReactCountryFlag from 'react-country-flag';
-import { BsArrowRight, BsChat, BsSpeedometer } from 'react-icons/bs';
+import { BsArrowRight, BsChat, BsClock, BsSpeedometer } from 'react-icons/bs';
 import { CgSandClock } from 'react-icons/cg';
 import {
   FaArrowRight,
@@ -30,6 +30,7 @@ import {
   VEHICLES,
 } from '../types';
 import { countries } from '../utils/country_codes';
+import { calculateTimeBetweenDates } from './calculateTimeBetweenDates';
 import { secondsToTime } from './secondsToTime';
 
 export const vehicleToIcon = (vehicle: VEHICLES) => {
@@ -318,9 +319,9 @@ export const viewNumberOfComments = (size: number) => {
   );
 };
 
-export const showTripDistance = (trip: Trip) => {
-  if (!trip?.distance) return null;
-  const kilometers = (trip.distance / 1000).toFixed(2);
+export const showTripDistance = (distance: number | undefined) => {
+  if (!distance) return null;
+  const kilometers = (distance / 1000).toFixed(2);
   return (
     <Tooltip content={`travelled ${kilometers} kms`}>
       <div className="flex items-center gap-1">
@@ -331,20 +332,34 @@ export const showTripDistance = (trip: Trip) => {
   );
 };
 
-export const showTripGoogleDuration = (trip: Trip) => {
-  const google_duration = trip.google_duration;
-  if (google_duration) {
-    return (
-      <Tooltip
-        content={`Google Maps duration: ${secondsToTime(google_duration)}`}
-      >
-        <div className="flex items-center gap-1">
-          <FaGoogle className="inline-block" />
-          {secondsToTime(google_duration)}
-        </div>
-      </Tooltip>
-    );
-  }
+export const showTripGoogleDuration = (google_duration: number | undefined) => {
+  if (!google_duration) return null;
+  return (
+    <Tooltip
+      content={`Google Maps duration: ${secondsToTime(google_duration)}`}
+    >
+      <div className="flex items-center gap-1">
+        <FaGoogle className="inline-block" />
+        {secondsToTime(google_duration)}
+      </div>
+    </Tooltip>
+  );
+};
+
+export const showTripDuration = (
+  departure: string | undefined,
+  arrival: string | undefined
+) => {
+  if (!departure || !arrival) return null;
+  const duration = calculateTimeBetweenDates(departure, arrival);
+  return (
+    <Tooltip content={`Trip duration: ${duration}`}>
+      <div className="flex items-center gap-1">
+        <BsClock className="inline" />
+        {duration}
+      </div>
+    </Tooltip>
+  );
 };
 
 export const showUserGender = (
