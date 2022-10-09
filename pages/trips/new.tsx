@@ -9,7 +9,7 @@ import { date, number, object, ref, string } from 'yup';
 import { useAuth } from '../../src/components/contexts/AuthContext';
 import LoadingContainer from '../../src/components/LoadingContainer';
 import { TripForm } from '../../src/components/TripForm';
-import { createTrip } from '../../src/db/trips_new';
+import { createTrip } from '../../src/db/trips';
 import FlowbiteWindow from '../../src/flowbite/FlowbiteWindow';
 import { showErrors } from '../../src/utils/viewHelpers';
 

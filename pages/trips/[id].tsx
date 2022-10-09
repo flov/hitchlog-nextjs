@@ -10,7 +10,7 @@ import { HitchhikingTrip } from '../../src/components/HitchhikingTrip';
 import { Trip, User } from '../../src/types';
 import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import LoadingContainer from '../../src/components/LoadingContainer';
-import { getTrip } from '../../src/db/trips_new';
+import { getTrip } from '../../src/db/trips';
 import { getUser } from '../../src/db/users';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {

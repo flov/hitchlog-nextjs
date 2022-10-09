@@ -9,7 +9,7 @@ import { PuffLoader } from 'react-spinners';
 import { useAuth } from '../../src/components/contexts/AuthContext';
 import JVectorMap from '../../src/components/JVectorMap';
 import { ListTrips } from '../../src/components/ListTrips';
-import { getTripsWithQuery } from '../../src/db/trips_new';
+import { getTripsWithQuery } from '../../src/db/trips';
 import { fetchProfile, getGeomap } from '../../src/db/users';
 import { Geomap, Profile, Trip } from '../../src/types';
 import { capitalize, profilePicture } from '../../src/utils';
@@ -129,7 +129,7 @@ const Show: NextPage<{
             </div>
           )}
         </section>
-        <div className="w-full p-4 border rounded-lg sm:max-w-xs dark:border-gray-700 dark:bg-gray-800">
+        <div className="w-full p-4 mb-16 border rounded-lg sm:max-w-xs dark:border-gray-700 dark:bg-gray-800">
           <ProfileStats profile={profile} />
         </div>
       </div>

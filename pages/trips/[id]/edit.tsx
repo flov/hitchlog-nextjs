@@ -17,7 +17,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Experiences, Ride, Trip, Vehicles } from '../../../src/types';
 import { displayRoute } from '../../../src/utils/DirectionsHandler';
 import { useAuth } from '../../../src/components/contexts/AuthContext';
-import { deleteTrip, getTrip, updateRide } from '../../../src/db/trips_new';
+import { deleteTrip, getTrip, updateRide } from '../../../src/db/trips';
 import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import LoadingContainer from '../../../src/components/LoadingContainer';
 import { useRouter } from 'next/router';
