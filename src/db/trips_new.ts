@@ -62,17 +62,26 @@ export const createTrip = (payload: any) => {
   });
 };
 
-export const updateRide = async (values: any) => {
-  const payload = { ride: values };
-  return axios
-    .patch(`${API_URL}/rides/${values.id}`, payload, {
+export const deleteTrip = (id: number) => {
+  return axios.delete(`${API_URL}/trips/${id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
+    },
+  });
+};
+
+export const updateRide = (payload: any) => {
+  return axios.patch(
+    `${API_URL}/rides/${payload.id}`,
+    { ride: payload },
+    {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
         Authorization: `Bearer ${Cookies.get('authToken')}`,
       },
-    })
-    .then((res) => {
-      return res;
-    });
+    }
+  );
 };

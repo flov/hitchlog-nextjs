@@ -1,17 +1,23 @@
-import { Accordion } from 'flowbite-react';
-import { Formik } from 'formik';
+import {
+  Accordion,
+  Alert,
+  Button,
+  Label,
+  Textarea,
+  TextInput,
+} from 'flowbite-react';
+import { Field, Form, Formik, FormikValues } from 'formik';
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from 'next';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import { Ride, Trip } from '../../../src/types';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Experiences, Ride, Trip, Vehicles } from '../../../src/types';
 import { displayRoute } from '../../../src/utils/DirectionsHandler';
-import { RideForm } from '../../../src/components/RideForm';
 import { useAuth } from '../../../src/components/contexts/AuthContext';
-import { getTrip, updateRide } from '../../../src/db/trips_new';
+import { deleteTrip, getTrip, updateRide } from '../../../src/db/trips_new';
 import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import LoadingContainer from '../../../src/components/LoadingContainer';
 import { useRouter } from 'next/router';
@@ -24,10 +30,17 @@ declare global {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const { data } = await getTrip(params?.id);
+  const trip = await getTrip(params?.id);
+
+  if (!trip.data) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
-      trip: JSON.parse(JSON.stringify(data)),
+      trip: JSON.parse(JSON.stringify(trip.data)),
       googleMapsKey: process.env.GOOGLE_MAPS_KEY,
     },
   };
@@ -73,18 +86,26 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
     trip.user_id,
   ]);
 
-  // const changeRides = (values: Ride[]) => {
-  // const rideIndex = rides.findIndex((ride: Ride) => ride.id === values.id);
-  // let newRides = [...rides];
-  // if (rideIndex !== -1) {
-  // newRides[rideIndex] = {
-  // ...newRides[rideIndex],
-  // ...values,
-  // };
-  // }
-  // setRides(newRides);
-  // };
-  //
+  const changeRides = (id: string | number, name: string, value: any) => {
+    const rideIndex = rides.findIndex((ride: Ride) => ride.id === id);
+    let newRides = [...rides];
+    if (rideIndex !== -1) {
+      newRides[rideIndex] = {
+        ...newRides[rideIndex],
+        ...{ [name]: value },
+      };
+    }
+    setRides(newRides);
+    console.log(newRides);
+  };
+
+  const handleDeleteTrip = () => {
+    if (window.confirm('Are you sure you want to delete this trip?')) {
+      deleteTrip(trip.id).then((res) => {
+        router.push('/hitchhikers/' + currentUser?.id);
+      });
+    }
+  };
 
   return (
     <>
@@ -92,10 +113,17 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
         <title>Hitchlog - Edit Hitchiking Trip</title>
       </Head>
 
-      <div className="w-full bg-gray-200 h-96" id="map"></div>
+      <div className="w-full h-48 bg-gray-200" id="map"></div>
       <div className="px-4 py-8 mx-auto max-w-7xl">
-        <div className="grid-edit-trip">
-          <div className="max-w-sm">
+        <div className="flex flex-col gap-4 sm_grid-edit-trip">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="text-xl">Edit Trip</h1>
+              <Button size="sm" onClick={handleDeleteTrip} color="failure">
+                Delete trip
+              </Button>
+            </div>
+
             <Accordion alwaysOpen={true}>
               {trip?.rides &&
                 trip?.rides.map((ride: Ride, index: number) => (
@@ -103,9 +131,6 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                     <Accordion.Title>Ride {index + 1}</Accordion.Title>
                     <Accordion.Content>
                       <Formik
-                        component={(props) => (
-                          <RideForm {...props} rides={trip.rides} ride={ride} />
-                        )}
                         initialValues={{
                           id: ride.id,
                           vehicle: ride.vehicle,
@@ -113,16 +138,176 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                           story: ride.story,
                           title: ride.title,
                           experience: ride.experience,
+                          tag_list: ride.tags.join(', '),
+                          youtube: ride.youtube,
                         }}
-                        onSubmit={async (values) => {
-                          await updateRide(values);
+                        onSubmit={(values, { setSubmitting }) => {
+                          updateRide(values)
+                            .then((res) => {
+                              console.log(res.data);
+                              window.confetti();
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            });
+                          setSubmitting(false);
                         }}
-                      />
+                      >
+                        {({
+                          handleSubmit,
+                          handleChange,
+                          handleBlur,
+                          values,
+                          isSubmitting,
+                        }) => {
+                          const handleTagListChange = (e: ChangeEvent<any>) => {
+                            handleChange(e);
+                            changeRides(
+                              values.id,
+                              'tags',
+                              e.target.value.split(',')
+                            );
+                          };
+
+                          const handleOnChange = (
+                            e: React.ChangeEvent<any>
+                          ) => {
+                            handleChange(e);
+                            changeRides(
+                              values.id,
+                              e.target.name,
+                              e.target.value
+                            );
+                          };
+
+                          return (
+                            <Form onSubmit={handleSubmit}>
+                              <div className="mb-2">
+                                <Label htmlFor="title" value="Title" />
+                              </div>
+                              <TextInput
+                                type="text"
+                                placeholder="Title"
+                                onChange={handleOnChange}
+                                onBlur={handleBlur}
+                                value={values.title}
+                                name="title"
+                              />
+                              <div className="mt-2 ">
+                                <Label htmlFor="tag_list">
+                                  Tag your ride (seperated by comma)
+                                </Label>
+                                <div className="mt-2">
+                                  <TextInput
+                                    id="tag_list"
+                                    name="tag_list"
+                                    placeholder="Tag your ride"
+                                    type="text"
+                                    onChange={handleTagListChange}
+                                    onBlur={handleBlur}
+                                  />
+                                </div>
+                              </div>
+                              <div className="mt-2">
+                                <div className="mb-2">
+                                  <Label htmlFor="story" value="My Story" />
+                                </div>
+                                <Textarea
+                                  name="story"
+                                  placeholder="Tell us your story with this ride"
+                                  value={values.story}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  rows={4}
+                                />
+                              </div>
+
+                              <div className="mt-2">
+                                <div className="mb-2">
+                                  <Label
+                                    htmlFor="experience"
+                                    value="Select your experience"
+                                  />
+                                </div>
+                                <Field
+                                  as="select"
+                                  onChange={handleOnChange}
+                                  name="experience"
+                                  className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 rounded-lg p-2.5 text-sm"
+                                >
+                                  <option value="">Select experience</option>
+                                  {Experiences.map((experience) => (
+                                    <option key={experience}>
+                                      {experience}
+                                    </option>
+                                  ))}
+                                </Field>
+                              </div>
+
+                              <div className="mt-2">
+                                <div className="mb-2">
+                                  <Label
+                                    htmlFor="vehicle"
+                                    value="Select your vehicle"
+                                  />
+                                </div>
+                                <Field
+                                  as="select"
+                                  onChange={handleOnChange}
+                                  name="vehicle"
+                                  className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 rounded-lg p-2.5 text-sm"
+                                >
+                                  <option>Select vehicle</option>
+                                  {Vehicles.map((vehicle) => (
+                                    <option key={vehicle}>{vehicle}</option>
+                                  ))}
+                                </Field>
+
+                                <div className="my-2">
+                                  <Label
+                                    htmlFor="waiting_time"
+                                    value="Waiting Time in minutes"
+                                  />
+                                </div>
+                                <TextInput
+                                  type="number"
+                                  placeholder="Waiting Time"
+                                  onChange={handleOnChange}
+                                  onBlur={handleBlur}
+                                  value={values.waiting_time}
+                                  name="waiting_time"
+                                />
+                                <div className="my-2">
+                                  <Label
+                                    htmlFor="youtube"
+                                    value="Video (Youtube ID)"
+                                  />
+                                </div>
+                                <TextInput
+                                  type="text"
+                                  placeholder="Youtube ID"
+                                  onChange={handleOnChange}
+                                  onBlur={handleBlur}
+                                  value={values.youtube}
+                                  name="youtube"
+                                />
+                              </div>
+
+                              <div className="mt-4">
+                                <Button disabled={isSubmitting} type="submit">
+                                  Save Ride
+                                </Button>
+                              </div>
+                            </Form>
+                          );
+                        }}
+                      </Formik>
                     </Accordion.Content>
                   </Accordion.Panel>
                 ))}
             </Accordion>
           </div>
+
           <div>
             {currentUser && (
               <HitchhikingTrip trip={trip} rides={rides} user={currentUser} />

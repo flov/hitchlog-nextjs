@@ -63,6 +63,7 @@ const New: NextPage<{ google: GoogleAPI }> = ({ google }) => {
   const initialValues = {
     origin: {},
     destination: {},
+    country_distances: [],
     originName: '',
     destinationName: '',
     travelling_with: '0',
@@ -96,16 +97,9 @@ const New: NextPage<{ google: GoogleAPI }> = ({ google }) => {
       </Head>
       <div className="h-48 lg:h-96" ref={googlemap} id="map"></div>
       <FlowbiteWindow>
-        <h2 className="text-xl font-bold tracking-tight text-center sm:text-2xl lg:text-3xl lg:text-4xl">
+        <h2 className="text-xl font-bold tracking-tight text-center sm:text-2xl ">
           Log a new hitchhiking adventure
         </h2>
-        {errors && (
-          <Alert color="failure">
-            <span>
-              <span className="font-medium">{showErrors(errors)}</span>
-            </span>
-          </Alert>
-        )}
         {!currentUser && (
           <div className="mt-4">
             <Alert color="info">
@@ -114,6 +108,13 @@ const New: NextPage<{ google: GoogleAPI }> = ({ google }) => {
               </span>
             </Alert>
           </div>
+        )}
+        {errors && (
+          <Alert color="failure">
+            <span>
+              <span className="font-medium">{showErrors(errors)}</span>
+            </span>
+          </Alert>
         )}
         {map && currentUser ? (
           <div>

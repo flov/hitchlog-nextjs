@@ -9,10 +9,10 @@ import {
   experienceCircle,
   experiencesForRides,
   showEmbeddedYoutubeVideo,
-  tagsForTrip,
+  tagsForRides,
   vehicleIconsForRides,
 } from '../utils/viewHelpers';
-import { getOrdinalNumber, photoForUser } from '../utils';
+import { getOrdinalNumber, photoForUser, profilePicture } from '../utils';
 import Link from 'next/link';
 import { useAuth } from './contexts/AuthContext';
 
@@ -28,6 +28,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   };
 
   const { currentUser } = useAuth();
+  console.log(trip);
 
   return (
     <article
@@ -50,7 +51,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
         </span>
       </div>
       <div className="flex items-center mb-4 gap-2 dark:text-white">
-        {tagsForTrip(trip)}
+        {tagsForRides(trip.rides)}
       </div>
 
       <div className="flex items-center justify-between mb-2 align gap-2">
@@ -101,7 +102,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
                     width={28}
                     height={28}
                     // @ts-ignore
-                    src={photoForUser(trip.user, '28x28')}
+                    src={profilePicture(trip.user.md5_email)}
                     alt={`${trip.user.username}'s profile picture'`}
                   />
                 </a>

@@ -25,7 +25,8 @@ export type Trip = {
   origin: Location;
   destination: Location;
   rides: Ride[];
-  user: { username: string; gender: string };
+  total_distance: number;
+  user: { username: string; md5_email: string; gender: string };
 };
 
 export type Country = {

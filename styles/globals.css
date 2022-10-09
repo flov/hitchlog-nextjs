@@ -89,18 +89,19 @@ a:hover {
     height: calc(100vh - 8.6rem);
   }
 }
+@media (min-width: 640px) {
+  .sm_grid-edit-trip {
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr) 2fr;
+    grid-gap: theme(spacing.4);
+  }
+}
 
 .card-grid {
   display: grid;
   grid-gap: theme(spacing.4);
   grid-template-columns: repeat(auto-fit, minmax(385px, 1fr));
   margin-bottom: theme(spacing.4);
-}
-
-.grid-edit-trip {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(323px, 1fr));
-  grid-gap: theme(spacing.4);
 }
 
 .grid-auto-fit {

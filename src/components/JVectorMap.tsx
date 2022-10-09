@@ -55,7 +55,7 @@ const JVectorMap: FC<{ geomap: Geomap }> = ({ geomap }) => {
                 // @ts-ignore
                 `<b>${label.html()}</b><br/>
                 <b>Number of Trips: </b>${geomap.trip_count[code]}<br/>
-                <b>Hitchhiked kms: </b>${geomap.distances[code]}`
+                <b>Hitchhiked km: </b>${geomap.distances[code]}`
               );
             }
           }}

@@ -6,6 +6,7 @@ import { secondsToHumanReadable } from '../utils';
 import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
 import { calculateTimeBetweenDates } from '../utils/calculateTimeBetweenDates';
 import {
+  countryFlag,
   showErrors,
   showTripDistance,
   showTripDuration,
@@ -57,19 +58,22 @@ export const TripForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-center gap-2">
+        {values.country_distances &&
+          values.country_distances.map((cd: Record<string, any>) => (
+            <div key={cd.distance}>
+              {countryFlag(
+                cd.country_code,
+                `${cd.country}, distance ${Math.round(cd.distance / 1000)} km`
+              )}
+            </div>
+          ))}
+      </div>
+      <div className="flex items-center justify-center gap-2">
         {showTripGoogleDuration(values.googleDuration)}
         {showTripDistance(values.totalDistance)}
         {showTripDuration(values.departure, values.arrival)}
       </div>
-      {!!errors.length && (
-        <Alert color="failure">
-          <span>
-            <span className="font-medium">{showErrors(errors)}</span>
-          </span>
-        </Alert>
-      )}
-
       <div className="mt-4 grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="originName">Starting point</Label>

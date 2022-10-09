@@ -8,7 +8,6 @@ import { useAuth } from '../../src/components/contexts/AuthContext';
 import EditProfileForm from '../../src/components/EditProfileForm';
 import LoadingContainer from '../../src/components/LoadingContainer';
 import { authenticateToken, updateUser } from '../../src/db/users';
-import { executeNTimes, randomConfetti } from '../../src/utils';
 import { showErrors } from '../../src/utils/viewHelpers';
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {

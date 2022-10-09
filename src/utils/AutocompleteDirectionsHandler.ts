@@ -54,12 +54,13 @@ export class AutocompleteDirectionsHandler {
 
     this.directionsRenderer.addListener('directions_changed', () => {
       const directions = this.directionsRenderer.getDirections();
-
-      if (directions) {
-        const { totalDistance, googleDuration } =
-          this.computeTotalDistance(directions);
-        this.setFieldValue('totalDistance', totalDistance);
-        this.setFieldValue('googleDuration', googleDuration);
+      if (
+        directions &&
+        directions.geocoded_waypoints &&
+        directions.geocoded_waypoints.length > 2
+      ) {
+        console.log('directions changed');
+        this.computeTotalDistance(directions);
       }
     });
 
@@ -77,12 +78,12 @@ export class AutocompleteDirectionsHandler {
   }
 
   getDataFromAddressComponent(
-    address_component: google.maps.GeocoderAddressComponent[]
+    address_component: google.maps.GeocoderAddressComponent[] | undefined
   ) {
-    const city = address_component.find((component) =>
+    const city = address_component?.find((component) =>
       component.types.includes('locality')
     );
-    const country = address_component.find((component) =>
+    const country = address_component?.find((component) =>
       component.types.includes('country')
     );
     return {
@@ -90,6 +91,64 @@ export class AutocompleteDirectionsHandler {
       country: country ? country.long_name : '',
       country_code: country ? country.short_name : '',
     };
+  }
+
+  getCountriesForDirectionsResult(
+    directionsResult: google.maps.DirectionsResult
+  ) {
+    const { routes } = directionsResult;
+    const leg = routes[0].legs[0];
+    const { steps } = leg;
+    const start_country = leg.start_address.split(', ').pop();
+    const end_country = leg.end_address.split(', ').pop();
+    let countries: [string, number][] = [];
+
+    if (countries.length === 0 && start_country && leg.distance)
+      countries.push([start_country, leg.distance?.value]);
+
+    if (start_country == end_country)
+      return [[start_country, leg.distance?.value]];
+    let distance = 0;
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i];
+      const { instructions } = step;
+      if (step.distance) distance += step.distance.value;
+      if (instructions.includes('Entering')) {
+        let country = instructions.split('Entering ').pop();
+        country?.includes('</div>')
+          ? (country = country.split('</div>')[0])
+          : country;
+        if (country) {
+          countries[countries.length - 1][1] = distance;
+          countries.push([country, 0]);
+          distance = 0;
+        }
+      }
+      if (i == steps.length - 1) {
+        countries[countries.length - 1][1] = distance;
+      }
+    }
+    return countries;
+  }
+
+  geocodeCountries(countries: [string, number][]) {
+    const geocoder = new google.maps.Geocoder();
+    const promises = countries.map((country) => {
+      return new Promise((resolve, reject) => {
+        geocoder.geocode({ address: country[0] }, (results, status) => {
+          if (status === 'OK' && results) {
+            resolve({
+              country: results[0].address_components[0].long_name,
+              country_code: results[0].address_components[0].short_name,
+              distance: country[1],
+            });
+          } else {
+            reject(status);
+          }
+        });
+      });
+    });
+    return Promise.all(promises);
   }
 
   computeTotalDistance(result: google.maps.DirectionsResult | null) {
@@ -103,11 +162,13 @@ export class AutocompleteDirectionsHandler {
       totalDistance += myroute.legs[i]!.distance!.value;
       totalDuration += myroute.legs[i]!.duration!.value;
     }
-
-    return {
-      totalDistance: totalDistance,
-      googleDuration: totalDuration,
-    };
+    const countries = this.getCountriesForDirectionsResult(result);
+    // @ts-ignore
+    this.geocodeCountries(countries).then((countries) => {
+      this.setFieldValue('country_distances', countries);
+    });
+    this.setFieldValue('totalDistance', totalDistance);
+    this.setFieldValue('googleDuration', totalDuration);
   }
 
   setupPlaceChangedListener(
@@ -174,10 +235,7 @@ export class AutocompleteDirectionsHandler {
       },
       (response, status) => {
         if (status === 'OK') {
-          const { totalDistance, googleDuration } =
-            this.computeTotalDistance(response);
-          this.setFieldValue('totalDistance', totalDistance);
-          this.setFieldValue('googleDuration', googleDuration);
+          this.computeTotalDistance(response);
           me.directionsRenderer.setDirections(response);
         } else {
           window.alert('Directions request failed due to ' + status);

@@ -326,7 +326,7 @@ export const showTripDistance = (distance: number | undefined) => {
     <Tooltip content={`travelled ${kilometers} kms`}>
       <div className="flex items-center gap-1">
         <BsArrowRight className="inline" />
-        {kilometers} kms
+        {kilometers} km
       </div>
     </Tooltip>
   );
@@ -424,8 +424,15 @@ export const showEmbeddedYoutubeVideo = (youtubeId: string | undefined) => {
   );
 };
 
-export const tagsForTrip = (trip: Trip) => {
-  const tags = removeDuplicates(trip.rides.map((x) => x.tags).flat());
+export const tagsForRide = (ride: Ride) =>
+  ride.tags.map((tag) => (
+    <Badge color="purple" key={`${ride.id}${tag}`}>
+      {tag}
+    </Badge>
+  ));
+
+export const tagsForRides = (rides: Ride[]) => {
+  const tags = removeDuplicates(rides.map((x) => x.tags).flat());
   return tags.map((tag) => (
     <Badge color="purple" key={tag}>
       {tag}
