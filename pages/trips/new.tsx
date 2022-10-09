@@ -11,12 +11,17 @@ import LoadingContainer from '../../src/components/LoadingContainer';
 import { TripForm } from '../../src/components/TripForm';
 import { createTrip } from '../../src/db/trips';
 import FlowbiteWindow from '../../src/flowbite/FlowbiteWindow';
+import { IpLocation } from '../../src/types';
+import { fetchLocationFromClient } from '../../src/utils';
 import { showErrors } from '../../src/utils/viewHelpers';
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  const ipLocation = await fetchLocationFromClient();
+
   return {
     props: {
       googleMapsKey: process.env.GOOGLE_MAPS_KEY,
+      ipLocation,
     },
   };
 };
@@ -41,7 +46,10 @@ const TripSchema = object().shape({
     .required(),
 });
 
-const New: NextPage<{ google: GoogleAPI }> = ({ google }) => {
+const New: NextPage<{ google: GoogleAPI; ipLocation: IpLocation }> = ({
+  ipLocation,
+  google,
+}) => {
   const googlemap = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
   const [errors, setErrors] = useState<Record<string, any>>();
@@ -49,13 +57,12 @@ const New: NextPage<{ google: GoogleAPI }> = ({ google }) => {
   const router = useRouter();
 
   useEffect(() => {
-    // if (!clientLocation) return;
     const map = new google.maps.Map(googlemap.current as HTMLDivElement, {
       center: {
-        lat: Number(12),
-        lng: Number(42),
+        lat: Number(ipLocation?.latitude ? ipLocation.latitude : 0),
+        lng: Number(ipLocation?.longitude ? ipLocation.longitude : 0),
       },
-      zoom: 6,
+      zoom: 4,
     });
     setMap(map);
   }, [google.maps.Map]);

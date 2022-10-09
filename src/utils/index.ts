@@ -1,5 +1,6 @@
 import { EXPERIENCES, Trip, IpLocation, User } from '../types';
 import md5 from 'md5';
+import axios from 'axios';
 
 export const capitalize = (s: string) => {
   if (typeof s !== 'string') return '';
@@ -28,17 +29,17 @@ export const tripToString = (trip: Trip) =>
 
 export const fetchIpAddressOfClient = async () => {
   const response = await fetch('https://api.ipify.org?format=json');
-  const json = await response.json();
-  return json.ip;
+  const { ip } = await response.json();
+  return ip;
 };
 
 export const fetchLocationFromClient = async () => {
   const ipAddress = await fetchIpAddressOfClient();
-  const response = await fetch(
+  const response = await axios.get(
     `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPLOCATION}&ip=${ipAddress}`
   );
-  const data = await response.json();
-  return data as IpLocation;
+  const IpLocation = response.data;
+  return IpLocation as IpLocation;
 };
 
 export const myXOR = (a: any, b: any): boolean => {
