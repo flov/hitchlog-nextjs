@@ -32,15 +32,13 @@ const Login: FC<{ toggleModal: () => void }> = ({ toggleModal }) => {
         postLogin(values)
           .then((res) => {
             setCurrentUser(res.data.user);
-            addToast('You have successfully logged in', {
-              appearance: 'success',
-              autoDismiss: true,
-            });
+            addToast('You have successfully logged in');
             setError(null);
             Cookies.set('authToken', res.headers.authorization.split(' ')[1]);
             toggleModal();
           })
           .catch((err) => {
+            addToast('Something went wrong', 'error');
             setError(err.response.data);
           });
 

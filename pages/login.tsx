@@ -45,9 +45,7 @@ const Login: FC = () => {
                     console.log(res);
                     setCurrentUser(res.data.user);
                     setError(null);
-                    addToast('You have successfully logged in', {
-                      appearance: 'success',
-                    });
+                    addToast('You have successfully logged in');
                     Cookies.set(
                       'authToken',
                       res.headers.authorization.split(' ')[1]
@@ -55,9 +53,7 @@ const Login: FC = () => {
                     router.push(`/hitchhikers/${res.data.user.username}`);
                   })
                   .catch((err) => {
-                    addToast('Something went wrong.', {
-                      appearance: 'failure',
-                    });
+                    addToast('Something went wrong.', 'error');
 
                     setError(err.response.data);
                   });
