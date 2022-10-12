@@ -12,12 +12,14 @@ import { useTheme } from 'next-themes';
 import { useAuth } from './contexts/AuthContext';
 import { capitalize, profilePicture } from '../utils';
 import Login from './Login';
+import Image from 'next/image';
 
 const NavBar = () => {
   const { currentUser, logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const [themeSwitcher, setThemeSwitcher] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const hitchlog_logo = '/hitchlog_logo.png';
   const toggleModal = () => setShowModal(!showModal);
 
   useEffect(() => {
@@ -33,18 +35,22 @@ const NavBar = () => {
   return (
     <Navbar fluid={true} rounded={true}>
       <Navbar.Brand href="/">
-        <img
-          src="https://flowbite.com/docs/images/logo.svg"
-          className="h-6 mr-3 sm:h-9"
-          alt="Flowbite Logo"
-        />
+        <div className="ml-2 mr-3">
+          <Image
+            alt="Vercel logo"
+            quality={100}
+            src={hitchlog_logo}
+            width={19}
+            height={27}
+          />
+        </div>
+
         <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
           Hitchlog
         </span>
       </Navbar.Brand>
 
       <div className="flex gap-3 md:order-2">
-        <Navbar.Toggle />
         {currentUser ? (
           <>
             <Dropdown
@@ -71,6 +77,11 @@ const NavBar = () => {
                 </span>
               </Dropdown.Header>
               <Dropdown.Item>
+                <Link href={`/hitchhikers/${currentUser.username}`}>
+                  Your profile
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Item>
                 <Link href="/trips/new">Log new trip</Link>
               </Dropdown.Item>
               <Dropdown.Item>
@@ -82,9 +93,12 @@ const NavBar = () => {
             </Dropdown>
           </>
         ) : (
-          <Button onClick={toggleModal}>Login</Button>
+          <Button color="gray" onClick={toggleModal}>
+            Login
+          </Button>
         )}
         <DarkThemeToggle onClick={handleThemeSwitch} />
+        <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
         <li>
