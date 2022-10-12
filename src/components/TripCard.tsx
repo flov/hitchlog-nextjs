@@ -28,7 +28,6 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   };
 
   const { currentUser } = useAuth();
-  console.log(trip);
 
   return (
     <article

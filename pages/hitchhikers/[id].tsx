@@ -136,7 +136,7 @@ const Show: NextPage<{
 
       {trips.length > 0 && (
         <div id="ListTrips">
-          <div className="flex justify-center w-full mt-2 sm:mt-4">
+          <div className="flex justify-center w-full my-2 sm:mt-4">
             <h2 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
               {capitalize(profile.username)}&apos;s trips:
             </h2>

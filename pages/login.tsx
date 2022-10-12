@@ -3,11 +3,11 @@ import { Field, Form, Formik, FormikHelpers, FormikValues } from 'formik';
 import { useRouter } from 'next/router';
 import { useAuth } from '../src/components/contexts/AuthContext';
 import Cookies from 'js-cookie';
-import axios from 'axios';
 import { Alert, Label, TextInput } from 'flowbite-react';
 import Link from 'next/link';
 import { FiKey, FiMail } from 'react-icons/fi';
-import { API_URL } from '../src/config';
+import { useToasts } from '../src/components/contexts/ToastContext';
+import { postLogin } from '../src/db/users';
 
 type Values = {
   password: string;
@@ -22,6 +22,8 @@ const Login: FC = () => {
   const router = useRouter();
   const { setCurrentUser } = useAuth();
   const [error, setError] = useState(null);
+
+  const { addToast } = useToasts();
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -38,11 +40,14 @@ const Login: FC = () => {
                 values: Values,
                 { setSubmitting }: FormikHelpers<Values>
               ) => {
-                axios
-                  .post(`${API_URL}/users/sign_in`, { user: values })
+                postLogin(values)
                   .then((res) => {
+                    console.log(res);
                     setCurrentUser(res.data.user);
                     setError(null);
+                    addToast('You have successfully logged in', {
+                      appearance: 'success',
+                    });
                     Cookies.set(
                       'authToken',
                       res.headers.authorization.split(' ')[1]
@@ -50,6 +55,10 @@ const Login: FC = () => {
                     router.push(`/hitchhikers/${res.data.user.username}`);
                   })
                   .catch((err) => {
+                    addToast('Something went wrong.', {
+                      appearance: 'failure',
+                    });
+
                     setError(err.response.data);
                   });
 

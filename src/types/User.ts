@@ -16,7 +16,7 @@ export type User = {
   cs_user?: string;
   be_welcome_user?: string;
   trustroots?: string;
-  location: UserLocation;
+  location?: UserLocation;
 };
 
 export type UserLocation = {

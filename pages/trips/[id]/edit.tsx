@@ -22,6 +22,7 @@ import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import LoadingContainer from '../../../src/components/LoadingContainer';
 import { useRouter } from 'next/router';
 import { HitchhikingTrip } from '../../../src/components/HitchhikingTrip';
+import { useToasts } from '../../../src/components/contexts/ToastContext';
 
 declare global {
   interface Window {
@@ -54,9 +55,15 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
   const router = useRouter();
 
   const [rides, setRides] = useState<Ride[]>(trip?.rides);
+  const { addToast } = useToasts();
 
   useEffect(() => {
-    if (currentUser?.id !== trip.user_id) router.push('/login');
+    if (currentUser?.id !== trip.user_id) {
+      addToast('You are not authorized to edit this trip', {
+        appearance: 'failure',
+      });
+      router.push('/login');
+    }
     const mapElement = document.getElementById('map') as HTMLDivElement;
     if (!mapElement) return;
     const map = new google.maps.Map(mapElement, {
@@ -96,12 +103,12 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
       };
     }
     setRides(newRides);
-    console.log(newRides);
   };
 
   const handleDeleteTrip = () => {
     if (window.confirm('Are you sure you want to delete this trip?')) {
       deleteTrip(trip.id).then((res) => {
+        addToast('Trip deleted successfully');
         router.push('/hitchhikers/' + currentUser?.id);
       });
     }
@@ -112,7 +119,6 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
       <Head>
         <title>Hitchlog - Edit Hitchiking Trip</title>
       </Head>
-
       <div className="w-full h-48 bg-gray-200" id="map"></div>
       <div className="px-4 py-8 mx-auto max-w-7xl">
         <div className="flex flex-col gap-4 sm_grid-edit-trip">
@@ -144,10 +150,16 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                         onSubmit={(values, { setSubmitting }) => {
                           updateRide(values)
                             .then((res) => {
-                              console.log(res.data);
                               window.confetti();
+                              addToast('Ride updated successfully');
                             })
                             .catch((err) => {
+                              addToast(
+                                'Ride not updated. Something went wrong',
+                                {
+                                  appearance: 'failure',
+                                }
+                              );
                               console.log(err);
                             });
                           setSubmitting(false);

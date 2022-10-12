@@ -5,6 +5,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useAuth } from '../../src/components/contexts/AuthContext';
+import { useToasts } from '../../src/components/contexts/ToastContext';
 import EditProfileForm from '../../src/components/EditProfileForm';
 import LoadingContainer from '../../src/components/LoadingContainer';
 import { authenticateToken, updateUser } from '../../src/db/users';
@@ -31,6 +32,7 @@ const EditProfile: NextPage = () => {
   const [errors, setErrors] = useState(null);
   const { currentUser, setCurrentUser } = useAuth();
   const router = useRouter();
+  const { addToast } = useToasts();
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -76,6 +78,7 @@ const EditProfile: NextPage = () => {
                     .then((response) => {
                       setCurrentUser(response.data);
                       setIsSuccessful(true);
+                      addToast('Profile updated successfully');
                       setErrors(null);
                       router.push(`/hitchhikers/${currentUser.username}`);
                     })
@@ -90,11 +93,11 @@ const EditProfile: NextPage = () => {
                   username: currentUser.username,
                   about_you: currentUser.about_you,
                   formatted_address: currentUser.location?.formatted_address,
-                  lat: currentUser.location.lat,
-                  lng: currentUser.location.lng,
-                  city: currentUser.location.city,
-                  country: currentUser.location.country,
-                  country_code: currentUser.location.country_code,
+                  lat: currentUser.location?.lat,
+                  lng: currentUser.location?.lng,
+                  city: currentUser.location?.city,
+                  country: currentUser.location?.country,
+                  country_code: currentUser.location?.country_code,
                   cs_user: currentUser.cs_user,
                   be_welcome_user: currentUser.be_welcome_user,
                   trustroots: currentUser.trustroots,

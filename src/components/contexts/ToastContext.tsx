@@ -10,10 +10,14 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { HiCheck } from 'react-icons/hi';
+import { HiCheck, HiExclamation, HiX } from 'react-icons/hi';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type ToastProps = {
-  addToast: (content: string, options?: {}) => void;
+  addToast: (
+    content: string,
+    options?: { autoDismiss?: boolean; appearance?: string }
+  ) => void;
 };
 
 const ToastsContext = createContext<ToastProps>({
@@ -26,6 +30,7 @@ type Toast = {
   id: string;
   content: string;
   autoDismiss: boolean;
+  appearance: string;
   remove: () => void;
 };
 
@@ -33,13 +38,17 @@ export const ToastsProvider: FC<{ children: JSX.Element }> = ({ children }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const addToast = useCallback(
-    (content: string, options = { autoDismiss: true }) => {
+    (
+      content: string,
+      options = { autoDismiss: true, appearance: 'success' }
+    ) => {
       const id = uuidv4();
 
       const toast = {
         id,
         content,
-        ...options,
+        autoDismiss: options.autoDismiss,
+        appearance: options.appearance || 'success',
         remove: () => setToasts((toasts) => toasts.filter((t) => t.id !== id)),
       };
 
@@ -62,11 +71,21 @@ export const ToastsProvider: FC<{ children: JSX.Element }> = ({ children }) => {
       {children}
       {mounted
         ? createPortal(
-            <div className="absolute z-50 ml-auto mr-auto text-center top-4 right-4">
-              {toasts.map((toast) => (
-                <MyToast key={toast.id} {...toast} />
-              ))}
-            </div>,
+            <AnimatePresence>
+              <div className="absolute z-50 ml-auto mr-auto text-center bottom-4 right-4">
+                {toasts.map((toast) => (
+                  <motion.div
+                    key={toast.id}
+                    initial={{ opacity: 0, y: 50, scale: 0.3 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 20, scale: 0.5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <MyToast key={toast.id} {...toast} />
+                  </motion.div>
+                ))}
+              </div>
+            </AnimatePresence>,
             document.getElementById('portal') as Element
           )
         : null}
@@ -74,7 +93,7 @@ export const ToastsProvider: FC<{ children: JSX.Element }> = ({ children }) => {
   );
 };
 
-const MyToast: FC<Toast> = ({ content, autoDismiss, remove }) => {
+const MyToast: FC<Toast> = ({ content, appearance, autoDismiss, remove }) => {
   useEffect(() => {
     if (autoDismiss) {
       const timeoutHandle = setTimeout(remove, 5000);
@@ -85,10 +104,23 @@ const MyToast: FC<Toast> = ({ content, autoDismiss, remove }) => {
 
   return (
     <div className="mb-4">
-      <Toast color="success">
-        <div className="inline-flex items-center justify-center w-8 h-8 text-green-500 bg-green-100 rounded-lg shrink-0 dark:bg-green-800 dark:text-green-200">
-          <HiCheck className="w-5 w-24 h-5" />
-        </div>
+      <Toast duration={75}>
+        {appearance === 'success' && (
+          <div className="inline-flex items-center justify-center w-8 h-8 text-green-500 bg-green-100 rounded-lg shrink-0 dark:bg-green-800 dark:text-green-200">
+            <HiCheck className="w-5 w-24 h-5" />
+          </div>
+        )}
+        {appearance === 'failure' && (
+          <div className="inline-flex items-center justify-center w-8 h-8 text-red-500 bg-red-100 rounded-lg shrink-0 dark:bg-red-800 dark:text-red-200">
+            <HiExclamation className="w-5 w-24 h-5" />
+          </div>
+        )}
+        {appearance === 'warning' && (
+          <div className="inline-flex items-center justify-center w-8 h-8 text-yellow-500 bg-yellow-100 rounded-lg shrink-0 dark:bg-yellow-800 dark:text-yellow-200">
+            <HiExclamation className="w-5 w-24 h-5" />
+          </div>
+        )}
+
         <div className="ml-3 text-sm font-normal">{content}</div>
         <div className="flex items-center ml-auto space-x-2">
           <Toast.Toggle />

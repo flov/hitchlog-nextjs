@@ -17,12 +17,8 @@ export const getGeomap = async (id: string | number) =>
     },
   });
 
-export const postLogin = async (values: {
-  email: string;
-  password: string;
-}) => {
+export const postLogin = async (values: { email: string; password: string }) =>
   axios.post(`${API_URL}/users/sign_in`, { user: values });
-};
 
 export const getUser = async (id: number | string) => {
   return axios.get(`${API_URL}/users/${id}`, {

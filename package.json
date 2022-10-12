@@ -26,6 +26,7 @@
     "flowbite": "^1.5.2",
     "flowbite-react": "^0.1.11",
     "formik": "^2.2.9",
+    "framer-motion": "^7.5.3",
     "google-maps-react": "^2.0.6",
     "jquery": "^3.6.1",
     "js-cookie": "^3.0.1",

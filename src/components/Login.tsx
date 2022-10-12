@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { FiKey, FiMail } from 'react-icons/fi';
 import { useAuth } from './contexts/AuthContext';
 import { API_URL } from '../config';
+import { postLogin } from '../db/users';
+import { useToasts } from './contexts/ToastContext';
 
 type Values = {
   password: string;
@@ -21,15 +23,19 @@ const Login: FC<{ toggleModal: () => void }> = ({ toggleModal }) => {
   };
   const { setCurrentUser } = useAuth();
   const [error, setError] = useState(null);
+  const { addToast } = useToasts();
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-        axios
-          .post(`${API_URL}/users/sign_in`, { user: values })
+        postLogin(values)
           .then((res) => {
             setCurrentUser(res.data.user);
+            addToast('You have successfully logged in', {
+              appearance: 'success',
+              autoDismiss: true,
+            });
             setError(null);
             Cookies.set('authToken', res.headers.authorization.split(' ')[1]);
             toggleModal();

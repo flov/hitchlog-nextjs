@@ -51,7 +51,6 @@ const ShowTrip: NextPage<{
     );
     const directionsService = new google.maps.DirectionsService();
     const directionsRenderer = new google.maps.DirectionsRenderer({
-      draggable: true,
       map,
       panel: document.getElementById('panel') as HTMLElement,
     });
@@ -65,8 +64,8 @@ const ShowTrip: NextPage<{
 
   return (
     <div>
+      <div className="w-full h-48 bg-gray-200" id="map"></div>
       <div className="max-w-4xl px-4 py-8 mx-auto">
-        <div className="w-full h-48 bg-gray-200" id="map"></div>
         {user && <HitchhikingTrip trip={trip} rides={trip.rides} user={user} />}
       </div>
     </div>
