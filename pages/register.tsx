@@ -7,6 +7,8 @@ import React, { FC, useState } from 'react';
 import { object, string } from 'yup';
 import { API_URL } from '../src/config';
 import { FiKey, FiMail } from 'react-icons/fi';
+import { useToastContext } from 'flowbite-react/lib/esm/components/Toast/ToastContext';
+import { useToasts } from '../src/components/contexts/ToastContext';
 
 const UserSchema = object().shape({
   username: string().required(),
@@ -18,14 +20,15 @@ const UserSchema = object().shape({
 const Register: FC = () => {
   const [error, setError] = useState();
   const router = useRouter();
+  const { addToast } = useToasts();
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto">
+      <div className="flex flex-col items-center justify-center py-8 mx-auto sm:px-6">
         <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Create an account
+            <h1 className="mb-4 text-xl leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              Sign up
             </h1>
             <Formik
               initialValues={{
@@ -45,6 +48,8 @@ const Register: FC = () => {
                     router.push('/login');
                   })
                   .catch((error) => {
+                    addToast(error?.response?.data?.error, 'error');
+
                     setError(error?.response?.data?.error);
                   })
                   .finally(() => {
@@ -53,9 +58,9 @@ const Register: FC = () => {
               }}
             >
               {({ isSubmitting }) => (
-                <Form className="space-y-4 md:space-y-6">
+                <Form>
                   {error && (
-                    <div>
+                    <div className="mb-4">
                       <Alert color="failure">
                         <span>
                           <span className="font-medium">{error}</span>
@@ -87,7 +92,7 @@ const Register: FC = () => {
                       )}
                     </Field>
                   </div>
-                  <div>
+                  <div className="mt-2">
                     <div className="block mb-2">
                       <Label htmlFor="username" value="Username" />
                     </div>
@@ -102,7 +107,7 @@ const Register: FC = () => {
                       )}
                     </Field>
                   </div>
-                  <div>
+                  <div className="mt-2">
                     <label
                       htmlFor="date_of_birth"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -115,7 +120,7 @@ const Register: FC = () => {
                       )}
                     </Field>
                   </div>
-                  <div>
+                  <div className="mt-2">
                     <label
                       htmlFor="gender"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -138,7 +143,7 @@ const Register: FC = () => {
                       )}
                     </Field>
                   </div>
-                  <div>
+                  <div className="mt-2">
                     <label
                       htmlFor="password"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -154,7 +159,7 @@ const Register: FC = () => {
                       required
                     />
                   </div>
-                  <div>
+                  <div className="mt-2">
                     <label
                       htmlFor="password_confirmation"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -171,13 +176,13 @@ const Register: FC = () => {
                     />
                   </div>
 
-                  <div className="flex justify-center">
+                  <div className="flex justify-center my-4">
                     <Button
-                      color={error ? 'failure' : 'light'}
+                      color={error ? 'failure' : 'info'}
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      Create an account
+                      Create account
                     </Button>
                   </div>
                   <p className="text-sm font-light text-gray-500 dark:text-gray-400">

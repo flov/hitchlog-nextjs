@@ -16,7 +16,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 type ToastProps = {
   addToast: (
     content: string,
-    options?: { autoDismiss?: boolean; appearance?: string }
+    appearance?: 'success' | 'error' | 'warning' | undefined
   ) => void;
 };
 
@@ -37,25 +37,19 @@ type Toast = {
 export const ToastsProvider: FC<{ children: JSX.Element }> = ({ children }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const addToast = useCallback(
-    (
-      content: string,
-      options = { autoDismiss: true, appearance: 'success' }
-    ) => {
-      const id = uuidv4();
+  const addToast = useCallback((content: string, appearance = 'success') => {
+    const id = uuidv4();
 
-      const toast = {
-        id,
-        content,
-        autoDismiss: options.autoDismiss,
-        appearance: options.appearance || 'success',
-        remove: () => setToasts((toasts) => toasts.filter((t) => t.id !== id)),
-      };
+    const toast = {
+      id,
+      content,
+      autoDismiss: true,
+      appearance: appearance || 'success',
+      remove: () => setToasts((toasts) => toasts.filter((t) => t.id !== id)),
+    };
 
-      setToasts((toasts) => [...toasts, toast]);
-    },
-    []
-  );
+    setToasts((toasts) => [...toasts, toast]);
+  }, []);
 
   const contextValue = useMemo(() => ({ addToast }), [addToast]);
 
@@ -103,14 +97,14 @@ const MyToast: FC<Toast> = ({ content, appearance, autoDismiss, remove }) => {
   }, [autoDismiss, remove]);
 
   return (
-    <div className="mb-4">
-      <Toast duration={75}>
+    <div className="mb-4 border border-gray-600 rounded-lg">
+      <Toast>
         {appearance === 'success' && (
           <div className="inline-flex items-center justify-center w-8 h-8 text-green-500 bg-green-100 rounded-lg shrink-0 dark:bg-green-800 dark:text-green-200">
             <HiCheck className="w-5 w-24 h-5" />
           </div>
         )}
-        {appearance === 'failure' && (
+        {appearance === 'error' && (
           <div className="inline-flex items-center justify-center w-8 h-8 text-red-500 bg-red-100 rounded-lg shrink-0 dark:bg-red-800 dark:text-red-200">
             <HiExclamation className="w-5 w-24 h-5" />
           </div>

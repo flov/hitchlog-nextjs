@@ -59,9 +59,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
 
   useEffect(() => {
     if (currentUser?.id !== trip.user_id) {
-      addToast('You are not authorized to edit this trip', {
-        appearance: 'failure',
-      });
+      addToast('You are not authorized to edit this trip', 'error');
       router.push('/login');
     }
     const mapElement = document.getElementById('map') as HTMLDivElement;
@@ -156,9 +154,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                             .catch((err) => {
                               addToast(
                                 'Ride not updated. Something went wrong',
-                                {
-                                  appearance: 'failure',
-                                }
+                                'error'
                               );
                               console.log(err);
                             });
@@ -205,6 +201,20 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                                 value={values.title}
                                 name="title"
                               />
+                              <div className="mt-2">
+                                <div className="mb-2">
+                                  <Label htmlFor="story" value="My Story" />
+                                </div>
+                                <Textarea
+                                  name="story"
+                                  placeholder="Tell us your story with this ride"
+                                  value={values.story}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  rows={4}
+                                />
+                              </div>
+
                               <div className="mt-2 ">
                                 <Label htmlFor="tag_list">
                                   Tag your ride (seperated by comma)
@@ -220,20 +230,6 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                                   />
                                 </div>
                               </div>
-                              <div className="mt-2">
-                                <div className="mb-2">
-                                  <Label htmlFor="story" value="My Story" />
-                                </div>
-                                <Textarea
-                                  name="story"
-                                  placeholder="Tell us your story with this ride"
-                                  value={values.story}
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  rows={4}
-                                />
-                              </div>
-
                               <div className="mt-2">
                                 <div className="mb-2">
                                   <Label
