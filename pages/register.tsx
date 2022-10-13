@@ -24,7 +24,7 @@ const Register: FC = () => {
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center py-8 mx-auto sm:px-6">
+      <div className="flex flex-col items-center justify-center px-4 py-6 mx-auto">
         <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6">
             <h1 className="mb-4 text-xl leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
