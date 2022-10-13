@@ -2,7 +2,7 @@ import { Pagination, Table } from 'flowbite-react';
 import Image from 'next/image';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getUsers } from '../../src/db/users';
 import { User } from '../../src/types';
 import { profilePicture } from '../../src/utils';
@@ -13,7 +13,7 @@ import {
   showUserGender,
 } from '../../src/utils/viewHelpers';
 import { useRouter } from 'next/router';
-import { FaStar } from 'react-icons/fa';
+import { PuffLoader } from 'react-spinners';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const users = await getUsers(Number(query?.page) || 1);
@@ -37,7 +37,7 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
 ) => {
   const [page, setPage] = useState(props.page);
   const [users, setUsers] = useState(props.users);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handlePageChange = async (p: number) => {
@@ -50,9 +50,6 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
       { shallow: true }
     );
     setPage(p);
-  };
-
-  useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true);
       const { data } = await getUsers(page);
@@ -60,15 +57,15 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
       setIsLoading(false);
     };
     fetchUsers();
-  }, [page]);
+  };
 
   return (
-    <div className="px-4 mx-auto text-center max-w-screen-lg lg:mb-16">
-      <h1 className="mt-8 text-4xl">
+    <div className="mx-auto text-center sm:px-4 max-w-screen-lg lg:mb-16">
+      <h1 className="mt-4 text-xl sm:text-4xl sm:mt-8">
         The Glorious Hitchhikers Of The Hitchlog
       </h1>
 
-      <div className="mb-4">
+      <div className="mt-2 mb-4">
         <Pagination
           onPageChange={handlePageChange}
           currentPage={page}
@@ -80,47 +77,50 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
       <Table striped>
         <Table.Head>
           <Table.HeadCell>
-            <div className="flex justify-between">Username</div>
-          </Table.HeadCell>
-          <Table.HeadCell>
-            <FaStar className="inline-block" />
+            <div className="flex justify-between">Username and Stats</div>
           </Table.HeadCell>
 
           <Table.HeadCell>Member since</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
-          {users.map((user: User, index) => (
-            <Table.Row className="dark:text-white" key={`user${index}`}>
-              <Table.Cell>
-                <div className="flex items-center text-md gap-2 dark:text-white">
-                  <Link href={`/hitchhikers/${user.username}`}>
-                    <a className="flex items-center gap-2">
-                      <Image
-                        alt={`${user.username}'s profile picture`}
-                        className="rounded-full"
-                        src={profilePicture(user.md5_email)}
-                        width={40}
-                        height={40}
-                      />
-                      {user.username}
-                    </a>
-                  </Link>
+          {isLoading ? (
+            <Table.Row>
+              <Table.Cell colSpan={2}>
+                <div className="flex justify-center">
+                  <PuffLoader color="white" />
                 </div>
               </Table.Cell>
-              <Table.Cell>
-                <div className="flex gap-2">
-                  <div className="flex items-center">
-                    ({user.age}
-                    {showUserGender(user.gender)})
-                  </div>
-                  {showNumberOfRides(user.number_of_rides)}
-                  {viewNumberOfTrips(user.number_of_trips)}
-                  {countryFlag(user.location?.country_code)}
-                </div>
-              </Table.Cell>
-              <Table.Cell>{user.created_at}</Table.Cell>
             </Table.Row>
-          ))}
+          ) : (
+            users.map((user: User, index) => (
+              <Table.Row className="dark:text-white" key={`user${index}`}>
+                <Table.Cell className="px-3">
+                  <div className="flex items-center text-md gap-2 dark:text-white">
+                    <Link href={`/hitchhikers/${user.username}`}>
+                      <a className="flex items-center gap-2">
+                        <Image
+                          alt={`${user.username}'s profile picture`}
+                          className="rounded-full"
+                          src={profilePicture(user.md5_email)}
+                          width={40}
+                          height={40}
+                        />
+                        {user.username}
+                      </a>
+                    </Link>
+                    <div className="flex items-center">
+                      ({user.age}
+                      {showUserGender(user.gender)})
+                    </div>
+                    {showNumberOfRides(user.number_of_rides)}
+                    {viewNumberOfTrips(user.number_of_trips)}
+                    {countryFlag(user.location?.country_code)}
+                  </div>
+                </Table.Cell>
+                <Table.Cell>{user.created_at}</Table.Cell>
+              </Table.Row>
+            ))
+          )}
         </Table.Body>
       </Table>
       <div className="my-4">
