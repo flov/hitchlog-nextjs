@@ -111,3 +111,9 @@ a:hover {
 .image-shadow span {
   overflow: visible !important;
 }
+
+@media screen and (max-width: 767px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
