@@ -1,12 +1,13 @@
 import { Ride } from './Ride';
 
 export type Location = {
-  lat?: number;
-  lng?: number;
+  lat: number;
+  lng: number;
   city?: string;
   country?: string;
   country_code?: string;
-  placeId?: string;
+  place_id: string | null;
+  name: string | null;
 };
 
 export type Timestamp = { seconds: number; nanoseconds: number };

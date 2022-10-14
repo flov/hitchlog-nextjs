@@ -9,6 +9,22 @@ export type Ride = {
   gender?: GENDERS;
   number: number;
   tags: string[];
+  photo?: Photo;
+  photo_caption: string;
+};
+
+export type Photo = {
+  url: string;
+  small: Small;
+  thumb: Thumb;
+};
+
+export type Small = {
+  url: string;
+};
+
+export type Thumb = {
+  url: string;
 };
 
 export type EXPERIENCES = 'very good' | 'good' | 'neutral' | 'bad' | 'very bad';

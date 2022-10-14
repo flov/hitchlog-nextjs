@@ -2,7 +2,7 @@ import { Pagination, Table } from 'flowbite-react';
 import Image from 'next/image';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getUsers } from '../../src/db/users';
 import { User } from '../../src/types';
 import { profilePicture } from '../../src/utils';

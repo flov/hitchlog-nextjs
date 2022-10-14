@@ -28,7 +28,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 };
 
 const EditProfile: NextPage = () => {
-  const [isSuccessful, setIsSuccessful] = useState(false);
   const [errors, setErrors] = useState(null);
   const { currentUser, setCurrentUser } = useAuth();
   const router = useRouter();
@@ -60,24 +59,11 @@ const EditProfile: NextPage = () => {
                   </Alert>
                 </div>
               )}
-              {isSuccessful && (
-                <div className="my-2">
-                  <Alert color="success">
-                    <span>
-                      <span className="font-medium">
-                        Profile updated successfully!
-                      </span>
-                    </span>
-                  </Alert>
-                </div>
-              )}
               <Formik
                 onSubmit={(values, { setSubmitting }) => {
-                  setIsSuccessful(false);
                   updateUser(currentUser?.username as string, values)
                     .then((response) => {
                       setCurrentUser(response.data);
-                      setIsSuccessful(true);
                       addToast('Profile updated successfully');
                       setErrors(null);
                       router.push(`/hitchhikers/${currentUser.username}`);

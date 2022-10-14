@@ -180,7 +180,7 @@ const Index: FC<{
             onPageChange={handlePageChange}
             currentPage={page}
             showIcons={true}
-            layout="pagination"
+            layout="navigation"
             totalPages={totalPages}
           />
         </div>
@@ -198,7 +198,7 @@ const Index: FC<{
             onPageChange={handlePageChange}
             currentPage={page}
             showIcons={true}
-            layout="pagination"
+            layout="navigation"
             totalPages={totalPages}
           />
         </div>

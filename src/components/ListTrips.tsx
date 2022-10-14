@@ -7,7 +7,7 @@ export const ListTrips: FC<{
   map: google.maps.Map | null;
 }> = ({ map, trips }) => {
   return (
-    <div className="mx-auto max-w-7xl">
+    <div className="mx-auto sm:px-4 max-w-7xl">
       {!!trips.length ? (
         <div className="card-grid">
           {trips.map((trip) => (
