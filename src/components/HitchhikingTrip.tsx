@@ -14,7 +14,6 @@ import {
   showTripDistance,
   showEmbeddedYoutubeVideo,
   countryFlagsForTrip,
-  experiencesForRides,
   tagsForRides,
   tagsForRide,
 } from '../utils/viewHelpers';
@@ -22,6 +21,7 @@ import ReactMarkdown from 'react-markdown';
 import { User, EXPERIENCES, Ride, Trip } from '../types';
 import { CgSandClock } from 'react-icons/cg';
 import Link from 'next/link';
+import ExperiencesForRides from './helpers/ExperiencesForRides';
 
 export function HitchhikingTrip({
   user,
@@ -55,7 +55,7 @@ export function HitchhikingTrip({
 
         <div className="flex flex-col items-center justify-between text-gray-500">
           <div className="flex items-center mt-2 gap-2 dark:text-white">
-            {experiencesForRides(rides)}
+            <ExperiencesForRides rides={rides} />
             {countryFlagsForTrip(trip)}
           </div>
           {trip.rides.length > 0 && (

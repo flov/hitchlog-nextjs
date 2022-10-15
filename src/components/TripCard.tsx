@@ -10,7 +10,7 @@ import {
   tagsForRides,
   vehicleIconsForRides,
 } from '../utils/viewHelpers';
-import { getOrdinalNumber, profilePicture, tripUrl } from '../utils';
+import { getOrdinalNumber, photoForUser, profilePicture } from '../utils';
 import Link from 'next/link';
 import { useAuth } from './contexts/AuthContext';
 import ExperiencesForRides from './helpers/ExperiencesForRides';
@@ -36,21 +36,21 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   return (
     <article
       onClick={centerMapToTrip}
-      className="w-full bg-white border border-gray-200 rounded-lg sm:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
+      className="bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
     >
-      <div className="h-46">
+      <div className="h-56 sm:h-64 xl:h-76">
         <Carousel slide={false}>
           {ridesWithPhoto.map(
             (ride, index) =>
               ride.photo && (
-                <div className="">
+                <div className="relative">
                   <img
                     className="rounded-t-lg"
                     alt={`photo of ${getOrdinalNumber(ride.number)} ride`}
                     key={index}
                     src={ride.photo.url}
                   />
-                  <p className="top-0 w-full text-center bg-white absoulte">
+                  <p className="absolute top-0 w-full font-bold text-center bg-white dark:bg-gray-800 opacity-70">
                     {ride.photo_caption}
                   </p>
                 </div>
@@ -73,12 +73,12 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
             </Tooltip>
           </span>
         </div>
-        <div className="flex items-center mb-4 overflow-x-scroll gap-2 dark:text-white">
+        <div className="flex items-center mb-4 gap-2 dark:text-white">
           {tagsForRides(trip.rides)}
         </div>
 
         <div className="flex items-center justify-between mb-2 align gap-2">
-          <Link href={tripUrl(trip)}>
+          <Link href={`/trips/${trip.id}`}>
             <a>
               From {trip.origin?.city} to {trip.destination?.city}
             </a>
@@ -141,7 +141,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
               </>
             )}
           </div>
-          <Link href={tripUrl(trip)}>
+          <Link href={`/trips/${trip.id}`}>
             <a className="inline-flex items-center font-medium no-underline text-primary-600 dark:text-primary-500 hover:underline">
               Read more
               <RightArrow />

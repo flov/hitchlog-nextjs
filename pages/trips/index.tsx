@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import { Formik } from 'formik';
 import SearchForm from '../../src/components/SearchForm';
 import { Pagination } from 'flowbite-react';
+import { FaList, FaMap } from 'react-icons/fa';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const res = await getTripsWithQuery({ q: query.q as Record<string, any> });
@@ -66,6 +67,16 @@ const Index: FC<{
       { shallow: true }
     );
     setPage(p);
+    const fetchTrips = async () => {
+      setIsLoading(true);
+      const res = await getTripsWithQuery({
+        q: Object.assign(query),
+        page,
+      });
+      setTripsData(res);
+      setIsLoading(false);
+    };
+    fetchTrips();
   };
 
   useEffect(() => {
@@ -76,7 +87,7 @@ const Index: FC<{
           lat: trips[0]?.origin?.lat as number,
           lng: trips[0]?.origin?.lng as number,
         },
-        zoom: 7,
+        zoom: 6,
       });
       setMap(createdMap);
 
@@ -117,92 +128,108 @@ const Index: FC<{
     }
   }, []);
 
-  useEffect(() => {
-    const fetchTrips = async () => {
-      setIsLoading(true);
-      const res = await getTripsWithQuery({
-        q: Object.assign(query),
-        page,
-      });
-      setTripsData(res);
-      setIsLoading(false);
-    };
-    fetchTrips();
-  }, [page]);
+  const [isShowingMap, setIsShowingMap] = useState(false);
 
   return (
     <>
-      <div className="h-48 lg:h-96" ref={ref} id="map">
-        {trips.map((trip, index) => (
-          <OverlayContainer
-            map={map}
-            position={{
-              lat: trip?.origin?.lat as number,
-              lng: trip?.origin?.lng as number,
-            }}
-            key={`uniqueKey${index}`}
-          >
-            <OverlayBubble trip={trip} />
-          </OverlayContainer>
-        ))}
-      </div>
-
-      <div className="p-4 mx-auto max-w-7xl">
-        <Formik
-          onSubmit={(values, { setSubmitting }) => {
-            setQuery(Object.assign(query, values));
-            getTripsWithQuery({ q: Object.assign(query, values) })
-              .then((res: AxiosResponse) => {
-                router.push(
-                  {
-                    pathname: '/trips',
-                    query: { q: JSON.stringify(res.config.params.q) },
-                  },
-                  undefined,
-                  { shallow: true }
-                );
-
-                setTripsData(res);
-              })
-              .catch((err) => {
-                console.log(err);
-              })
-              .finally(() => {
-                setSubmitting(false);
-              });
-          }}
-          initialValues={{ ...Object.assign(query, q) }}
-          component={(p) => <SearchForm {...p} />}
-        />
-
-        <div className="flex justify-center w-full mb-4 itmes-center">
-          <Pagination
-            onPageChange={handlePageChange}
-            currentPage={page}
-            showIcons={true}
-            layout="navigation"
-            totalPages={totalPages}
-          />
-        </div>
-
-        {isLoading ? (
-          <div className="p-8 grid place-items-center">
-            <PuffLoader color="blue" />
-          </div>
+      <div
+        className="fixed z-10 flex items-center justify-center p-2 cursor-pointer gap-2 left-1/2 fixed-button"
+        onClick={() => setIsShowingMap(!isShowingMap)}
+      >
+        {isShowingMap ? (
+          <>
+            <FaList />
+            List
+          </>
         ) : (
-          <ListTrips map={map} trips={trips} />
+          <>
+            <FaMap />
+            Map
+          </>
         )}
-
-        <div className="flex justify-center w-full mb-4 itmes-center">
-          <Pagination
-            onPageChange={handlePageChange}
-            currentPage={page}
-            showIcons={true}
-            layout="navigation"
-            totalPages={totalPages}
-          />
-        </div>
       </div>
+
+      <div className={isShowingMap ? 'full-screen' : 'h-0'} ref={ref} id="map">
+        {map &&
+          trips.map((trip, index) => (
+            <OverlayContainer
+              map={map}
+              position={{
+                lat: trip?.origin?.lat as number,
+                lng: trip?.origin?.lng as number,
+              }}
+              key={`uniqueKey${index}`}
+            >
+              <OverlayBubble trip={trip} />
+            </OverlayContainer>
+          ))}
+      </div>
+
+      {!isShowingMap && (
+        <div
+          id="listTrips"
+          className={`${
+            isShowingMap ? 'invisible' : 'display'
+          } mx-auto max-w-7xl`}
+        >
+          <div className="p-2 sm:p-4">
+            <Formik
+              onSubmit={(values, { setSubmitting }) => {
+                setQuery(Object.assign(query, values));
+                getTripsWithQuery({ q: Object.assign(query, values) })
+                  .then((res: AxiosResponse) => {
+                    router.push(
+                      {
+                        pathname: '/trips',
+                        query: { q: JSON.stringify(res.config.params.q) },
+                      },
+                      undefined,
+                      { shallow: true }
+                    );
+
+                    setTripsData(res);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  })
+                  .finally(() => {
+                    setSubmitting(false);
+                  });
+              }}
+              initialValues={{ ...Object.assign(query, q) }}
+              component={(p) => <SearchForm {...p} />}
+            />
+          </div>
+
+          <div className="flex justify-center w-full mb-4 itmes-center">
+            <Pagination
+              onPageChange={handlePageChange}
+              currentPage={page}
+              showIcons={true}
+              layout="table"
+              totalPages={totalPages}
+            />
+          </div>
+
+          {isLoading ? (
+            <div className="p-8 grid place-items-center">
+              <PuffLoader color="blue" />
+            </div>
+          ) : (
+            <ListTrips map={map} trips={trips} />
+          )}
+
+          <div className="flex justify-center w-full mb-4 itmes-center">
+            <Pagination
+              onPageChange={handlePageChange}
+              currentPage={page}
+              showIcons={true}
+              layout="navigation"
+              totalPages={totalPages}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };

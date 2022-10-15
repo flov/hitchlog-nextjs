@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'GT Walsheim Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Roboto'), url(/fonts/roboto.woff2) format('woff2');
+}
+
 html,
 body {
   padding: 0;
@@ -81,12 +89,16 @@ a:hover {
   color: #000;
 }
 
+.full-screen {
+  height: calc(100vh - 4rem);
+}
+
 * {
   box-sizing: border-box;
 }
 @media (min-width: 768px) {
   .md-full-screen {
-    height: calc(100vh - 8.6rem);
+    height: calc(100vh - 4.1rem);
   }
 }
 @media (min-width: 640px) {
@@ -110,6 +122,26 @@ a:hover {
 
 .image-shadow span {
   overflow: visible !important;
+}
+
+.fixed-button {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+  bottom: 30px;
+  left: 50%;
+  transform: translate(-50%);
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(12, 103, 118);
+  overflow: hidden;
+  z-index: 5;
+  box-shadow: rgb(0 0 0 / 4%) 0px 1px 6px, rgb(0 0 0 / 19%) 0px 5.5px 16px;
 }
 
 @media screen and (max-width: 767px) {
