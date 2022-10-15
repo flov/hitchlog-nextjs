@@ -37,7 +37,7 @@ export class AutocompleteDirectionsHandler {
   }
 
   route() {
-    if (!this.origin.placeId || !this.destination.placeId) {
+    if (!this.origin.place_id || !this.destination.place_id) {
       return;
     }
 
@@ -45,8 +45,8 @@ export class AutocompleteDirectionsHandler {
 
     this.directionsService.route(
       {
-        origin: { placeId: this.origin.placeId },
-        destination: { placeId: this.destination.placeId },
+        origin: { placeId: this.origin.place_id },
+        destination: { placeId: this.destination.place_id },
         travelMode: google.maps.TravelMode.DRIVING,
       },
       (response, status) => {
