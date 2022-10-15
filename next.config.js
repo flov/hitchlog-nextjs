@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['lh3.googleusercontent.com', 'www.gravatar.com', 'robohash.org'],
+    domains: [
+      'lh3.googleusercontent.com',
+      'www.gravatar.com',
+      'robohash.org',
+      's3-eu-west-1.amazonaws.com',
+    ],
   },
 };
 

@@ -100,7 +100,7 @@ a:hover {
 .card-grid {
   display: grid;
   grid-gap: theme(spacing.4);
-  grid-template-columns: repeat(auto-fit, minmax(385px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
   margin-bottom: theme(spacing.4);
 }
 

@@ -20,6 +20,7 @@ import {
 } from 'react-icons/fa';
 import { FiThumbsUp, FiUser } from 'react-icons/fi';
 import { capitalize, pluralize, removeDuplicates } from '.';
+import ExperienceCircle from '../components/helpers/ExperienceCircle';
 import {
   ExperienceKey,
   ExperiencesRecord,
@@ -142,7 +143,9 @@ export const experiencesForProfile = (experiences: ExperiencesRecord) => {
                 key={`${index}RideNumber`}
                 className="flex items-center space-x-3"
               >
-                <div className="relative">{experienceCircle(replaced_exp)}</div>
+                <div className="relative">
+                  <ExperienceCircle experience={replaced_exp} />
+                </div>
               </div>
             );
           })}
@@ -156,56 +159,6 @@ export const experiencesForProfile = (experiences: ExperiencesRecord) => {
     );
   });
 };
-
-export const experiencesForRides = (rides: Ride[]) => (
-  <>
-    {!!rides?.length && (
-      <Tooltip
-        content={`${rides.length} ${pluralize(
-          rides.length,
-          'ride'
-        )}: ${removeDuplicates(rides.map((x) => x.experience)).join(', ')}`}
-      >
-        <div className="flex items-center -space-x-3">
-          {rides.map((ride, index) => {
-            if (index >= 5) return;
-            return (
-              <div
-                key={`${index}RideNumber`}
-                className="flex items-center space-x-3"
-              >
-                <div className="relative">
-                  {experienceCircle(ride.experience)}
-                </div>
-              </div>
-            );
-          })}
-          {rides.length > 5 && (
-            <div className="relative flex items-center justify-center w-5 h-5 text-xs bg-gray-700 rounded-full font-sm ring-2 ring-gray-300 hover:bg-gray-600 dark:ring-gray-500 ">
-              {rides.length}
-            </div>
-          )}
-        </div>
-      </Tooltip>
-    )}
-  </>
-);
-
-export const experienceCircle = (experience: string | undefined, size = 5) => (
-  <div
-    className={`rounded-full dark:border-gray-600 border-gray-200 border h-${size} w-${size} ${
-      experience === 'very good'
-        ? 'bg-green-400'
-        : experience === 'good'
-        ? 'bg-green-500'
-        : experience === 'bad'
-        ? 'bg-red-400'
-        : experience === 'very bad'
-        ? 'bg-red-600'
-        : 'bg-yellow-300'
-    }`}
-  ></div>
-);
 
 export const showErrors = (errors: Record<string, string[]> | string) => {
   if (typeof errors === 'string') return errors;

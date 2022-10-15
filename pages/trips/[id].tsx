@@ -4,7 +4,7 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from 'next';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { displayRoute } from '../../src/utils/DirectionsHandler';
 import { HitchhikingTrip } from '../../src/components/HitchhikingTrip';
 import { Trip, User } from '../../src/types';
@@ -14,7 +14,10 @@ import { getTrip } from '../../src/db/trips';
 import { getUser } from '../../src/db/users';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const trip = await getTrip(params?.id);
+  // params.id looks like: ${id}-hitchhike-from-${fromCity}-to-${toCity}
+  const paramId = params?.id as string;
+  const id = paramId.split('-')[0];
+  const trip = await getTrip(id);
   if (!trip.data) {
     return {
       notFound: true,
