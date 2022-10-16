@@ -14,9 +14,29 @@ const VectorMap = dynamic(
 );
 
 const JVectorMap: FC<{ geomap: Geomap }> = ({ geomap }) => {
-  const { theme } = useTheme();
+  const { theme, systemTheme } = useTheme();
 
   if (!geomap || !Object.keys(geomap.distances).length) return null;
+  const fillColor =
+    theme === 'system'
+      ? systemTheme === 'dark'
+        ? '#fff'
+        : '#ccc'
+      : theme === 'dark'
+      ? '#fff'
+      : '#ccc';
+  const bgColor =
+    theme === 'system'
+      ? systemTheme === 'dark'
+        ? 'rgb(31 41 55)'
+        : '#fff'
+      : theme === 'dark'
+      ? 'rgb(31 41 55)'
+      : '#fff';
+
+  // theme === 'dark' ? 'rgb(31 41 55)' : 'rgb(255 255 255)'
+  // fill: theme === 'dark' ? '#FFF' : '#CCC',
+  // fill: theme === 'dark' ? '#3b82f6' : '#3b82f6',
 
   return (
     <>
@@ -26,13 +46,13 @@ const JVectorMap: FC<{ geomap: Geomap }> = ({ geomap }) => {
           map={worldMill}
           regionStyle={{
             initial: {
-              fill: theme === 'dark' ? '#FFF' : '#CCC',
+              fill: fillColor,
               fillOpacity: 1,
               stroke: 'none',
               strokeOpacity: 1,
             },
             hover: {
-              fill: theme === 'dark' ? '#3b82f6' : '#3b82f6',
+              fill: '#3b82f6',
               fillOpacity: 0.8,
               cursor: 'pointer',
             },
@@ -41,9 +61,7 @@ const JVectorMap: FC<{ geomap: Geomap }> = ({ geomap }) => {
             },
             selectedHover: {},
           }}
-          backgroundColor={
-            theme === 'dark' ? 'rgb(31 41 55)' : 'rgb(255 255 255)'
-          }
+          backgroundColor={bgColor}
           containerStyle={{
             width: '100%',
             height: '100%',
