@@ -1,31 +1,20 @@
 import { AxiosResponse } from 'axios';
-import { Button, Pagination } from 'flowbite-react';
+import { Alert, Button, Pagination } from 'flowbite-react';
 import { GetServerSideProps, NextPage } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PuffLoader } from 'react-spinners';
 import { useAuth } from '../../src/components/contexts/AuthContext';
+import VehiclesForProfile from '../../src/components/helpers/VehiclesForProfile';
 import JVectorMap from '../../src/components/JVectorMap';
 import { ListTrips } from '../../src/components/ListTrips';
+import ProfileStats from '../../src/components/users/ProfileStats';
 import { getTripsWithQuery } from '../../src/db/trips';
 import { fetchProfile, getGeomap } from '../../src/db/users';
 import { Geomap, Profile, Trip } from '../../src/types';
-import { capitalize, profilePicture } from '../../src/utils';
-import {
-  countryFlagsForProfile,
-  experiencesForProfile,
-  showCountryFlagForUser,
-  showHitchhikedKms,
-  showUserGender,
-  viewAverageSpeed,
-  viewAverageWaitingTime,
-  viewNumberOfComments,
-  viewNumberOfRides,
-  viewNumberOfStories,
-  viewNumberOfTrips,
-} from '../../src/utils/viewHelpers';
+import { capitalize } from '../../src/utils';
+import { experiencesForProfile } from '../../src/utils/viewHelpers';
 
 export const getServerSideProps: GetServerSideProps = async ({
   query,
@@ -115,11 +104,26 @@ const Show: NextPage<{
             )}
           </div>
 
+          {profile.number_of_trips == 0 && (
+            <div className="mt-2">
+              <Alert color="info">
+                <span className="font-medium">
+                  {capitalize(profile.username)} has not added any trips yet.
+                </span>
+              </Alert>
+            </div>
+          )}
+
           {profile.about_you && <p className="mt-2">{profile.about_you}</p>}
 
           {!!profile.experiences && (
             <div className="flex justify-between w-full mt-4">
               {experiencesForProfile(profile.experiences)}
+            </div>
+          )}
+          {!!profile.vehicles && (
+            <div className="flex justify-between w-full mt-4">
+              <VehiclesForProfile vehicles={profile.vehicles} />
             </div>
           )}
 
@@ -129,7 +133,7 @@ const Show: NextPage<{
             </div>
           )}
         </section>
-        <div className="w-full p-4 mb-16 border rounded-lg sm:max-w-xs dark:border-gray-700 dark:bg-gray-800">
+        <div className="w-full p-4 border rounded-lg sm:max-w-xs dark:border-gray-700 dark:bg-gray-800">
           <ProfileStats profile={profile} />
         </div>
       </div>
@@ -142,7 +146,7 @@ const Show: NextPage<{
             </h2>
           </div>
 
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-4 overflow-x-scroll">
             <Pagination
               onPageChange={handlePageChange}
               currentPage={page}
@@ -160,7 +164,7 @@ const Show: NextPage<{
               <ListTrips trips={trips} map={null} />
             </div>
           )}
-          <div className="flex justify-center my-4">
+          <div className="flex justify-center my-4 overflow-x-scroll">
             <Pagination
               onPageChange={handlePageChange}
               currentPage={page}
@@ -169,59 +173,6 @@ const Show: NextPage<{
               totalPages={totalPages}
             />
           </div>
-        </div>
-      )}
-    </>
-  );
-};
-
-const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
-  const { currentUser } = useAuth();
-  return (
-    <>
-      <div className="flex justify-center image-shadow">
-        <Image
-          className="rounded-full shadow shadow-lg"
-          alt="Profile picture"
-          width={128}
-          height={128}
-          src={profilePicture(profile.md5_email, 128)}
-        />
-      </div>
-      <div className="flex items-center justify-center mt-4 gap-2">
-        {capitalize(profile.username)} ({profile.age})
-        {showUserGender(profile.gender, 20)}
-        {showCountryFlagForUser(profile)}
-      </div>
-      <div className="flex items-center justify-center pt-2 gap-2">
-        {viewNumberOfTrips(profile.number_of_trips)}
-        {viewNumberOfRides(profile.number_of_rides)}
-        {viewNumberOfStories(profile.number_of_stories)}
-        {viewNumberOfComments(profile.number_of_comments)}
-      </div>
-      <div className="flex items-center justify-center pb-2 gap-2">
-        {viewAverageSpeed(profile.average_speed)}
-        {viewAverageWaitingTime(profile.average_waiting_time)}
-        {showHitchhikedKms(profile.hitchhiked_kms)}
-      </div>
-      <div className="grid grid-auto-fit gap-1">
-        {countryFlagsForProfile(profile.hitchhiked_countries)}
-      </div>
-      {profile.trustroots && (
-        <div className="mt-2">
-          Trustroots:{' '}
-          <a
-            className="text-primary-500"
-            href={
-              profile.trustroots.includes('http')
-                ? profile.trustroots
-                : `https://www.trustroots.org/profile/${profile.trustroots}`
-            }
-          >
-            {profile.trustroots.includes('http')
-              ? profile.trustroots.split('/').pop()
-              : profile.trustroots}
-          </a>
         </div>
       )}
     </>
