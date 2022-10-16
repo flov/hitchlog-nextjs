@@ -122,6 +122,19 @@ export function HitchhikingTrip({
                     <h1 className="2xl">{ride.title}</h1>
                   </Timeline.Title>
                   <Timeline.Body className="max-w-2xl mt-2">
+                    {ride.photo && (
+                      <a
+                        href={ride.photo.url}
+                        rel="noreferrer noopener"
+                        target="_blank"
+                        className="block mb-4"
+                      >
+                        <img
+                          alt={`photo of ${getOrdinalNumber(ride.number)} ride`}
+                          src={ride.photo.small.url}
+                        />
+                      </a>
+                    )}
                     {ride.story && <ReactMarkdown>{ride.story}</ReactMarkdown>}
                     {showEmbeddedYoutubeVideo(ride.youtube)}
                   </Timeline.Body>
