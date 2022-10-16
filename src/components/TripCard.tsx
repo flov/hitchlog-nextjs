@@ -38,7 +38,11 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
       onClick={centerMapToTrip}
       className="bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
     >
-      <div className="h-56 sm:h-64 xl:h-76">
+      <div
+        className={`h-56 sm:h-64 xl:h-76 ${
+          ridesWithPhoto.length === 0 && 'hidden'
+        }`}
+      >
         <Carousel slide={false}>
           {ridesWithPhoto.map(
             (ride, index) =>
