@@ -149,7 +149,42 @@ const Index: FC<{
         )}
       </div>
 
-      <div className={isShowingMap ? 'full-screen' : 'h-0'} ref={ref} id="map">
+      <Formik
+        onSubmit={(values, { setSubmitting }) => {
+          setQuery(Object.assign(query, values));
+          getTripsWithQuery({ q: Object.assign(query, values) })
+            .then((res: AxiosResponse) => {
+              router.push(
+                {
+                  pathname: '/trips',
+                  query: { q: JSON.stringify(res.config.params.q) },
+                },
+                undefined,
+                { shallow: true }
+              );
+
+              setTripsData(res);
+            })
+            .catch((err) => {
+              console.log(err);
+            })
+            .finally(() => {
+              setSubmitting(false);
+            });
+        }}
+        initialValues={{ ...Object.assign(query, q) }}
+        component={(p) => <SearchForm {...p} />}
+      />
+
+      <div
+        className={
+          isShowingMap
+            ? 'visible trip-map-full-screen animate-fadeIn'
+            : 'invisible animate-fadeOut'
+        }
+        ref={ref}
+        id="map"
+      >
         {map &&
           trips.map((trip, index) => (
             <OverlayContainer
@@ -165,71 +200,40 @@ const Index: FC<{
           ))}
       </div>
 
-      {!isShowingMap && (
-        <div
-          id="listTrips"
-          className={`${
-            isShowingMap ? 'invisible' : 'display'
-          } mx-auto max-w-7xl`}
-        >
-          <div className="p-2 sm:p-4">
-            <Formik
-              onSubmit={(values, { setSubmitting }) => {
-                setQuery(Object.assign(query, values));
-                getTripsWithQuery({ q: Object.assign(query, values) })
-                  .then((res: AxiosResponse) => {
-                    router.push(
-                      {
-                        pathname: '/trips',
-                        query: { q: JSON.stringify(res.config.params.q) },
-                      },
-                      undefined,
-                      { shallow: true }
-                    );
-
-                    setTripsData(res);
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  })
-                  .finally(() => {
-                    setSubmitting(false);
-                  });
-              }}
-              initialValues={{ ...Object.assign(query, q) }}
-              component={(p) => <SearchForm {...p} />}
-            />
-          </div>
-
-          <div className="flex justify-center w-full mb-4 itmes-center">
-            <Pagination
-              onPageChange={handlePageChange}
-              currentPage={page}
-              showIcons={true}
-              layout="table"
-              totalPages={totalPages}
-            />
-          </div>
-
-          {isLoading ? (
-            <div className="p-8 grid place-items-center">
-              <PuffLoader color="blue" />
-            </div>
-          ) : (
-            <ListTrips map={map} trips={trips} />
-          )}
-
-          <div className="flex justify-center w-full mb-4 itmes-center">
-            <Pagination
-              onPageChange={handlePageChange}
-              currentPage={page}
-              showIcons={true}
-              layout="navigation"
-              totalPages={totalPages}
-            />
-          </div>
+      <div
+        id="listTrips"
+        className={`${
+          isShowingMap ? 'hidden animate-FadeOut' : 'block animate-FadeIn'
+        } mx-auto max-w-7xl`}
+      >
+        <div className="flex justify-center w-full my-4 itmes-center">
+          <Pagination
+            onPageChange={handlePageChange}
+            currentPage={page}
+            showIcons={true}
+            layout="table"
+            totalPages={totalPages}
+          />
         </div>
-      )}
+
+        {isLoading ? (
+          <div className="p-8 grid place-items-center">
+            <PuffLoader color="blue" />
+          </div>
+        ) : (
+          <ListTrips map={map} trips={trips} />
+        )}
+
+        <div className="flex justify-center w-full my-4 itmes-center">
+          <Pagination
+            onPageChange={handlePageChange}
+            currentPage={page}
+            showIcons={true}
+            layout="navigation"
+            totalPages={totalPages}
+          />
+        </div>
+      </div>
     </>
   );
 };

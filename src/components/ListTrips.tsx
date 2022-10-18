@@ -9,7 +9,7 @@ export const ListTrips: FC<{
   return (
     <div className="mx-auto sm:px-4 max-w-7xl">
       {!!trips.length ? (
-        <div className="card-grid">
+        <div className="card-grid gap-2 sm:gap-4">
           {trips.map((trip) => (
             <TripCard trip={trip} map={map} key={trip.id} />
           ))}

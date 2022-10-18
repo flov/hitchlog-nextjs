@@ -3,7 +3,7 @@ export type Ride = {
   title?: string;
   story?: string;
   experience?: EXPERIENCES;
-  vehicle?: VEHICLES;
+  vehicle?: VEHICLE;
   waiting_time?: number;
   youtube?: string;
   gender?: GENDERS;
@@ -30,13 +30,7 @@ export type Thumb = {
 export type EXPERIENCES = 'very good' | 'good' | 'neutral' | 'bad' | 'very bad';
 export const Experiences = ['very good', 'good', 'neutral', 'bad', 'very bad'];
 
-export type VEHICLES =
-  | 'car'
-  | 'bus'
-  | 'truck'
-  | 'motorcycle'
-  | 'plane'
-  | 'boat';
+export type VEHICLE = 'car' | 'bus' | 'truck' | 'motorcycle' | 'plane' | 'boat';
 export const Vehicles = ['car', 'bus', 'truck', 'motorcycle', 'plane', 'boat'];
 
 export type GENDERS = 'male' | 'female' | 'mixed';

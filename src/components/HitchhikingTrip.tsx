@@ -16,6 +16,7 @@ import {
   countryFlagsForTrip,
   tagsForRides,
   tagsForRide,
+  showUserGender,
 } from '../utils/viewHelpers';
 import ReactMarkdown from 'react-markdown';
 import { User, EXPERIENCES, Ride, Trip } from '../types';
@@ -44,13 +45,14 @@ export function HitchhikingTrip({
           src={profilePicture(user.md5_email, 96)}
           alt={`${user?.username}'s profile picture'`}
         />
-        <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+        <span className="flex items-center mt-2 text-sm text-gray-500 gap-1 dark:text-gray-400">
           Hitchhiked {moment(departure).fromNow()} by{' '}
           <Link href={`/hitchhikers/${user.username}`}>
             <a className="font-semibold text-gray-900 dark:text-white">
               {user?.username}
             </a>
           </Link>
+          {showUserGender(user.gender)}
         </span>
 
         <div className="flex flex-col items-center justify-between text-gray-500">

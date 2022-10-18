@@ -45,7 +45,7 @@ const Login: FC = () => {
                     console.log(res);
                     setCurrentUser(res.data.user);
                     setError(null);
-                    addToast('You have successfully logged in');
+                    addToast('Welcome back!');
                     Cookies.set(
                       'authToken',
                       res.headers.authorization.split(' ')[1]

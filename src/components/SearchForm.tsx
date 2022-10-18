@@ -10,15 +10,16 @@ const SearchForm = ({
   values,
 }: FormikValues) => {
   return (
-    <Form className="flex justify-around sm:flex-row">
-      <div className="flex justify-between mb-2 gap-2">
+    <Form className="flex justify-around p-2 border dark:border-0 border-y-1 dark:bg-gray-900 sm:flex-row">
+      <div className="flex items-center justify-between gap-2">
         <Field name="rides_experience_eq">
           {({ field }: FormikValues) => (
             <div className="">
               <Select
+                sizing="sm"
                 id="rides_experience_eq"
                 name="rides_experience_eq"
-                {...field}
+                onChange={handleChange}
               >
                 <option value="">Experience</option>
                 {Experiences.map((experience) => (
@@ -81,10 +82,7 @@ const SearchForm = ({
             </div>
           )}
         </Field>
-      </div>
-
-      <div className="mb-4">
-        <Button type="submit" disabled={isSubmitting}>
+        <Button size="sm" type="submit" disabled={isSubmitting}>
           {isSubmitting ? (
             <div className="mr-2">
               <Spinner light />

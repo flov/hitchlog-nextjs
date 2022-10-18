@@ -7,6 +7,7 @@ import { Badge, Button, Carousel, Tooltip } from 'flowbite-react';
 import {
   countryFlagsForTrip,
   showEmbeddedYoutubeVideo,
+  showUserGender,
   tagsForRides,
   vehicleIconsForRides,
 } from '../utils/viewHelpers';
@@ -36,7 +37,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   return (
     <article
       onClick={centerMapToTrip}
-      className="bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
+      className="bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
     >
       <div
         className={`h-56 sm:h-64 xl:h-76 ${

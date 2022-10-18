@@ -36,6 +36,20 @@ module.exports = {
       serif: ['Merriweather', 'serif'],
     },
     extend: {
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+        fadeOut: {
+          '0%': { opacity: 1 },
+          '100%': { opacity: 0 },
+        },
+      },
+      animation: {
+        fadeIn: 'fadeIn 0.5s ease-in-out',
+        fadeOut: 'fadeOut 0.5s ease-in-out',
+      },
       colors: {
         primary: {
           50: '#eff6ff',
@@ -57,6 +71,8 @@ module.exports = {
         78: '19.5rem',
         80: '20rem',
         128: '32rem',
+        144: '36rem',
+        160: '40rem',
         '8xl': '96rem',
         '9xl': '128rem',
       },

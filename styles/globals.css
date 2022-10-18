@@ -89,8 +89,8 @@ a:hover {
   color: #000;
 }
 
-.full-screen {
-  height: calc(100vh - 4rem);
+.trip-map-full-screen {
+  height: calc(100vh - 8rem);
 }
 
 * {
@@ -111,9 +111,7 @@ a:hover {
 
 .card-grid {
   display: grid;
-  grid-gap: theme(spacing.4);
   grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
-  margin-bottom: theme(spacing.4);
 }
 
 .grid-auto-fit {
@@ -122,6 +120,10 @@ a:hover {
 
 .image-shadow span {
   overflow: visible !important;
+}
+
+.image-resize-edit-profile span {
+  width: 8rem !important;
 }
 
 .fixed-button {

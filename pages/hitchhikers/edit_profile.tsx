@@ -9,7 +9,8 @@ import { useToasts } from '../../src/components/contexts/ToastContext';
 import EditProfileForm from '../../src/components/EditProfileForm';
 import LoadingContainer from '../../src/components/LoadingContainer';
 import { authenticateToken, updateUser } from '../../src/db/users';
-import { showErrors } from '../../src/utils/viewHelpers';
+import { profilePicture, showErrors } from '../../src/utils/viewHelpers';
+import Image from 'next/image';
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
@@ -48,6 +49,26 @@ const EditProfile: NextPage = () => {
                 >
                   Back to profile
                 </Button>
+              </div>
+
+              <div className="flex">
+                <div className="mr-5 image-resize-edit-profile">
+                  <Image
+                    className="rounded-full shadow shadow-lg w-80"
+                    alt="Profile picture"
+                    width={128}
+                    height={128}
+                    src={profilePicture(currentUser.md5_email, 128)}
+                  />
+                </div>
+                <p>
+                  This is your gravatar image. Facebook and Google login is in
+                  development. Until then, in order to change your profile
+                  image, you can change your profile image with your email at{' '}
+                  <a className="text-blue-500" href="https://en.gravatar.com/">
+                    Gravatar.com
+                  </a>
+                </p>
               </div>
 
               {errors && (

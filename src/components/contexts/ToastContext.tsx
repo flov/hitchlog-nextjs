@@ -66,19 +66,17 @@ export const ToastsProvider: FC<{ children: JSX.Element }> = ({ children }) => {
       {mounted
         ? createPortal(
             <AnimatePresence>
-              <div className="absolute z-50 ml-auto mr-auto text-center bottom-4 right-4">
-                {toasts.map((toast) => (
-                  <motion.div
-                    key={toast.id}
-                    initial={{ opacity: 0, y: 50, scale: 0.3 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 20, scale: 0.5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <MyToast key={toast.id} {...toast} />
-                  </motion.div>
-                ))}
-              </div>
+              {toasts.map((toast) => (
+                <motion.div
+                  key={toast.id}
+                  initial={{ opacity: 0, y: 50, scale: 0.3 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <MyToast key={toast.id} {...toast} />
+                </motion.div>
+              ))}
             </AnimatePresence>,
             document.getElementById('portal') as Element
           )

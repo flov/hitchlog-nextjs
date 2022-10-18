@@ -32,7 +32,7 @@ const Login: FC<{ toggleModal: () => void }> = ({ toggleModal }) => {
         postLogin(values)
           .then((res) => {
             setCurrentUser(res.data.user);
-            addToast('You have successfully logged in');
+            addToast('Welcome back!');
             setError(null);
             Cookies.set('authToken', res.headers.authorization.split(' ')[1]);
             toggleModal();

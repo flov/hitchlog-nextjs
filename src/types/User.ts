@@ -1,4 +1,4 @@
-import { EXPERIENCES, VEHICLES } from './Ride';
+import { EXPERIENCES, VEHICLE } from './Ride';
 
 export type User = {
   id: number;
@@ -47,7 +47,7 @@ export type Profile = {
   age: number;
   md5_email: string;
   username: string;
-  gender: 'male' | 'female' | 'non-binary';
+  gender: 'male' | 'female' | 'non-binary' | null;
   about_you: string;
   languages: string;
   hitchhiked_countries: Record<string, number>;
@@ -65,7 +65,7 @@ export type Profile = {
   location: UserLocation;
   travelling_with: TravellingWith;
   experiences: ExperiencesRecord;
-  vehicles: VEHICLES;
+  vehicles: Record<VEHICLE, number>;
   age_of_trips: number[][];
 };
 

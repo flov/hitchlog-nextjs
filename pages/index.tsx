@@ -22,6 +22,7 @@ const Home: NextPage = () => {
           <p className="text-xl font-light font-bold text-gray-500 sm:text-xl dark:text-gray-400">
             Share your hitchhiking adventure with the world
           </p>
+          <div className="h-4 mt-8 bg-purple-500 rounded-full bg-gradient-to-l md:bg-gradient-to-r hover:bg-gradient-to-r from-purple-500 to-pink-500"></div>
         </div>
       </main>
     </>

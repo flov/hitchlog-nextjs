@@ -28,13 +28,13 @@ import {
   Ride,
   Trip,
   User,
-  VEHICLES,
+  VEHICLE,
 } from '../types';
 import { countries } from '../utils/country_codes';
 import { calculateTimeBetweenDates } from './calculateTimeBetweenDates';
 import { secondsToTime } from './secondsToTime';
 
-export const vehicleToIcon = (vehicle: VEHICLES) => {
+export const vehicleToIcon = (vehicle: VEHICLE) => {
   switch (vehicle) {
     case 'car':
       return <FaCarSide />;
@@ -316,19 +316,23 @@ export const showTripDuration = (
 };
 
 export const showUserGender = (
-  gender: 'male' | 'female' | 'non-binary',
+  gender: 'male' | 'female' | 'non-binary' | null,
   size = 16
-) => (
-  <Tooltip content={gender}>
-    {gender == 'male' ? (
-      <FaMars className="inline" size={size} />
-    ) : gender == 'female' ? (
-      <FaVenus className="inline" />
-    ) : (
-      <FaMarsStrokeV className="inline" />
-    )}
-  </Tooltip>
-);
+) => {
+  if (!gender) return null;
+
+  return (
+    <Tooltip content={gender}>
+      {gender == 'male' ? (
+        <FaMars className="inline" size={size} />
+      ) : gender == 'female' ? (
+        <FaVenus className="inline" />
+      ) : (
+        <FaMarsStrokeV className="inline" />
+      )}
+    </Tooltip>
+  );
+};
 
 export const viewNumberOfTrips = (tripsSize: number) => (
   <Tooltip content={`${tripsSize} ${pluralize(tripsSize, 'trip')}`}>
