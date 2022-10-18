@@ -70,9 +70,9 @@ export const TripForm = ({
           ))}
       </div>
       <div className="flex items-center justify-center gap-2">
-        {showTripGoogleDuration(values.googleDuration)}
         {showTripDistance(values.totalDistance)}
         {showTripDuration(values.departure, values.arrival)}
+        {showTripGoogleDuration(values.googleDuration)}
       </div>
       <div className="mt-4 grid grid-cols-2 gap-4">
         <div>
@@ -195,10 +195,10 @@ export const TripForm = ({
             value={values.travelling_with}
             name="travelling_with"
           >
-            <option value="0">Travelling by yourself</option>
-            <option value="1">Travelling with one other person</option>
-            <option value="2">Travelling with two other persons</option>
-            <option value="3">Travelling with three other persons</option>
+            <option value="0">yourself</option>
+            <option value="1">with one other person</option>
+            <option value="2">with two other persons</option>
+            <option value="3">with three other persons</option>
           </Select>
         </div>
 

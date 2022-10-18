@@ -7,7 +7,6 @@ import { Badge, Button, Carousel, Tooltip } from 'flowbite-react';
 import {
   countryFlagsForTrip,
   showEmbeddedYoutubeVideo,
-  showUserGender,
   tagsForRides,
   vehicleIconsForRides,
 } from '../utils/viewHelpers';
@@ -78,7 +77,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
             </Tooltip>
           </span>
         </div>
-        <div className="flex items-center mb-4 gap-2 dark:text-white">
+        <div className="flex items-center mb-4 overflow-x-auto gap-2 dark:text-white">
           {tagsForRides(trip.rides)}
         </div>
 

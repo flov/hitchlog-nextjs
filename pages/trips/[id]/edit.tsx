@@ -111,7 +111,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
         <title>Hitchlog - Edit Hitchiking Trip</title>
       </Head>
       <div className="w-full h-48 bg-gray-200" id="map"></div>
-      <div className="px-4 py-8 mx-auto max-w-7xl">
+      <div className="px-2 py-4 mx-auto sm:px-4 sm: max-w-7xl">
         <div className="flex flex-col gap-4 sm_grid-edit-trip">
           <div>
             <div className="flex items-center justify-between mb-4">
@@ -200,7 +200,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                                 </div>
                                 <Textarea
                                   name="story"
-                                  placeholder="Tell us your story with this ride"
+                                  placeholder="Tell us about what happened in this ride"
                                   value={values.story}
                                   onChange={handleChange}
                                   onBlur={handleBlur}
@@ -208,21 +208,6 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                                 />
                               </div>
 
-                              <div className="mt-2 ">
-                                <Label htmlFor="tag_list">
-                                  Tag your ride (seperated by comma)
-                                </Label>
-                                <div className="mt-2">
-                                  <TextInput
-                                    id="tag_list"
-                                    name="tag_list"
-                                    placeholder="Tag your ride"
-                                    type="text"
-                                    onChange={handleTagListChange}
-                                    onBlur={handleBlur}
-                                  />
-                                </div>
-                              </div>
                               <div className="mt-2">
                                 <div className="mb-2">
                                   <Label
@@ -263,6 +248,22 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                                     <option key={vehicle}>{vehicle}</option>
                                   ))}
                                 </Field>
+
+                                <div className="mt-2 ">
+                                  <Label htmlFor="tag_list">
+                                    Tag your ride (seperated by comma)
+                                  </Label>
+                                  <div className="mt-2">
+                                    <TextInput
+                                      id="tag_list"
+                                      name="tag_list"
+                                      placeholder="Tag your ride"
+                                      type="text"
+                                      onChange={handleTagListChange}
+                                      onBlur={handleBlur}
+                                    />
+                                  </div>
+                                </div>
 
                                 <div className="my-2">
                                   <Label

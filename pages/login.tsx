@@ -3,11 +3,13 @@ import { Field, Form, Formik, FormikHelpers, FormikValues } from 'formik';
 import { useRouter } from 'next/router';
 import { useAuth } from '../src/components/contexts/AuthContext';
 import Cookies from 'js-cookie';
-import { Alert, Label, TextInput } from 'flowbite-react';
+import { Alert, Button, Label, TextInput } from 'flowbite-react';
 import Link from 'next/link';
 import { FiKey, FiMail } from 'react-icons/fi';
 import { useToasts } from '../src/components/contexts/ToastContext';
 import { postLogin } from '../src/db/users';
+import { API_URL } from '../src/config';
+import { GoogleLogin } from 'react-google-login';
 
 type Values = {
   password: string;
@@ -25,6 +27,34 @@ const Login: FC = () => {
 
   const { addToast } = useToasts();
 
+  const signInWithGoogle = async () => {
+    try {
+      const res = await fetch(`${API_URL}/users/auth/google_oauth2`, {
+        method: 'post',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await res.json();
+      if (data.error) {
+        addToast(data.error, 'error');
+      } else {
+        addToast('Welcome back!');
+        setError(null);
+        Cookies.set('authToken', data.token);
+        router.push('/');
+      }
+    } catch (err) {
+      addToast('Something went wrong', 'error');
+      console.log(err);
+    }
+  };
+
+  const responseGoogle = (response: any) => {
+    console.log(response);
+  };
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md-full-screen lg:py-0">
@@ -33,7 +63,15 @@ const Login: FC = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
-
+            <Button onClick={signInWithGoogle}>Sign in with Google</Button>
+            <GoogleLogin
+              clientId="156839509266-atp3gkjpbid8kpgm7hs9fuo1cnh1hdu3.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={'single_host_origin'}
+            />
+            ,
             <Formik
               initialValues={initialValues}
               onSubmit={(
