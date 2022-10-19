@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import worldMill from '@react-jvectormap/world/worldMill.json';
 import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
@@ -62,10 +62,6 @@ const JVectorMap: FC<{ geomap: Geomap }> = ({ geomap }) => {
             selectedHover: {},
           }}
           backgroundColor={bgColor}
-          containerStyle={{
-            width: '100%',
-            height: '100%',
-          }}
           onRegionTipShow={(event, label, code) => {
             if (geomap.distances[code]) {
               // @ts-ignore
@@ -88,7 +84,6 @@ const JVectorMap: FC<{ geomap: Geomap }> = ({ geomap }) => {
               },
             ],
           }}
-          containerClassName="rounded"
         />
       </div>
     </>

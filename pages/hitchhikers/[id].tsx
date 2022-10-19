@@ -170,7 +170,7 @@ const Show: NextPage<{
             </div>
           ) : (
             <div className="px-4">
-              <ListTrips trips={trips} map={null} />
+              <ListTrips isLoading={isLoading} trips={trips} map={null} />
             </div>
           )}
           <div className="flex justify-center my-4 overflow-x-scroll">
