@@ -91,7 +91,7 @@ export const TripForm = ({
                       ? 'failure'
                       : touched.originName
                       ? 'success'
-                      : 'info'
+                      : 'gray'
                   }
                   {...field}
                 />
@@ -112,7 +112,7 @@ export const TripForm = ({
                 ? 'failure'
                 : touched.destinationName
                 ? 'success'
-                : 'info'
+                : 'gray'
             }
             onChange={handleChange}
             onBlur={handleBlur}
@@ -132,7 +132,7 @@ export const TripForm = ({
                 ? 'failure'
                 : touched.departure
                 ? 'success'
-                : 'primary'
+                : 'gray'
             }
             onChange={handleChange}
             onBlur={handleBlurArrivalDeparted}
@@ -152,7 +152,7 @@ export const TripForm = ({
                 ? 'failure'
                 : touched.arrival
                 ? 'success'
-                : 'primary'
+                : 'gray'
             }
             required={true}
             placeholder="arrival"
@@ -164,30 +164,41 @@ export const TripForm = ({
         </div>
         <div>
           <Label htmlFor="number_of_rides">Number of rides</Label>
-          <TextInput
+          <Select
             color={
               touched.number_of_rides && errors.number_of_rides
                 ? 'failure'
                 : touched.number_of_rides
                 ? 'success'
-                : 'primary'
+                : 'gray'
             }
             id="number_of_rides"
-            type="number"
             required={true}
             placeholder="Number of rides"
             onChange={handleChange}
             onBlur={handleBlur}
-            value={values.number_of_rides}
+            defaultValue={1}
             name="number_of_rides"
-          />
+          >
+            {new Array(30).fill(0).map((_, i) => (
+              <option key={i} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </Select>
         </div>
 
         <div>
           <Label htmlFor="travelling_with">Travelling with:</Label>
           <Select
             id="travelling_with"
-            color="info"
+            color={
+              touched.number_of_rides && errors.number_of_rides
+                ? 'failure'
+                : touched.number_of_rides
+                ? 'success'
+                : 'gray'
+            }
             defaultValue={0}
             required={true}
             onChange={handleChange}

@@ -73,7 +73,7 @@ const New: NextPage<{ google: GoogleAPI; ipLocation: IpLocation }> = ({
     originName: '',
     destinationName: '',
     travelling_with: '0',
-    number_of_rides: 0,
+    number_of_rides: 1,
     arrival: '',
     departure: '',
     totalDistance: 0,
