@@ -204,7 +204,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                                   value={values.story}
                                   onChange={handleChange}
                                   onBlur={handleBlur}
-                                  rows={4}
+                                  rows={7}
                                 />
                               </div>
 

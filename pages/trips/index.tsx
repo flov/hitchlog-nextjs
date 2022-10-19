@@ -216,13 +216,7 @@ const Index: FC<{
           />
         </div>
 
-        {isLoading ? (
-          <div className="p-8 grid place-items-center">
-            <PuffLoader color="blue" />
-          </div>
-        ) : (
-          <ListTrips map={map} trips={trips} />
-        )}
+        <ListTrips map={map} isLoading={isLoading} trips={trips} />
 
         <div className="flex justify-center w-full my-4 itmes-center">
           <Pagination
