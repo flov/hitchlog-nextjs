@@ -36,14 +36,14 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   return (
     <article
       onClick={centerMapToTrip}
-      className="bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
+      className="bg-white border border-gray-200 rounded-lg animate-fadeIn dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
     >
       <div
         className={`h-56 sm:h-64 xl:h-76 ${
           ridesWithPhoto.length === 0 && 'hidden'
         }`}
       >
-        <Carousel slide={false}>
+        <Carousel slideInterval={5000} slide={true}>
           {ridesWithPhoto.map(
             (ride, index) =>
               ride.photo && (

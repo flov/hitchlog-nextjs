@@ -88,7 +88,7 @@ export const ToastsProvider: FC<{ children: JSX.Element }> = ({ children }) => {
 const MyToast: FC<Toast> = ({ content, appearance, autoDismiss, remove }) => {
   useEffect(() => {
     if (autoDismiss) {
-      const timeoutHandle = setTimeout(remove, 5000);
+      const timeoutHandle = setTimeout(remove, 10000);
 
       return () => clearTimeout(timeoutHandle);
     }
