@@ -96,11 +96,20 @@ const Show: NextPage<{
               {capitalize(profile.username)}
             </h1>
             {profile.username === currentUser?.username && (
-              <Link passHref href={'/hitchhikers/edit_profile'}>
-                <a>
-                  <Button size="xs">Edit profile</Button>
-                </a>
-              </Link>
+              <>
+                <Link passHref href={'/hitchhikers/edit_profile'}>
+                  <a>
+                    <Button size="xs">Edit profile</Button>
+                  </a>
+                </Link>
+                <Link passHref href={'/trips/new'}>
+                  <a>
+                    <Button color="warning" size="xs">
+                      Log new trip
+                    </Button>
+                  </a>
+                </Link>
+              </>
             )}
           </div>
 
