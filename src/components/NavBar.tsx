@@ -105,7 +105,7 @@ const NavBar = () => {
           <Link href="/">Home</Link>
         </li>
         <li>
-          <Link href="/trips">Trips</Link>
+          <Link href='trips?q=%7B"rides_story_present"%3Atrue%7D'>Trips</Link>
         </li>
         <li>
           <Link href="/hitchhikers">Hitchhikers</Link>
