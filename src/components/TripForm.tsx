@@ -1,13 +1,10 @@
-import { Alert, Button, Label, Select, TextInput } from 'flowbite-react';
+import { Button, Label, Select, TextInput } from 'flowbite-react';
 import { Field, FormikValues } from 'formik';
 import moment from 'moment';
 import { ChangeEvent, MutableRefObject, useEffect, useRef } from 'react';
-import { secondsToHumanReadable } from '../utils';
 import { AutocompleteDirectionsHandler } from '../utils/AutocompleteDirectionsHandler';
-import { calculateTimeBetweenDates } from '../utils/calculateTimeBetweenDates';
 import {
   countryFlag,
-  showErrors,
   showTripDistance,
   showTripDuration,
   showTripGoogleDuration,
@@ -69,27 +66,29 @@ export const TripForm = ({
             </div>
           ))}
       </div>
+
       <div className="flex items-center justify-center gap-2">
         {showTripDistance(values.totalDistance)}
         {showTripDuration(values.departure, values.arrival)}
         {showTripGoogleDuration(values.googleDuration)}
       </div>
+
       <div className="mt-4 grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="originName">Starting point</Label>
-          <Field name="originName">
+          <Label htmlFor="from_name">Starting point</Label>
+          <Field name="from_name">
             {({ field }: FormikValues) => (
               <div className="">
                 <TextInput
-                  id="originName"
+                  id="from_name"
                   ref={originRef}
                   placeholder="Enter origin"
                   type="text"
                   required
                   color={
-                    touched.originName && errors.origin?.lat
+                    touched.from_name && errors.origin?.lat
                       ? 'failure'
-                      : touched.originName
+                      : touched.from_name
                       ? 'success'
                       : 'gray'
                   }
@@ -101,7 +100,7 @@ export const TripForm = ({
         </div>
 
         <div>
-          <Label htmlFor="destinationName">Destination</Label>
+          <Label htmlFor="to_name">Destination</Label>
           <TextInput
             ref={destinationRef}
             type="text"
@@ -110,14 +109,14 @@ export const TripForm = ({
             color={
               touched.destination && errors.destination?.lat
                 ? 'failure'
-                : touched.destinationName
+                : touched.to_name
                 ? 'success'
                 : 'gray'
             }
             onChange={handleChange}
             onBlur={handleBlur}
-            value={values.destinationName}
-            name="destinationName"
+            value={values.to_name}
+            name="to_name"
           />
         </div>
         <div>
@@ -140,9 +139,9 @@ export const TripForm = ({
             name="departure"
           />
         </div>
+
         <div>
           <Label htmlFor="arrival">Arrival</Label>
-
           <TextInput
             id="arrival"
             ref={arrivalRef}
@@ -162,6 +161,7 @@ export const TripForm = ({
             name="arrival"
           />
         </div>
+
         <div>
           <Label htmlFor="number_of_rides">Number of rides</Label>
           <Select
@@ -207,9 +207,9 @@ export const TripForm = ({
             name="travelling_with"
           >
             <option value="0">yourself</option>
-            <option value="1">with one other person</option>
-            <option value="2">with two other persons</option>
-            <option value="3">with three other persons</option>
+            <option value="1">one other person</option>
+            <option value="2">two other persons</option>
+            <option value="3">three other persons</option>
           </Select>
         </div>
 

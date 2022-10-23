@@ -195,14 +195,14 @@ export class AutocompleteDirectionsHandler {
       }
       if (!place.geometry?.location) return;
       this.location = place.geometry.location;
-      this.setFieldValue(`${mode}Name`, place.formatted_address);
       this.setFieldValue(mode, {
-        placeId: place.place_id,
+        place_id: place.place_id,
         lat,
         lng,
         city,
         country,
         country_code,
+        formatted_address: place.formatted_address,
       });
       this.route();
     });

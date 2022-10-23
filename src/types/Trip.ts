@@ -7,7 +7,7 @@ export type Location = {
   country?: string;
   country_code?: string;
   place_id: string | null;
-  name: string | null;
+  sanitized_address: string;
 };
 
 export type Timestamp = { seconds: number; nanoseconds: number };

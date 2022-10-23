@@ -11,7 +11,7 @@ export const ListTrips: FC<{
   return (
     <div className="mx-auto max-w-7xl">
       {!!trips.length ? (
-        <div className="card-grid gap-2 sm:gap-4">
+        <div className="card-grid gap-2 sm:px-4 sm:gap-4">
           {isLoading
             ? new Array(12).fill(0).map((_, index) => <Skeleton key={index} />)
             : trips.map((trip) => (

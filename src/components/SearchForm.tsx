@@ -3,12 +3,7 @@ import { Field, Form, FormikValues } from 'formik';
 import { FaCamera, FaScroll, FaVideo } from 'react-icons/fa';
 import { Experiences } from '../types';
 
-const SearchForm = ({
-  handleChange,
-  submitForm,
-  isSubmitting,
-  values,
-}: FormikValues) => {
+const SearchForm = ({ handleChange, isSubmitting }: FormikValues) => {
   return (
     <Form className="flex justify-around p-2 border dark:border-0 border-y-1 dark:bg-gray-900 sm:flex-row">
       <div className="flex items-center justify-between gap-2">

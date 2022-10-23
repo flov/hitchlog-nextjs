@@ -2,7 +2,12 @@ import { Badge, Card, Timeline, Tooltip } from 'flowbite-react';
 import moment from 'moment';
 import Image from 'next/image';
 import { BsArrowRight } from 'react-icons/bs';
-import { experienceToColor, getOrdinalNumber, profilePicture } from '../utils';
+import {
+  capitalize,
+  experienceToColor,
+  getOrdinalNumber,
+  profilePicture,
+} from '../utils';
 import {
   showAgeAtTrip,
   showNumberOfRides,
@@ -49,7 +54,7 @@ export function HitchhikingTrip({
           Hitchhiked {moment(departure).fromNow()} by{' '}
           <Link href={`/hitchhikers/${user.username}`}>
             <a className="font-semibold text-gray-900 dark:text-white">
-              {user?.username}
+              {capitalize(user?.username)}
             </a>
           </Link>
           {showUserGender(user.gender)}
@@ -79,12 +84,10 @@ export function HitchhikingTrip({
           {showNumberOfStories(trip.rides)}
         </div>
 
-        {trip.origin.city && trip.destination.city && (
-          <h5 className="mt-2 text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-white">
-            {trip.origin?.city} <BsArrowRight className="inline" />{' '}
-            {trip.destination?.city}
-          </h5>
-        )}
+        <h5 className="mt-2 text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-white">
+          {trip.origin.sanitized_address} <BsArrowRight className="inline" />{' '}
+          {trip.destination.sanitized_address}
+        </h5>
       </div>
       <div className="p-4">
         <Timeline>
@@ -120,9 +123,7 @@ export function HitchhikingTrip({
                       )}
                     </div>
                   </Timeline.Time>
-                  <Timeline.Title className="mt-3">
-                    <h1 className="2xl">{ride.title}</h1>
-                  </Timeline.Title>
+                  <Timeline.Title className="mt-3">{ride.title}</Timeline.Title>
                   <Timeline.Body className="max-w-2xl mt-2">
                     {ride.photo && (
                       <a
@@ -135,6 +136,11 @@ export function HitchhikingTrip({
                           alt={`photo of ${getOrdinalNumber(ride.number)} ride`}
                           src={ride.photo.small.url}
                         />
+                        {ride.photo_caption && (
+                          <p className="text-gray-500 text-md dark:text-gray-400">
+                            {ride.photo_caption}
+                          </p>
+                        )}
                       </a>
                     )}
                     {ride.story && <ReactMarkdown>{ride.story}</ReactMarkdown>}

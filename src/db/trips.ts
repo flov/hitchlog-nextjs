@@ -65,7 +65,6 @@ export const createTrip = (payload: any) => {
 export const deleteTrip = (id: number) => {
   return axios.delete(`${API_URL}/trips/${id}`, {
     headers: {
-      'Content-Type': 'application/json',
       Accept: 'application/json',
       Authorization: `Bearer ${Cookies.get('authToken')}`,
     },
@@ -73,15 +72,11 @@ export const deleteTrip = (id: number) => {
 };
 
 export const updateRide = (payload: any) => {
-  return axios.patch(
-    `${API_URL}/rides/${payload.id}`,
-    { ride: payload },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: `Bearer ${Cookies.get('authToken')}`,
-      },
-    }
-  );
+  return axios.patch(`${API_URL}/rides/${payload.id}`, payload, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Accept: 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
+    },
+  });
 };

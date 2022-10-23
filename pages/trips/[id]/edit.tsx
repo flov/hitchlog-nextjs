@@ -1,4 +1,12 @@
-import { Accordion, Button, Label, Textarea, TextInput } from 'flowbite-react';
+import {
+  Accordion,
+  Button,
+  FileInput,
+  Label,
+  Spinner,
+  Textarea,
+  TextInput,
+} from 'flowbite-react';
 import { Field, Form, Formik } from 'formik';
 import {
   GetServerSideProps,
@@ -50,6 +58,8 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
   const [rides, setRides] = useState<Ride[]>(trip?.rides);
   const { addToast } = useToasts();
 
+  console.log(rides);
+
   useEffect(() => {
     if (currentUser?.id !== trip.user_id) {
       addToast('You are not authorized to edit this trip', 'error');
@@ -84,6 +94,16 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
     trip.user_id,
   ]);
 
+  const setRidesFromPayload = (payload: Ride) => {
+    const newRides = rides.map((ride) => {
+      if (ride.id === payload.id) {
+        return payload;
+      }
+      return ride;
+    });
+    setRides(newRides);
+  };
+
   const changeRides = (id: string | number, name: string, value: any) => {
     const rideIndex = rides.findIndex((ride: Ride) => ride.id === id);
     let newRides = [...rides];
@@ -98,7 +118,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
 
   const handleDeleteTrip = () => {
     if (window.confirm('Are you sure you want to delete this trip?')) {
-      deleteTrip(trip.id).then((res) => {
+      deleteTrip(trip.id).then(() => {
         addToast('Trip deleted successfully');
         router.push('/hitchhikers/' + currentUser?.id);
       });
@@ -116,7 +136,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
           <div>
             <div className="flex items-center justify-between mb-4">
               <h1 className="text-xl">Edit Trip</h1>
-              <Button size="sm" onClick={handleDeleteTrip} color="failure">
+              <Button size="xs" onClick={handleDeleteTrip} color="failure">
                 Delete trip
               </Button>
             </div>
@@ -137,12 +157,15 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                           experience: ride.experience,
                           tag_list: ride.tags.join(', '),
                           youtube: ride.youtube,
+                          photo_caption: ride.photo_caption,
                         }}
                         onSubmit={(values, { setSubmitting }) => {
+                          setSubmitting(true);
                           updateRide(values)
                             .then((res) => {
                               window.confetti();
                               addToast('Ride updated successfully');
+                              setRidesFromPayload(res.data);
                             })
                             .catch((err) => {
                               addToast(
@@ -150,16 +173,16 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                                 'error'
                               );
                               console.log(err);
-                            });
-                          setSubmitting(false);
+                            })
+                            .finally(() => setSubmitting(false));
                         }}
                       >
                         {({
-                          handleSubmit,
                           handleChange,
                           handleBlur,
                           values,
                           isSubmitting,
+                          setFieldValue,
                         }) => {
                           const handleTagListChange = (e: ChangeEvent<any>) => {
                             handleChange(e);
@@ -182,7 +205,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                           };
 
                           return (
-                            <Form onSubmit={handleSubmit}>
+                            <Form encType="multipart/form-data" method="PATCH">
                               <div className="mb-2">
                                 <Label htmlFor="title" value="Title" />
                               </div>
@@ -196,17 +219,60 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                               />
                               <div className="mt-2">
                                 <div className="mb-2">
-                                  <Label htmlFor="story" value="My Story" />
+                                  <Label
+                                    htmlFor="story"
+                                    value="My Story (markdown)"
+                                  />
                                 </div>
                                 <Textarea
                                   name="story"
                                   placeholder="Tell us about what happened in this ride"
                                   value={values.story}
-                                  onChange={handleChange}
+                                  onChange={handleOnChange}
                                   onBlur={handleBlur}
                                   rows={7}
                                 />
                               </div>
+
+                              <div className="block mb-2">
+                                <Label htmlFor="photo" value="Upload photo" />
+                              </div>
+
+                              <FileInput
+                                id="photo"
+                                helperText="A photo of your ride gives a good impression of your experience"
+                                name="photo"
+                                onChange={(
+                                  event: ChangeEvent<HTMLInputElement>
+                                ) => {
+                                  if (event.currentTarget.files) {
+                                    setFieldValue(
+                                      'photo',
+                                      event.currentTarget.files[0]
+                                    );
+                                  }
+                                }}
+                                onBlur={handleBlur}
+                              />
+
+                              {values.photo && (
+                                <>
+                                  <div className="mb-2">
+                                    <Label
+                                      htmlFor="photo_caption"
+                                      value="Photo caption"
+                                    />
+                                  </div>
+                                  <TextInput
+                                    type="text"
+                                    placeholder="Say something about this photo"
+                                    onChange={handleOnChange}
+                                    onBlur={handleBlur}
+                                    value={values.photo_caption}
+                                    name="photo_caption"
+                                  />
+                                </>
+                              )}
 
                               <div className="mt-2">
                                 <div className="mb-2">
@@ -297,7 +363,16 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
 
                               <div className="mt-4">
                                 <Button disabled={isSubmitting} type="submit">
-                                  Save Ride
+                                  {isSubmitting ? (
+                                    <>
+                                      <div className="mr-2">
+                                        <Spinner size="sm" light />
+                                      </div>
+                                      Saving...
+                                    </>
+                                  ) : (
+                                    'Save Ride'
+                                  )}
                                 </Button>
                               </div>
                             </Form>
