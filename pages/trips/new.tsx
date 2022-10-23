@@ -84,7 +84,7 @@ const New: NextPage<{ google: GoogleAPI; ipLocation: IpLocation }> = ({
     const payload = {
       trip: values,
     };
-    const t = createTrip(payload)
+    createTrip(payload)
       .then((res) => {
         router.push(`/trips/${res.data.id}/edit`);
         return res.data;

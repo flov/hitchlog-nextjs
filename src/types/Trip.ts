@@ -14,6 +14,7 @@ export type Timestamp = { seconds: number; nanoseconds: number };
 
 export type Trip = {
   id: number | string;
+  to_param: string;
   arrival: Date;
   departure: Date;
   created_at: Date;

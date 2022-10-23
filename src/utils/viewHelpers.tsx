@@ -161,15 +161,19 @@ export const experiencesForProfile = (experiences: ExperiencesRecord) => {
 };
 
 export const showErrors = (errors: Record<string, string[]> | string) => {
-  if (typeof errors === 'string') return errors;
-  if (Object.keys(errors).length === 0) return errors;
-  return Object.keys(errors).map((key) => (
-    <ul key={key}>
-      <li>
-        {key}: {errors[key]?.join(' ')}{' '}
-      </li>
-    </ul>
-  ));
+  if (typeof errors === 'string') return <>errors</>;
+  if (Object.keys(errors).length === 0) return null;
+  return (
+    <>
+      {Object.keys(errors).map((key) => (
+        <ul key={key}>
+          <li>
+            {key}: {errors[key]?.join(' ')}{' '}
+          </li>
+        </ul>
+      ))}
+    </>
+  );
 };
 
 export const showVehiclesForRides = (rides: Ride[]) =>

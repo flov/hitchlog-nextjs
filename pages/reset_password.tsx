@@ -1,9 +1,10 @@
 import axios from 'axios';
-import { Alert, Button, Label, TextInput } from 'flowbite-react';
+import { Alert, Button, TextInput } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useToasts } from '../src/components/contexts/ToastContext';
 import { API_URL } from '../src/config';
 import { showErrors } from '../src/utils/viewHelpers';
 
@@ -27,6 +28,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 const Reset: NextPage<{ token: string }> = ({ token }) => {
   const [errors, setErrors] = useState();
   const router = useRouter();
+  const { addToast } = useToasts();
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -38,10 +40,15 @@ const Reset: NextPage<{ token: string }> = ({ token }) => {
               onSubmit={(values) => {
                 axios
                   .put(`${API_URL}/users/password`, { user: { ...values } })
-                  .then((res) => {
+                  .then(() => {
                     router.push('/login');
                   })
                   .catch((error) => {
+                    addToast(
+                      error?.response?.data?.toString() ||
+                        'Something went wrong'
+                    );
+
                     setErrors(error?.response?.data);
                   });
               }}

@@ -157,6 +157,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                           experience: ride.experience,
                           tag_list: ride.tags.join(', '),
                           youtube: ride.youtube,
+                          photo: ride.photo,
                           photo_caption: ride.photo_caption,
                         }}
                         onSubmit={(values, { setSubmitting }) => {

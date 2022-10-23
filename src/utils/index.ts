@@ -119,18 +119,3 @@ export const secondsToHumanReadable = (seconds: number) => {
   if (minutes) array.push(`${minutes}m`);
   return array.join(' ');
 };
-
-export const tripUrl = (trip: Trip) => {
-  const from = trip.origin.city
-    ? trip.origin.city
-    : trip.origin.name
-    ? trip.origin.name
-    : `${trip.origin.lat},${trip.destination.lng}`;
-  const to = trip.destination.city
-    ? trip.destination.city
-    : trip.destination.name
-    ? trip.destination.name
-    : `${trip.destination.lat},${trip.destination.lng}`;
-
-  return `/trips/${trip.id}-hitchhike-from-${from}-to-${to}`;
-};

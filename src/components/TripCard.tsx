@@ -82,13 +82,13 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
         </div>
 
         <div className="flex items-center justify-between mb-2 align gap-2">
-          <Link href={`/trips/${trip.id}`}>
+          <Link href={`/trips/${trip.to_param}`}>
             <a>
               From {trip.origin?.city} to {trip.destination?.city}
             </a>
           </Link>
           {currentUser && currentUser.username === trip.user.username && (
-            <Link href={`/trips/${trip.id}/edit`} passHref>
+            <Link href={`/trips/${trip.to_param}/edit`} passHref>
               <Button size="xs">Edit</Button>
             </Link>
           )}
@@ -145,7 +145,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
               </>
             )}
           </div>
-          <Link href={`/trips/${trip.id}`}>
+          <Link href={`/trips/${trip.to_param}`}>
             <a className="inline-flex items-center font-medium no-underline text-primary-600 dark:text-primary-500 hover:underline">
               Read more
               <RightArrow />

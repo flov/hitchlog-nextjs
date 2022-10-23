@@ -5,7 +5,6 @@ import OverlayContainer from '../../src/components/OverlayContainer';
 import OverlayBubble from '../../src/components/OverlayBubble';
 import { Trip } from '../../src/types';
 import { ListTrips } from '../../src/components/ListTrips';
-import { PuffLoader } from 'react-spinners';
 import { getTripsWithQuery } from '../../src/db/trips';
 import LoadingContainer from '../../src/components/LoadingContainer';
 import { AxiosResponse } from 'axios';
