@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Button } from 'flowbite-react';
 import { useRouter } from 'next/router';
-import { FaMap } from 'react-icons/fa';
+import { FaMap, FaUsers } from 'react-icons/fa';
 import Link from 'next/link';
 
 const Home: NextPage = () => {
@@ -26,21 +26,31 @@ const Home: NextPage = () => {
           <p className="text-xl font-light font-bold text-gray-500 sm:text-xl dark:text-gray-400">
             Share your hitchhiking adventure with the world
           </p>
-          <div className="h-4 mt-8 bg-purple-500 rounded-full bg-gradient-to-l md:bg-gradient-to-r hover:bg-gradient-to-r from-purple-500 to-pink-500"></div>
+          <div className="h-2 mx-4 mt-8 bg-purple-500 rounded-full sm:h-4 bg-gradient-to-l md:bg-gradient-to-r hover:bg-gradient-to-r from-purple-500 to-pink-500"></div>
 
-          <div className="flex flex-col justify-center mt-6 gap-2 sm:flex-row">
+          <div className="flex flex-col justify-center p-4 mt-6 gap-2 sm:flex-row">
             <Link passHref href={'/register'}>
-              <Button>Get Started</Button>
+              <Button>Sign up</Button>
             </Link>
-            <Link passHref href={'/trips?q=%7B"rides_story_present"%3Atrue%7D'}>
-              <a>
+            <div className="flex justify-between sm:gap-2 gap-1">
+              <Link
+                passHref
+                href={'/trips?q=%7B"rides_story_present"%3Atrue%7D'}
+              >
                 <Button color="gray">
                   <div className="flex items-center gap-2">
                     <FaMap /> Explore Trips
                   </div>
                 </Button>
-              </a>
-            </Link>
+              </Link>
+              <Link passHref href={'/hitchhikers'}>
+                <Button color="gray">
+                  <div className="flex items-center gap-2">
+                    <FaUsers /> Explore Hitchhikers
+                  </div>
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
       </main>
