@@ -10,6 +10,14 @@ export const authenticateToken = async (token: string | undefined) =>
     },
   });
 
+export const confirmAccount = async (token: string) =>
+  axios.post(`${API_URL}/users/confirm`, {
+    confirmation_token: token,
+    headers: {
+      accept: 'application/json',
+    },
+  });
+
 export const getGeomap = async (id: string | number) =>
   axios.get(`${API_URL}/users/${id}/geomap`, {
     headers: {

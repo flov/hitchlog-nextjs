@@ -6,8 +6,7 @@ import { useRouter } from 'next/router';
 import React, { FC, useState } from 'react';
 import { object, string } from 'yup';
 import { API_URL } from '../src/config';
-import { FiKey, FiMail } from 'react-icons/fi';
-import { useToastContext } from 'flowbite-react/lib/esm/components/Toast/ToastContext';
+import { FiMail } from 'react-icons/fi';
 import { useToasts } from '../src/components/contexts/ToastContext';
 
 const UserSchema = object().shape({

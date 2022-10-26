@@ -14,10 +14,10 @@ import { getTrip } from '../../src/db/trips';
 import { getUser } from '../../src/db/users';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  // params.id looks like: ${id}-hitchhike-from-${fromCity}-to-${toCity}
+  // params.id looks like: hitchhike-from-${fromCity}-to-${toCity}-${id}
   const paramId = params?.id as string;
-  const id = paramId.split('-')[0];
-  const trip = await getTrip(id);
+  const idArray = paramId.split('-');
+  const trip = await getTrip(idArray[idArray.length - 1]);
   if (!trip.data) {
     return {
       notFound: true,

@@ -66,10 +66,22 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
       </h1>
 
       <div className="mt-2 mb-4">
+        <div className="mb-2 text-sm text-gray-700 dark:text-gray-400">
+          Shows only Hitchhikers who logged trips
+          <br />
+          Page{' '}
+          <span className="font-semibold text-gray-900 dark:text-white">
+            {page}
+          </span>{' '}
+          of&nbsp;
+          <span className="font-semibold text-gray-900 dark:text-white">
+            {props.totalPages}
+          </span>{' '}
+        </div>
         <Pagination
           onPageChange={handlePageChange}
           currentPage={page}
-          layout="table"
+          layout="navigation"
           showIcons={true}
           totalPages={props.totalPages}
         />

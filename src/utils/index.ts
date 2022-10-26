@@ -119,3 +119,9 @@ export const secondsToHumanReadable = (seconds: number) => {
   if (minutes) array.push(`${minutes}m`);
   return array.join(' ');
 };
+
+export const objectToString = (obj: any) => {
+  return Object.entries(obj)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(' ');
+};
