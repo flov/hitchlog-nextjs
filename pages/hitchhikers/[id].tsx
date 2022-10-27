@@ -86,16 +86,17 @@ const Show: NextPage<{
   };
 
   const { currentUser } = useAuth();
+  const isOwner = profile.username === currentUser?.username;
 
   return (
     <>
-      <div className="flex flex-col-reverse items-start justify-center max-w-5xl px-6 pt-8 mx-auto sm:flex-row sm:gap-8 gap-4">
+      <div className="flex flex-col-reverse items-start justify-center max-w-5xl px-4 pt-4 mx-auto sm:flex-row gap-4">
         <section className="w-full p-6 border rounded-lg dark:bg-gray-800 dark:border-gray-700">
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
               {capitalize(profile.username)}
             </h1>
-            {profile.username === currentUser?.username && (
+            {isOwner && (
               <>
                 <Link passHref href={'/hitchhikers/edit_profile'}>
                   <a>
@@ -117,7 +118,14 @@ const Show: NextPage<{
             <div className="mt-2">
               <Alert color="info">
                 <span className="font-medium">
-                  {capitalize(profile.username)} has not added any trips yet.
+                  {isOwner ? 'You have' : `${capitalize(profile.username)} has`}{' '}
+                  not logged any trips yet.
+                  {isOwner && (
+                    <>
+                      <br />
+                      Log your first trip by clicking the button above.
+                    </>
+                  )}
                 </span>
               </Alert>
             </div>
