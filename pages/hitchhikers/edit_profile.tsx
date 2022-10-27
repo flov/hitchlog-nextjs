@@ -51,7 +51,7 @@ const EditProfile: NextPage = () => {
                 </Button>
               </div>
 
-              <div className="flex">
+              <div className="flex items-center">
                 <div className="mr-5 image-resize-edit-profile">
                   <Image
                     className="rounded-full shadow shadow-lg w-80"
@@ -86,8 +86,11 @@ const EditProfile: NextPage = () => {
                     .then((response) => {
                       setCurrentUser(response.data);
                       addToast('Profile updated successfully');
+                      window.confetti();
                       setErrors(null);
-                      router.push(`/hitchhikers/${currentUser.username}`);
+                      values.username !== currentUser.username
+                        ? window.location.reload()
+                        : router.push(`/hitchhikers/${currentUser.username}`);
                     })
                     .catch((error) => {
                       setErrors(error?.response?.data);
