@@ -20,25 +20,27 @@ export const getServerSideProps: GetServerSideProps = async ({
   query,
   params,
 }) => {
-  const profile = await fetchProfile(params?.id as string);
-  const geomap = await getGeomap(params?.id as string);
-  const page = query.page ? JSON.parse(query.page as string) : 1;
-
-  if (profile.data?.error) {
+  try {
+    const profile = await fetchProfile(params?.id as string);
+    const geomap = await getGeomap(params?.id as string);
+    const page = query.page ? JSON.parse(query.page as string) : 1;
+    const trips = await getTripsWithQuery({
+      q: { user_id_eq: profile.data.id },
+    });
+    return {
+      props: {
+        profile: JSON.parse(JSON.stringify(profile.data)),
+        trips: JSON.parse(JSON.stringify(trips.data.trips)),
+        geomap: JSON.parse(JSON.stringify(geomap.data)),
+        totalPages: JSON.parse(JSON.stringify(trips.data.total_pages)),
+        page,
+      },
+    };
+  } catch (error) {
     return {
       notFound: true,
     };
   }
-  const trips = await getTripsWithQuery({ q: { user_id_eq: profile.data.id } });
-  return {
-    props: {
-      profile: JSON.parse(JSON.stringify(profile.data)),
-      trips: JSON.parse(JSON.stringify(trips.data.trips)),
-      geomap: JSON.parse(JSON.stringify(geomap.data)),
-      totalPages: JSON.parse(JSON.stringify(trips.data.total_pages)),
-      page,
-    },
-  };
 };
 
 const Show: NextPage<{
@@ -138,7 +140,7 @@ const Show: NextPage<{
               {experiencesForProfile(profile.experiences)}
             </div>
           )}
-          {!!profile.vehicles && (
+          {!!Object.keys(profile.vehicles) && (
             <div className="flex justify-between w-full mt-4">
               <VehiclesForProfile vehicles={profile.vehicles} />
             </div>
