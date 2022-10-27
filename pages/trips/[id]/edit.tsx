@@ -58,8 +58,6 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
   const [rides, setRides] = useState<Ride[]>(trip?.rides);
   const { addToast } = useToasts();
 
-  console.log(rides);
-
   useEffect(() => {
     if (currentUser?.id !== trip.user_id) {
       addToast('You are not authorized to edit this trip', 'error');
@@ -173,7 +171,6 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
                                 'Ride not updated. Something went wrong',
                                 'error'
                               );
-                              console.log(err);
                             })
                             .finally(() => setSubmitting(false));
                         }}

@@ -59,7 +59,6 @@ export class AutocompleteDirectionsHandler {
         directions.geocoded_waypoints &&
         directions.geocoded_waypoints.length > 2
       ) {
-        console.log('directions changed');
         this.computeTotalDistance(directions);
       }
     });

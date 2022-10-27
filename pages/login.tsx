@@ -41,7 +41,6 @@ const Login: FC = () => {
               ) => {
                 postLogin(values)
                   .then((res) => {
-                    console.log(res);
                     setCurrentUser(res.data.user);
                     setError(null);
                     addToast('Welcome back!');
