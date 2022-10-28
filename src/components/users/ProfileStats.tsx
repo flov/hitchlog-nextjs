@@ -15,9 +15,13 @@ import {
   viewNumberOfStories,
   viewNumberOfTrips,
 } from '../../utils/viewHelpers';
+import Link from 'next/link';
+import { useAuth } from '../contexts/AuthContext';
+import { Button } from 'flowbite-react';
 
 const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
   const createdAt = moment(profile.created_at).format('MMM YYYY');
+  const { currentUser } = useAuth();
   return (
     <>
       <div className="flex justify-center image-shadow">
@@ -67,6 +71,14 @@ const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
               ? profile.trustroots.split('/').pop()
               : profile.trustroots}
           </a>
+        </div>
+      )}
+
+      {currentUser && currentUser.username !== profile.username && (
+        <div className="mt-4">
+          <Link passHref href={`/hitchhikers/${profile.username}/send_message`}>
+            <a className="text-blue-500 hover:underline">Send message</a>
+          </Link>
         </div>
       )}
     </>
