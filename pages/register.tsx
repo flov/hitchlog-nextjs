@@ -44,6 +44,9 @@ const Register: FC = () => {
                   })
                   .then((response) => {
                     window.confetti();
+                    addToast(
+                      'Welcome to the Hitchlog! Please confirm your email.'
+                    );
                     router.push('/login');
                   })
                   .catch((error) => {
