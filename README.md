@@ -1,6 +1,19 @@
-## Getting Started
+# The Hitchlog
 
-Add a Google maps api key with access to google maps and places to `.env.local`.
+Share your hitchhiking experience. Hitchhiking opens the door to
+encounters which would never happen otherwise.
+It is an adventourous and eventful way of getting from a to b.
+The hitchlog is a social network for hitchhikers that serves as
+a blog for them to document their experiences and encounters.
+
+## Tech Stack
+
+![techstack](/public/techstack.png)
+
+## Getting started
+
+`cp .env.rb.sample .env.rb`.
+edit .env.rb to contain the right api keys
 
 ```bash
 npm install
@@ -8,11 +21,4 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Backend
-
-In order for the hitchlog to work, you need to run the rails backend:
-Clone the ruby on rails backend
-[http://github.com/flov/hitchlog-api](http://github.com/flov/hitchlog-api) and 
-follow the README instructions
 
