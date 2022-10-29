@@ -33,7 +33,7 @@ const NavBar = () => {
   };
 
   return (
-    <Navbar fluid={true} rounded={true}>
+    <Navbar className="border-b border-gray-200 dark:border-0" fluid={true}>
       <Navbar.Brand href="/">
         <div className="ml-2 mr-3">
           <Image

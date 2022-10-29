@@ -22,8 +22,8 @@
     "axios": "^0.27.2",
     "canvas-confetti": "^1.5.1",
     "classnames": "^2.3.1",
-    "flowbite": "^1.5.2",
-    "flowbite-react": "^0.1.11",
+    "flowbite": "^1.5.3",
+    "flowbite-react": "^0.3.2",
     "formik": "^2.2.9",
     "framer-motion": "^7.5.3",
     "google-maps-react": "^2.0.6",
@@ -37,7 +37,6 @@
     "react": "18.2.0",
     "react-country-flag": "^3.0.2",
     "react-dom": "18.2.0",
-    "react-google-login": "^5.2.2",
     "react-icons": "^4.4.0",
     "react-markdown": "^8.0.3",
     "react-spinners": "^0.13.4",
@@ -52,6 +51,7 @@
     "@types/uuid": "^8.3.4",
     "eslint": "8.18.0",
     "eslint-config-next": "12.2.0",
+    "flowbite-typography": "^1.0.3",
     "typescript": "4.7.4"
   }
 }
