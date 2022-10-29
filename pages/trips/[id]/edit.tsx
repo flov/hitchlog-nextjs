@@ -139,11 +139,11 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
               </Button>
             </div>
 
-            <Accordion alwaysOpen={true}>
+            <Accordion>
               {trip?.rides &&
                 trip?.rides.map((ride: Ride, index: number) => (
                   <Accordion.Panel key={`ride${index}`}>
-                    <Accordion.Title>Ride {index + 1}</Accordion.Title>
+                    <Accordion.Title as="h6">Ride {index + 1}</Accordion.Title>
                     <Accordion.Content>
                       <Formik
                         initialValues={{

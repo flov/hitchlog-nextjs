@@ -9,6 +9,7 @@ import {
   showEmbeddedYoutubeVideo,
   tagsForRides,
   vehicleIconsForRides,
+  viewNumberOfRides,
 } from '../utils/viewHelpers';
 import { getOrdinalNumber, photoForUser, profilePicture } from '../utils';
 import Link from 'next/link';
@@ -69,6 +70,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
             <Badge color="info">Trip</Badge>
             <ExperiencesForRides rides={trip.rides} />
             {vehicleIconsForRides(trip.rides)}
+            {viewNumberOfRides(trip.rides.length)}
             {countryFlagsForTrip(trip)}
           </div>
           <span className="text-sm">
@@ -108,7 +110,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
                   </h2>
                 </div>
                 {ride.story && (
-                  <p className="mb-5 font-light text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 mb-5 font-light text-gray-500 dark:text-gray-400">
                     {ride.story}
                   </p>
                 )}

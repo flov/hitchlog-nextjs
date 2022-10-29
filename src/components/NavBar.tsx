@@ -64,12 +64,10 @@ const NavBar = () => {
                 />
               }
             >
-              <Dropdown.Header className="bg-slate-400">
+              <Dropdown.Header>
                 <span className="block text-sm">
                   <Link href={`/hitchhikers/${currentUser.username}`}>
-                    <a className="hover:underline">
-                      {capitalize(currentUser.username)}
-                    </a>
+                    {capitalize(currentUser.username)}
                   </Link>
                 </span>
                 <span className="block text-sm font-medium truncate">

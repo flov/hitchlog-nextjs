@@ -14,7 +14,6 @@ import {
   FaRoad,
   FaScroll,
   FaShip,
-  FaThumbsUp,
   FaTruck,
   FaVenus,
 } from 'react-icons/fa';
@@ -350,7 +349,7 @@ export const viewNumberOfTrips = (tripsSize: number) => (
 export const viewNumberOfRides = (ridesSize: number) => (
   <Tooltip content={`${ridesSize} ${pluralize(ridesSize, 'ride')}`}>
     <div className="flex items-center gap-1">
-      <FaThumbsUp className="inline " /> {ridesSize}
+      <FiThumbsUp className="inline " /> {ridesSize}
     </div>
   </Tooltip>
 );

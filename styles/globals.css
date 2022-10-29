@@ -28,13 +28,18 @@ h4,
 h5,
 h6 {
   font-family: 'Lexend', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
 }
-p {
-  font-family: 'Open Sans', sans-serif;
-}
-nav a {
-  text-decoration: none;
-}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+p { font-family: 'Open Sans', sans-serif; }
+nav a { text-decoration: none; }
+
 a:hover { 
   /* text-decoration: underline; */
 }
