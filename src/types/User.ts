@@ -1,4 +1,4 @@
-import { EXPERIENCES, VEHICLE } from './Ride';
+import { VEHICLE } from './Ride';
 
 export type User = {
   id: number;

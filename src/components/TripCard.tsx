@@ -104,9 +104,11 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
                     <ExperienceCircle experience={ride.experience} size={3} />
                   </Tooltip>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                    {ride.title
-                      ? ride.title
-                      : `${getOrdinalNumber(ride.number)} ride`}
+                    <Link href={`/trips/${trip.to_param}`}>
+                      {ride.title
+                        ? ride.title
+                        : `${getOrdinalNumber(ride.number)} ride`}
+                    </Link>
                   </h2>
                 </div>
                 {ride.story && (

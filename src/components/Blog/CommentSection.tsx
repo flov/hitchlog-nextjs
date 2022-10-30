@@ -1,9 +1,16 @@
-import React, { FC } from 'react';
+import { Button, Label, Textarea } from 'flowbite-react';
+import { Field, Form, Formik, FormikValues } from 'formik';
+import React, { FC, useEffect, useState } from 'react';
+import { createComment } from '../../db/comments';
 import { Comment } from '../../types/Comment';
 import CommentComponent from './Comment';
 
-const CommentSection: FC<{ comments: Comment[] }> = ({ post }) => {
-  const comments = post.comments;
+const CommentSection: FC<{ comments: Comment[] }> = (props) => {
+  const [comments, setComments] = useState(props.comments);
+
+  useEffect(() => {
+    setComments(props.comments);
+  }, [props.comments]);
 
   return (
     <div>
@@ -13,26 +20,42 @@ const CommentSection: FC<{ comments: Comment[] }> = ({ post }) => {
             Discussion ({comments.length})
           </h2>
         </div>
-        <form className="mb-6">
-          <div className="px-4 py-2 mb-4 bg-white border border-gray-200 rounded-lg rounded-t-lg dark:bg-gray-800 dark:border-gray-700">
-            <label htmlFor="comment" className="sr-only">
-              Your comment
-            </label>
-            <textarea
-              id="comment"
-              rows={6}
-              className="w-full px-0 text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
-              placeholder="Write a comment..."
-              required
-            ></textarea>
-          </div>
-          <button
-            type="submit"
-            className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-          >
-            Post comment
-          </button>
-        </form>
+        <Formik
+          onSubmit={(values, { setSubmitting }) => {
+            console.log(values);
+            createComment('1', values).then((response) => {
+              setComments([...comments, response.data]);
+            });
+            setSubmitting(false);
+          }}
+          initialValues={{ body: '' }}
+        >
+          {({ isSubmitting }) => (
+            <Form className="mb-6">
+              <div>
+                <Label htmlFor="body">Comment</Label>
+                <Field name="body">
+                  {({ field }: FormikValues) => (
+                    <div className="mb-4">
+                      <Textarea
+                        rows={8}
+                        id="body"
+                        name="body"
+                        placeholder="Write a comment..."
+                        type="text"
+                        required
+                        {...field}
+                      />
+                    </div>
+                  )}
+                </Field>
+              </div>
+              <Button size="xs" type="submit" disabled={isSubmitting}>
+                Post comment
+              </Button>
+            </Form>
+          )}
+        </Formik>
 
         {comments.map((comment: Comment) => (
           <CommentComponent key={comment.created_at} comment={comment} />

@@ -37,7 +37,7 @@ const EditProfileForm: FC<FormikValues> = ({
         }
       });
     }
-  });
+  }, []);
 
   return (
     <Form>
@@ -83,12 +83,13 @@ const EditProfileForm: FC<FormikValues> = ({
         </Field>
       </div>
       <div>
-        <Label htmlFor="about_you">About you</Label>
+        <Label htmlFor="about_you">About you (markdown)</Label>
         <Field name="about_you">
           {({ field }: FormikValues) => (
             <div className="my-2">
               <Textarea
                 rows={10}
+                value={values.about_you}
                 id="about_you"
                 name="about_you"
                 placeholder="Tell us about yourself"
