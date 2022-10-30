@@ -143,7 +143,11 @@ export function HitchhikingTrip({
                         )}
                       </a>
                     )}
-                    {ride.story && <ReactMarkdown>{ride.story}</ReactMarkdown>}
+                    <div className="w-full max-w-2xl mx-auto format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+                      {ride.story && (
+                        <ReactMarkdown>{ride.story}</ReactMarkdown>
+                      )}
+                    </div>
                     {showEmbeddedYoutubeVideo(ride.youtube)}
                   </Timeline.Body>
                 </Timeline.Content>
