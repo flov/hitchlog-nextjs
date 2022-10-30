@@ -4,6 +4,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { PuffLoader } from 'react-spinners';
 import { useAuth } from '../../src/components/contexts/AuthContext';
 import VehiclesForProfile from '../../src/components/helpers/VehiclesForProfile';
@@ -133,15 +134,19 @@ const Show: NextPage<{
             </div>
           )}
 
-          {profile.about_you && <p className="mt-2">{profile.about_you}</p>}
+          {profile.about_you && (
+            <div className="mt-4 format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+              <ReactMarkdown>{profile.about_you}</ReactMarkdown>
+            </div>
+          )}
 
           {!!profile.experiences && (
-            <div className="flex justify-between w-full mt-4">
+            <div className="flex justify-between w-full mt-8">
               {experiencesForProfile(profile.experiences)}
             </div>
           )}
-          {!!Object.keys(profile.vehicles) && (
-            <div className="flex justify-between w-full mt-4">
+          {profile.vehicles && !!Object.keys(profile.vehicles) && (
+            <div className="flex justify-between w-full mt-8">
               <VehiclesForProfile vehicles={profile.vehicles} />
             </div>
           )}
@@ -159,21 +164,23 @@ const Show: NextPage<{
 
       {trips.length > 0 && (
         <div id="ListTrips">
-          <div className="flex justify-center w-full my-2 sm:mt-4">
+          <div className="flex justify-center w-full my-4 sm:my-6">
             <h2 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
               {capitalize(profile.username)}&apos;s trips:
             </h2>
           </div>
 
-          <div className="flex justify-center mb-4 overflow-x-scroll">
-            <Pagination
-              onPageChange={handlePageChange}
-              currentPage={page}
-              showIcons={true}
-              layout="pagination"
-              totalPages={totalPages}
-            />
-          </div>
+          {totalPages > 1 && (
+            <div className="flex justify-center mb-4 overflow-x-scroll">
+              <Pagination
+                onPageChange={handlePageChange}
+                currentPage={page}
+                showIcons={true}
+                layout="pagination"
+                totalPages={totalPages}
+              />
+            </div>
+          )}
           {isLoading ? (
             <div className="p-8 h-96 grid place-items-center">
               <PuffLoader color="blue" />
