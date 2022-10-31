@@ -95,12 +95,12 @@ const Show: NextPage<{
     <>
       <div className="flex flex-col-reverse items-start justify-center max-w-5xl px-4 pt-4 mx-auto sm:flex-row gap-4">
         <section className="w-full p-6 border rounded-lg dark:bg-gray-800 dark:border-gray-700">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white">
+          <div className="flex items-center justify-between gap-2">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               {capitalize(profile.username)}
             </h1>
             {isOwner && (
-              <>
+              <div className="flex gap-2">
                 <Link passHref href={'/hitchhikers/edit_profile'}>
                   <a>
                     <Button size="xs">Edit profile</Button>
@@ -108,12 +108,12 @@ const Show: NextPage<{
                 </Link>
                 <Link passHref href={'/trips/new'}>
                   <a>
-                    <Button color="warning" size="xs">
+                    <Button color="purple" size="xs">
                       Log new trip
                     </Button>
                   </a>
                 </Link>
-              </>
+              </div>
             )}
           </div>
 
