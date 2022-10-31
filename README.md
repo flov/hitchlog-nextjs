@@ -1,10 +1,9 @@
 # The Hitchlog
 
-Share your hitchhiking experience. Hitchhiking opens the door to
-encounters which would never happen otherwise.
-It is an adventourous and eventful way of getting from a to b.
-The hitchlog is a social network for hitchhikers that serves as
-a blog for them to document their experiences and encounters.
+Hitchhiking is an eventful, adventurous and free way of travelling that opens
+the room for encounters which would otherwise never happen.
+The hitchlog is a platform for sharing your hitchhiking experiences.
+It's sort of a blog, but with a focus on hitchhiking.
 
 ## Tech Stack
 
