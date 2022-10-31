@@ -30,14 +30,13 @@ const EditProfileForm: FC<FormikValues> = ({
         setFieldValue('city', city);
         setFieldValue('country', country);
         setFieldValue('country_code', country_code);
-
         if (place.geometry) {
           setFieldValue('lat', place.geometry.location?.lat());
           setFieldValue('lng', place.geometry.location?.lng());
         }
       });
     }
-  }, []);
+  });
 
   return (
     <Form>

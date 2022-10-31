@@ -1,10 +1,10 @@
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
-import { Post } from '../../src/types/Post';
-import { getPost } from '../../src/db/posts';
+import { Post } from '../../../src/types/Post';
+import { getPost } from '../../../src/db/posts';
 import ReactMarkdown from 'react-markdown';
-import CommentSection from '../../src/components/Blog/CommentSection';
-import PostComponent from '../../src/components/Blog/Post';
+import CommentSection from '../../../src/components/Blog/CommentSection';
+import PostComponent from '../../../src/components/Blog/Post';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   try {
@@ -30,9 +30,11 @@ const BlogPost: NextPage<{ post: Post }> = ({ post }) => {
     <>
       <main className="pt-8 pb-16 bg-white lg:pt-16 lg:pb-24 dark:bg-gray-900">
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">
-          <article className="w-full max-w-2xl mx-auto format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+          <article className="w-full max-w-2xl mx-auto ">
             <PostComponent post={post} />
-            <ReactMarkdown>{post.body}</ReactMarkdown>
+            <div className="format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+              <ReactMarkdown>{post.body}</ReactMarkdown>
+            </div>
             <CommentSection comments={post.comments} />
           </article>
         </div>

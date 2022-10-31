@@ -14,7 +14,6 @@ import Image from 'next/image';
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
-    await authenticateToken(req.cookies.authToken);
     return {
       props: { googleMapsKey: process.env.GOOGLE_MAPS_KEY },
     };

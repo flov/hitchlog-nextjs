@@ -5,7 +5,7 @@ export type Post = {
   title: string;
   body: string;
   user_id: number;
-  tags: string[];
+  tag: string;
   updated_at: string;
   created_at: string;
   to_param: string;

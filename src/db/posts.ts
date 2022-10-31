@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { API_URL } from '../config';
 
 export const getPosts = async () =>
@@ -6,6 +7,24 @@ export const getPosts = async () =>
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+    },
+  });
+
+export const createPost = async (data: any) =>
+  axios.post(`${API_URL}/posts`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
+    },
+  });
+
+export const updatePost = async (id: number, data: any) =>
+  axios.put(`${API_URL}/posts/${id}`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
     },
   });
 
