@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { Post } from '../../../src/types/Post';
 import { getPost } from '../../../src/db/posts';
@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import CommentSection from '../../../src/components/Blog/CommentSection';
 import PostComponent from '../../../src/components/Blog/Post';
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getStaticProps: GetStaticProps = async ({ query }) => {
   try {
     const id = query.id;
     const post = await getPost(id as string);
