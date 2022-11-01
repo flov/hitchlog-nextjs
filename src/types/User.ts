@@ -11,6 +11,7 @@ export type User = {
   hitchhiked_kms: number;
   number_of_trips: number;
   number_of_rides: number;
+  number_of_stories: number;
   created_at: string;
   age: number;
   cs_user?: string;

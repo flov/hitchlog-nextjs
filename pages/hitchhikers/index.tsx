@@ -11,6 +11,7 @@ import {
   showNumberOfRides,
   viewNumberOfTrips,
   showUserGender,
+  viewNumberOfStories,
 } from '../../src/utils/viewHelpers';
 import { useRouter } from 'next/router';
 import { PuffLoader } from 'react-spinners';
@@ -126,6 +127,8 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
                     </div>
                     {showNumberOfRides(user.number_of_rides)}
                     {viewNumberOfTrips(user.number_of_trips)}
+                    {user.number_of_stories > 0 &&
+                      viewNumberOfStories(user.number_of_stories)}
                     {countryFlag(user.location?.country_code)}
                   </div>
                 </Table.Cell>
