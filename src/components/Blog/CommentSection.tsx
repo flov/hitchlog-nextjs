@@ -1,12 +1,15 @@
 import { Button, Label, Textarea } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import React, { FC, useEffect, useState } from 'react';
-import { createComment } from '../../db/comments';
+import { createPostComment } from '../../db/comments';
 import { Comment } from '../../types/Comment';
+import { objectToString } from '../../utils';
+import { useToasts } from '../contexts/ToastContext';
 import CommentComponent from './Comment';
 
-const CommentSection: FC<{ comments: Comment[] }> = (props) => {
+const CommentSection: FC<{ comments: Comment[]; postId: number }> = (props) => {
   const [comments, setComments] = useState(props.comments);
+  const { addToast } = useToasts();
 
   useEffect(() => {
     setComments(props.comments);
@@ -22,11 +25,17 @@ const CommentSection: FC<{ comments: Comment[] }> = (props) => {
         </div>
         <Formik
           onSubmit={(values, { setSubmitting }) => {
-            console.log(values);
-            createComment('1', values).then((response) => {
-              setComments([...comments, response.data]);
-            });
-            setSubmitting(false);
+            createPostComment(props.postId, values)
+              .then((response) => {
+                setComments([...comments, response.data]);
+              })
+              .catch((error) => {
+                console.log({ error });
+                addToast(objectToString(error.response.data), 'error');
+              })
+              .finally(() => {
+                setSubmitting(false);
+              });
           }}
           initialValues={{ body: '' }}
         >
@@ -38,7 +47,7 @@ const CommentSection: FC<{ comments: Comment[] }> = (props) => {
                   {({ field }: FormikValues) => (
                     <div className="mb-4">
                       <Textarea
-                        rows={8}
+                        rows={4}
                         id="body"
                         name="body"
                         placeholder="Write a comment..."
@@ -50,7 +59,7 @@ const CommentSection: FC<{ comments: Comment[] }> = (props) => {
                   )}
                 </Field>
               </div>
-              <Button size="xs" type="submit" disabled={isSubmitting}>
+              <Button size="md" type="submit" disabled={isSubmitting}>
                 Post comment
               </Button>
             </Form>
@@ -66,3 +75,6 @@ const CommentSection: FC<{ comments: Comment[] }> = (props) => {
 };
 
 export default CommentSection;
+function addToast(arg0: any, arg1: string) {
+  throw new Error('Function not implemented.');
+}

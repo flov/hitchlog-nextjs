@@ -181,15 +181,9 @@ const Show: NextPage<{
               />
             </div>
           )}
-          {isLoading ? (
-            <div className="p-8 h-96 grid place-items-center">
-              <PuffLoader color="blue" />
-            </div>
-          ) : (
-            <div className="px-4">
-              <ListTrips isLoading={isLoading} trips={trips} map={null} />
-            </div>
-          )}
+          <div className="px-4">
+            <ListTrips isLoading={isLoading} trips={trips} map={null} />
+          </div>
           <div className="flex justify-center my-4 overflow-x-scroll">
             <Pagination
               onPageChange={handlePageChange}

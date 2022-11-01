@@ -1,9 +1,9 @@
-import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
-import PostCard from '../src/components/Blog/PostCard';
-import { getPosts } from '../src/db/posts';
-import { Post } from '../src/types/Post';
+import PostCard from '../../src/components/Blog/PostCard';
+import { getPosts } from '../../src/db/posts';
+import { Post } from '../../src/types/Post';
 
 export const getStaticProps: GetStaticProps = async () => {
   try {

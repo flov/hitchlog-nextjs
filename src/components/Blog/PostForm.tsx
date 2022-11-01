@@ -13,7 +13,6 @@ const PostForm: FC<{ post?: Post }> = ({
   post,
 }: FormikValues) => {
   const { currentUser } = useAuth();
-  console.log(values.body);
   const postMock = {
     id: 1,
     user_id: 1,

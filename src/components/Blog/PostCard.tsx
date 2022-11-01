@@ -60,7 +60,7 @@ const PostCard: FC<{ post: Post }> = ({ post }) => {
           </Link>
         </h2>
         {currentUser && currentUser.id === 1 && (
-          <Link href={`/blog/${post.to_param}`}>
+          <Link href={`/blog/${post.to_param}/edit`}>
             <Button size="xs" className="mb-2">
               Edit
             </Button>

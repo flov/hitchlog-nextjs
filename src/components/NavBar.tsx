@@ -106,6 +106,9 @@ const NavBar = () => {
           <Link href='/trips?q=%7B"rides_story_present"%3Atrue%7D'>Trips</Link>
         </li>
         <li>
+          <Link href="/blog">Blog</Link>
+        </li>
+        <li>
           <Link href="/hitchhikers">Hitchhikers</Link>
         </li>
       </Navbar.Collapse>

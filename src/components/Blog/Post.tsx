@@ -14,8 +14,8 @@ const PostComponent: FC<{ post: Post }> = ({ post }) => {
               width={64}
               height={64}
               className="w-16 h-16 rounded-full"
-              src={post.author.avatar_url}
-              alt={post.author.name}
+              src={post.author?.avatar_url}
+              alt={post.author?.name}
             />
           </div>
           <div>
@@ -24,7 +24,7 @@ const PostComponent: FC<{ post: Post }> = ({ post }) => {
               rel="author"
               className="text-xl font-bold text-gray-900 dark:text-white"
             >
-              {post.author.name}
+              {post.author?.name}
             </a>
             <p className="text-base font-light text-gray-500 dark:text-gray-400">
               Full Stack Software engineer & Founder of the Hitchlog
