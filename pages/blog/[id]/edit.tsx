@@ -21,18 +21,20 @@ const EditBlogPost: NextPage<{ post: Post }> = ({ post }) => {
   const { addToast } = useToasts();
   return (
     <div>
-      <Breadcrumb
-        aria-label="Solid background breadcrumb example"
-        className="px-5 py-3 bg-gray-50 dark:bg-gray-900"
-      >
-        <Breadcrumb.Item href="/'" icon={FaHome}>
-          Home
-        </Breadcrumb.Item>
-        <Breadcrumb.Item href="/blog">Projects</Breadcrumb.Item>
-        <Breadcrumb.Item href={`/blog/${post.to_param}`}>
-          {post.title}
-        </Breadcrumb.Item>
-      </Breadcrumb>
+      <div className="flex justify-center w-full">
+        <Breadcrumb
+          aria-label="Solid background breadcrumb example"
+          className="px-5 py-3 bg-gray-50 dark:bg-gray-900"
+        >
+          <Breadcrumb.Item href="/'" icon={FaHome}>
+            Home
+          </Breadcrumb.Item>
+          <Breadcrumb.Item href="/blog">Blog</Breadcrumb.Item>
+          <Breadcrumb.Item href={`/blog/${post.to_param}`}>
+            {post.title}
+          </Breadcrumb.Item>
+        </Breadcrumb>
+      </div>
 
       <section className="flex items-center justify-center px-4 py-6 bg-gray-50 dark:bg-gray-900">
         <Formik
