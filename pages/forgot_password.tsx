@@ -2,12 +2,14 @@ import { Alert, Label, TextInput } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import React, { FC, useState } from 'react';
 import { FiMail } from 'react-icons/fi';
+import { useToasts } from '../src/components/contexts/ToastContext';
 import { postResetPassword } from '../src/db/users';
 import { showErrors } from '../src/utils/viewHelpers';
 
 const ForgotPassword: FC = () => {
   const [errors, setErrors] = useState();
   const [isSuccessful, setIsSuccessful] = useState(false);
+  const { addToast } = useToasts();
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -25,9 +27,12 @@ const ForgotPassword: FC = () => {
                 postResetPassword(values)
                   .then((res) => {
                     setIsSuccessful(true);
+                    window.confetti();
+                    addToast('Password has been set', 'success');
                     setErrors(undefined);
                   })
                   .catch((error) => {
+                    addToast('Something went wrong', 'error');
                     setErrors(error?.response?.data);
                   })
                   .finally(() => {
