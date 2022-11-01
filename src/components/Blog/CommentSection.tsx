@@ -1,15 +1,20 @@
-import { Button, Label, Textarea } from 'flowbite-react';
+import { Button, Label, Modal, Textarea } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import React, { FC, useEffect, useState } from 'react';
 import { createPostComment } from '../../db/comments';
 import { Comment } from '../../types/Comment';
 import { objectToString } from '../../utils';
+import { useAuth } from '../contexts/AuthContext';
 import { useToasts } from '../contexts/ToastContext';
+import Login from '../Login';
 import CommentComponent from './Comment';
 
 const CommentSection: FC<{ comments: Comment[]; postId: number }> = (props) => {
   const [comments, setComments] = useState(props.comments);
   const { addToast } = useToasts();
+  const { isAuthenticated } = useAuth();
+  const [modal, setModal] = useState(false);
+  const toggleModal = () => setModal(!modal);
 
   useEffect(() => {
     setComments(props.comments);
@@ -25,17 +30,20 @@ const CommentSection: FC<{ comments: Comment[]; postId: number }> = (props) => {
         </div>
         <Formik
           onSubmit={(values, { setSubmitting }) => {
-            createPostComment(props.postId, values)
-              .then((response) => {
-                setComments([...comments, response.data]);
-              })
-              .catch((error) => {
-                console.log({ error });
-                addToast(objectToString(error.response.data), 'error');
-              })
-              .finally(() => {
-                setSubmitting(false);
-              });
+            isAuthenticated
+              ? createPostComment(props.postId, values)
+                  .then((response) => {
+                    setComments([...comments, response.data]);
+                  })
+                  .catch((error) => {
+                    console.log({ error });
+                    addToast(objectToString(error.response.data), 'error');
+                  })
+                  .finally(() => {
+                    setSubmitting(false);
+                  })
+              : toggleModal();
+            setSubmitting(false);
           }}
           initialValues={{ body: '' }}
         >
@@ -70,6 +78,12 @@ const CommentSection: FC<{ comments: Comment[]; postId: number }> = (props) => {
           <CommentComponent key={comment.created_at} comment={comment} />
         ))}
       </section>
+      <Modal size="md" show={modal} onClose={toggleModal}>
+        <Modal.Header>Sign in to your account</Modal.Header>
+        <Modal.Body>
+          <Login toggleModal={toggleModal} />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
