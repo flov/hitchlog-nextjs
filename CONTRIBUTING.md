@@ -15,4 +15,5 @@ more about the technologies that we use, check out the list below.
 
 ## How do I make a contribution?
 
+[Create an issue](https://github.com/flov/hitchlog-nextjs/issues/new) and let us know what you would like to work on.
 Fork the project, fix an issue or create a feature and create a github pull request.
