@@ -30,7 +30,6 @@ export const getServerSideProps: GetServerSideProps = async ({
     });
     return {
       props: {
-        username: params.id,
         profile: JSON.parse(JSON.stringify(profile.data)),
         trips: JSON.parse(JSON.stringify(trips.data.trips)),
         geomap: JSON.parse(JSON.stringify(geomap.data)),
@@ -51,7 +50,6 @@ const Show: NextPage<{
   geomap: Geomap;
   totalPages: number;
   page: number;
-  username: string;
 }> = (props) => {
   const { profile } = props;
   const router = useRouter();
@@ -96,7 +94,7 @@ const Show: NextPage<{
   return (
     <>
       <Head>
-        <title>{`Hitchlog - ${props.username}'s profile`}</title>
+        <title>{`Hitchlog - ${profile.username}'s profile`}</title>
       </Head>
 
       <div className="flex flex-col-reverse items-start justify-center max-w-5xl px-4 pt-4 mx-auto sm:flex-row gap-4">
