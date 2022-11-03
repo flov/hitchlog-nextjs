@@ -18,42 +18,66 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <section className="py-8 mx-auto text-center max-w-screen-sm lg:mb-16">
-          <h1 className="mb-4 text-5xl font-extrabold tracking-tight text-gray-900 lg:text-6xl dark:text-white">
-            Hitchlog
-          </h1>
-          <p className="text-xl font-light font-bold text-gray-500 sm:text-xl dark:text-gray-400">
-            Share your hitchhiking adventure with the world
-          </p>
-          <div className="h-2 mx-4 mt-8 bg-purple-500 rounded-full sm:h-4 bg-gradient-to-l md:bg-gradient-to-r hover:bg-gradient-to-r from-purple-500 to-pink-500"></div>
+      <section className="bg-white dark:bg-gray-900">
+        <div className="items-center px-4 py-8 mx-auto gap-16 max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
+          <div className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
+            <h1 className="mb-4 text-5xl font-extrabold tracking-tight text-gray-900 lg:text-6xl dark:text-white">
+              Hitchlog
+            </h1>
 
-          <div className="flex flex-col justify-center p-4 mt-6 gap-2 sm:flex-row">
-            <Link passHref href={'/register'}>
-              <Button>Sign up</Button>
-            </Link>
-            <div className="flex justify-between sm:gap-2 gap-1">
-              <Link
-                passHref
-                href={'/trips?q=%7B"rides_story_present"%3Atrue%7D'}
-              >
-                <Button color="gray">
-                  <div className="flex items-center gap-2">
-                    <FaMap /> Explore Trips
-                  </div>
-                </Button>
+            <h2 className="mb-4 text-xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
+              Share your hitchhiking experience
+            </h2>
+            <p className="mb-4">
+              Hitchhiking enables encounters that would otherwise never happen.
+              It is an eventful, adventurous and free way of travelling.
+            </p>
+            <p className="mb-4">
+              The hitchlog is a platform for hitchhikers to share their
+              experiences with the world. It works like a blog for hitchhikers.
+              You can share your hitchhiking experience, your stories, your
+              photos and your videos on a map and document your hitchhiking
+              journey.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Link passHref href={'/register'}>
+                <Button>Sign up</Button>
               </Link>
-              <Link passHref href={'/hitchhikers'}>
-                <Button color="gray">
-                  <div className="flex items-center gap-2">
-                    <FaUsers /> Explore Hitchhikers
-                  </div>
-                </Button>
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Link
+                  passHref
+                  href={'/trips?q=%7B"rides_story_present"%3Atrue%7D'}
+                >
+                  <Button color="gray">
+                    <div className="flex items-center gap-2">
+                      <FaMap /> Explore Trips
+                    </div>
+                  </Button>
+                </Link>
+                <Link passHref href={'/hitchhikers'}>
+                  <Button color="gray">
+                    <div className="flex items-center gap-2">
+                      <FaUsers /> Explore Hitchhikers
+                    </div>
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
-        </section>
-      </main>
+          <div className="mt-8 grid grid-cols-2 gap-4">
+            <img
+              className="w-full rounded-lg"
+              src="https://s3-eu-west-1.amazonaws.com/hitchlog.heroku.com/uploads/ride/25211/hitchhiking-from-hawaii-united-states-to-hawaii-united-states.jpg"
+              alt="Hitting the road"
+            />
+            <img
+              className="w-full mt-4 rounded-lg lg:mt-10"
+              src="/landing_page_2.png"
+              alt="office content 2"
+            />
+          </div>
+        </div>
+      </section>
     </>
   );
 };
