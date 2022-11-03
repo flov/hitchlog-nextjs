@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { FiKey, FiMail } from 'react-icons/fi';
 import { useToasts } from '../src/components/contexts/ToastContext';
 import { postLogin } from '../src/db/users';
+import Head from 'next/head';
 
 type Values = {
   password: string;
@@ -27,6 +28,9 @@ const Login: FC = () => {
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
+      <Head>
+        <title>Hitchlog - Login</title>
+      </Head>
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md-full-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -115,18 +119,20 @@ const Login: FC = () => {
                 </div>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don’t have an account yet?{' '}
-                  <Link href="/register">
-                    <a className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                      Sign up
-                    </a>
+                  <Link
+                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                    href="/register"
+                  >
+                    Sign up
                   </Link>
                 </p>
                 <p className="m-0 text-sm font-light text-gray-500 dark:text-gray-400">
                   Forgot your password?{' '}
-                  <Link href="/forgot_password">
-                    <a className="mt-0 font-medium text-primary-600 hover:underline dark:text-primary-500">
-                      Reset password
-                    </a>
+                  <Link
+                    className="mt-0 font-medium text-primary-600 hover:underline dark:text-primary-500"
+                    href="/forgot_password"
+                  >
+                    Reset password
                   </Link>
                 </p>
               </Form>

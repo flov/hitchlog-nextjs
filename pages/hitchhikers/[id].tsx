@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { PuffLoader } from 'react-spinners';
 import { useAuth } from '../../src/components/contexts/AuthContext';
 import VehiclesForProfile from '../../src/components/helpers/VehiclesForProfile';
 import JVectorMap from '../../src/components/JVectorMap';
@@ -16,6 +15,7 @@ import { fetchProfile, getGeomap } from '../../src/db/users';
 import { Geomap, Profile, Trip } from '../../src/types';
 import { capitalize } from '../../src/utils';
 import { experiencesForProfile } from '../../src/utils/viewHelpers';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async ({
   query,
@@ -30,6 +30,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     });
     return {
       props: {
+        username: params.id,
         profile: JSON.parse(JSON.stringify(profile.data)),
         trips: JSON.parse(JSON.stringify(trips.data.trips)),
         geomap: JSON.parse(JSON.stringify(geomap.data)),
@@ -50,6 +51,7 @@ const Show: NextPage<{
   geomap: Geomap;
   totalPages: number;
   page: number;
+  username: string;
 }> = (props) => {
   const { profile } = props;
   const router = useRouter();
@@ -93,6 +95,10 @@ const Show: NextPage<{
 
   return (
     <>
+      <Head>
+        <title>{`Hitchlog - ${props.username}'s profile`}</title>
+      </Head>
+
       <div className="flex flex-col-reverse items-start justify-center max-w-5xl px-4 pt-4 mx-auto sm:flex-row gap-4">
         <section className="w-full p-6 border rounded-lg dark:bg-gray-800 dark:border-gray-700">
           <div className="flex items-center justify-between gap-2">
@@ -102,16 +108,12 @@ const Show: NextPage<{
             {isOwner && (
               <div className="flex gap-2">
                 <Link passHref href={'/hitchhikers/edit_profile'}>
-                  <a>
-                    <Button size="xs">Edit profile</Button>
-                  </a>
+                  <Button size="xs">Edit profile</Button>
                 </Link>
                 <Link passHref href={'/trips/new'}>
-                  <a>
-                    <Button color="purple" size="xs">
-                      Log new trip
-                    </Button>
-                  </a>
+                  <Button color="purple" size="xs">
+                    Log new trip
+                  </Button>
                 </Link>
               </div>
             )}

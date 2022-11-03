@@ -6,6 +6,7 @@ import PostForm from '../../src/components/Blog/PostForm';
 import { useAuth } from '../../src/components/contexts/AuthContext';
 import { useToasts } from '../../src/components/contexts/ToastContext';
 import { createPost } from '../../src/db/posts';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   return {
@@ -19,6 +20,9 @@ const New: NextPage = () => {
 
   return (
     <section className="flex items-center justify-center px-4 py-6 bg-gray-50 dark:bg-gray-900">
+      <Head>
+        <title>Hitchlog - new Post</title>
+      </Head>
       <Formik
         onSubmit={(values, { setSubmitting }) => {
           createPost(values)

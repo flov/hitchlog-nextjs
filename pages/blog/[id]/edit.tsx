@@ -8,6 +8,7 @@ import { useToasts } from '../../../src/components/contexts/ToastContext';
 import { getPost, updatePost } from '../../../src/db/posts';
 import { Post } from '../../../src/types/Post';
 import { objectToString } from '../../../src/utils';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const id = query.id;
@@ -21,6 +22,9 @@ const EditBlogPost: NextPage<{ post: Post }> = ({ post }) => {
   const { addToast } = useToasts();
   return (
     <div>
+      <Head>
+        <title>Hitchlog - Edit Post</title>
+      </Head>
       <div className="flex justify-center w-full">
         <Breadcrumb
           aria-label="Solid background breadcrumb example"

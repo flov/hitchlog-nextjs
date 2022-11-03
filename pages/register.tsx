@@ -8,6 +8,7 @@ import { object, string } from 'yup';
 import { API_URL } from '../src/config';
 import { FiMail } from 'react-icons/fi';
 import { useToasts } from '../src/components/contexts/ToastContext';
+import Head from 'next/head';
 
 const UserSchema = object().shape({
   username: string().required(),
@@ -23,6 +24,11 @@ const Register: FC = () => {
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
+      <Head>
+        <title>Sign up</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
       <div className="flex flex-col items-center justify-center px-4 py-6 mx-auto">
         <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6">
@@ -45,7 +51,7 @@ const Register: FC = () => {
                   .then((response) => {
                     window.confetti();
                     addToast(
-                      'Welcome to the Hitchlog! Please confirm your email.'
+                      'Welcome to the Hitchlog! Please check your mails and confirm your email.'
                     );
                     router.push('/login');
                   })
@@ -189,10 +195,11 @@ const Register: FC = () => {
                   </div>
                   <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                     Already have an account?{' '}
-                    <Link href="/login">
-                      <a className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                        Login here
-                      </a>
+                    <Link
+                      className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                      href="/login"
+                    >
+                      Login here
                     </Link>
                   </p>
                 </Form>

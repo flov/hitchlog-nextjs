@@ -11,6 +11,7 @@ import LoadingContainer from '../../src/components/LoadingContainer';
 import { authenticateToken, updateUser } from '../../src/db/users';
 import { profilePicture, showErrors } from '../../src/utils/viewHelpers';
 import Image from 'next/image';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
@@ -35,6 +36,10 @@ const EditProfile: NextPage = () => {
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
+      <Head>
+        <title>Hitchlog - edit profile</title>
+      </Head>
+
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-3xl xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           {currentUser && (
@@ -57,7 +62,7 @@ const EditProfile: NextPage = () => {
                     alt="Profile picture"
                     width={128}
                     height={128}
-                    src={profilePicture(currentUser.md5_email, 128)}
+                    src={profilePicture(currentUser.md5_email, 164)}
                   />
                 </div>
                 <p>

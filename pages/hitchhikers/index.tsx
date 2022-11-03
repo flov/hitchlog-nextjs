@@ -2,7 +2,7 @@ import { Pagination, Table } from 'flowbite-react';
 import Image from 'next/image';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getUsers } from '../../src/db/users';
 import { User } from '../../src/types';
 import { profilePicture } from '../../src/utils';
@@ -15,6 +15,7 @@ import {
 } from '../../src/utils/viewHelpers';
 import { useRouter } from 'next/router';
 import { PuffLoader } from 'react-spinners';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const users = await getUsers(Number(query?.page) || 1);
@@ -62,6 +63,10 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
 
   return (
     <div className="mx-auto text-center sm:px-4 max-w-screen-lg lg:mb-16">
+      <Head>
+        <title>Hitchlog - Hitchhikers</title>
+      </Head>
+
       <h1 className="mt-4 text-xl sm:text-4xl sm:mt-8">
         The Glorious Hitchhikers Of The Hitchlog
       </h1>
@@ -109,17 +114,18 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
               <Table.Row className="dark:text-white" key={`user${index}`}>
                 <Table.Cell className="px-3">
                   <div className="flex items-center text-md gap-2 dark:text-white">
-                    <Link href={`/hitchhikers/${user.username}`}>
-                      <a className="flex items-center gap-2">
-                        <Image
-                          alt={`${user.username}'s profile picture`}
-                          className="rounded-full"
-                          src={profilePicture(user.md5_email)}
-                          width={40}
-                          height={40}
-                        />
-                        {user.username}
-                      </a>
+                    <Link
+                      className="flex items-center gap-2"
+                      href={`/hitchhikers/${user.username}`}
+                    >
+                      <Image
+                        alt={`${user.username}'s profile picture`}
+                        className="rounded-full"
+                        src={profilePicture(user.md5_email)}
+                        width={40}
+                        height={40}
+                      />
+                      {user.username}
                     </Link>
                     <div className="flex items-center">
                       ({user.age}

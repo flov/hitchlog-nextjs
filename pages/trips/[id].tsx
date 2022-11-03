@@ -12,6 +12,7 @@ import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import LoadingContainer from '../../src/components/LoadingContainer';
 import { getTrip } from '../../src/db/trips';
 import { getUser } from '../../src/db/users';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   // params.id looks like: hitchhike-from-${fromCity}-to-${toCity}-${id}
@@ -67,6 +68,11 @@ const ShowTrip: NextPage<{
 
   return (
     <div>
+      <Head>
+        <title>
+          {`Hitchlog - Hitchhiking from ${trip.origin.city} to ${trip.destination.city}`}
+        </title>
+      </Head>
       <div className="w-full h-48 bg-gray-200" id="map"></div>
       <div className="max-w-4xl px-4 py-4 mx-auto">
         {user && <HitchhikingTrip trip={trip} rides={trip.rides} user={user} />}

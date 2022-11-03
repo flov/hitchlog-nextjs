@@ -13,6 +13,7 @@ import { Formik } from 'formik';
 import SearchForm from '../../src/components/SearchForm';
 import { Pagination } from 'flowbite-react';
 import { FaList, FaMap } from 'react-icons/fa';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const res = await getTripsWithQuery({ q: query.q as Record<string, any> });
@@ -131,6 +132,10 @@ const Index: FC<{
 
   return (
     <>
+      <Head>
+        <title>Hitchlog - Hitchhiking Trips</title>
+      </Head>
+
       <div
         className="fixed z-10 flex items-center justify-center p-2 cursor-pointer gap-2 left-1/2 fixed-button"
         onClick={() => setIsShowingMap(!isShowingMap)}

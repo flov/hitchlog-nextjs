@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>The Hitchlog - Share your hitchhiking experience</title>
+        <title>Hitchlog - Share your hitchhiking experience</title>
         <meta
           name="description"
           content="Share your hitchhiking experience. The hitchlog is like a logbook for hitchhikers"

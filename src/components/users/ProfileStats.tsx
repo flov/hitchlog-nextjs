@@ -17,7 +17,6 @@ import {
 } from '../../utils/viewHelpers';
 import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
-import { Button } from 'flowbite-react';
 
 const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
   const createdAt = moment(profile.created_at).format('MMM YYYY');
@@ -76,8 +75,12 @@ const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
 
       {currentUser && currentUser.username !== profile.username && (
         <div className="mt-4">
-          <Link passHref href={`/hitchhikers/${profile.username}/send_message`}>
-            <a className="text-blue-500 hover:underline">Send message</a>
+          <Link
+            className="text-blue-500 hover:underline"
+            passHref
+            href={`/hitchhikers/${profile.username}/send_message`}
+          >
+            Send message
           </Link>
         </div>
       )}

@@ -1,4 +1,5 @@
 import { GetStaticProps, NextPage } from 'next';
+import Head from 'next/head';
 import Link from 'next/link';
 import React from 'react';
 import PostCard from '../../src/components/Blog/PostCard';
@@ -21,6 +22,10 @@ export const getStaticProps: GetStaticProps = async () => {
 const Blog: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (
     <>
+      <Head>
+        <title>Hitchlog - Blog</title>
+      </Head>
+
       <section className="bg-white dark:bg-gray-900">
         <div className="px-4 py-8 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
           <div className="mx-auto mb-8 text-center max-w-screen-sm lg:mb-16">
@@ -31,8 +36,11 @@ const Blog: NextPage<{ posts: Post[] }> = ({ posts }) => {
               Here we write about everything related with hitchhiking and the
               Hitchlog. If you feel like promoting a hitchhiking related event,
               or would like to make a guest post, please{' '}
-              <Link href="/hitchhikers/flov/send_message">
-                <a className="text-blue-500">get in touch</a>
+              <Link
+                className="text-blue-500"
+                href="/hitchhikers/flov/send_message"
+              >
+                get in touch
               </Link>
             </p>
           </div>

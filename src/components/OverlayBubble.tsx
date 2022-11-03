@@ -12,12 +12,10 @@ const OverlayBubble: FC<{ trip: Trip }> = ({ trip }) => {
         {trip.origin && trip.destination ? (
           <Link
             href={`/trips/${trip.id}`}
-            className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+            className="font-medium text-blue-600 no-underline hover:underline dark:text-blue-500"
           >
-            <a className="no-underline">
-              {trip.origin.city} <BsArrowRight className="inline" />{' '}
-              {trip.destination.city}
-            </a>
+            {trip.origin.city} <BsArrowRight className="inline" />{' '}
+            {trip.destination.city}
           </Link>
         ) : (
           <></>

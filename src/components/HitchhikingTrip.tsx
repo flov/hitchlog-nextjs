@@ -52,10 +52,11 @@ export function HitchhikingTrip({
         />
         <span className="flex items-center mt-2 text-sm text-gray-500 gap-1 dark:text-gray-400">
           Hitchhiked {moment(departure).fromNow()} by{' '}
-          <Link href={`/hitchhikers/${user.username}`}>
-            <a className="font-semibold text-gray-900 dark:text-white">
-              {capitalize(user?.username)}
-            </a>
+          <Link
+            className="font-semibold text-gray-900 dark:text-white"
+            href={`/hitchhikers/${user.username}`}
+          >
+            {capitalize(user?.username)}
           </Link>
           {showUserGender(user.gender)}
         </span>

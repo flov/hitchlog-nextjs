@@ -7,6 +7,7 @@ import CommentSection from '../../../src/components/Blog/CommentSection';
 import PostComponent from '../../../src/components/Blog/Post';
 import { Breadcrumb } from 'flowbite-react';
 import { FaHome } from 'react-icons/fa';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   try {
@@ -30,6 +31,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 const BlogPost: NextPage<{ post: Post }> = ({ post }) => {
   return (
     <main className="pb-16 bg-white lg:pb-24 dark:bg-gray-900">
+      <Head>
+        <title>{`Hitchlog - ${post.title}`}</title>
+      </Head>
       <div className="flex flex-col justify-between max-w-2xl px-4 mx-auto max-w-screen-xl ">
         <Breadcrumb
           aria-label="Solid background breadcrumb example"

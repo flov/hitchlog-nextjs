@@ -85,9 +85,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
 
         <div className="flex items-center justify-between mb-2 align gap-2">
           <Link href={`/trips/${trip.to_param}`}>
-            <a>
-              From {trip.origin?.city} to {trip.destination?.city}
-            </a>
+            From {trip.origin?.city} to {trip.destination?.city}
           </Link>
           {currentUser && currentUser.username === trip.user.username && (
             <Link href={`/trips/${trip.to_param}/edit`} passHref>
@@ -126,34 +124,39 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
           <div className="flex items-center space-x-4">
             {trip.user && (
               <>
-                <Link href={`/hitchhikers/${trip.user.username}`}>
-                  <a className="flex items-center space-x-2">
-                    <Image
-                      className="w-6 h-6 border border-gray-600 rounded-full"
-                      width={28}
-                      height={28}
-                      // @ts-ignore
-                      src={profilePicture(trip.user.md5_email)}
-                      alt={`${trip.user.username}'s profile picture'`}
-                    />
-                  </a>
+                <Link
+                  className="flex items-center space-x-2"
+                  href={`/hitchhikers/${trip.user.username}`}
+                >
+                  <Image
+                    className="w-6 h-6 border border-gray-600 rounded-full"
+                    width={28}
+                    height={28}
+                    // @ts-ignore
+                    src={profilePicture(trip.user.md5_email)}
+                    alt={`${trip.user.username}'s profile picture'`}
+                  />
                 </Link>
 
                 <span className="font-medium dark:text-white">
-                  <Link href={`/hitchhikers/${trip.user.username}`}>
-                    <a className="no-underline hover:underline">
-                      {trip.user.username}
-                    </a>
+                  <Link
+                    className="no-underline hover:underline"
+                    href={`/hitchhikers/${trip.user.username}`}
+                  >
+                    {trip.user.username}
                   </Link>
                 </span>
               </>
             )}
           </div>
-          <Link href={`/trips/${trip.to_param}`}>
-            <a className="inline-flex items-center font-medium no-underline text-primary-600 dark:text-primary-500 hover:underline">
+          <Link
+            className="inline-flex items-center font-medium no-underline text-primary-600 dark:text-primary-500 hover:underline"
+            href={`/trips/${trip.to_param}`}
+          >
+            <>
               Read more
               <RightArrow />
-            </a>
+            </>
           </Link>
         </div>
       </div>

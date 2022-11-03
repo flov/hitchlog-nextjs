@@ -1,13 +1,10 @@
 import React, { FC, useState } from 'react';
 import { Field, Form, Formik, FormikHelpers, FormikValues } from 'formik';
-import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import axios from 'axios';
 import { Alert, Label, TextInput } from 'flowbite-react';
 import Link from 'next/link';
 import { FiKey, FiMail } from 'react-icons/fi';
 import { useAuth } from './contexts/AuthContext';
-import { API_URL } from '../config';
 import { postLogin } from '../db/users';
 import { useToasts } from './contexts/ToastContext';
 
@@ -103,24 +100,22 @@ const Login: FC<{ toggleModal: () => void }> = ({ toggleModal }) => {
         </div>
         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
           Don’t have an account yet?{' '}
-          <Link href="/register">
-            <a
-              onClick={toggleModal}
-              className="font-medium text-primary-600 dark:text-primary-500"
-            >
-              Sign up
-            </a>
+          <Link
+            onClick={toggleModal}
+            className="font-medium text-primary-600 dark:text-primary-500"
+            href="/register"
+          >
+            Sign up
           </Link>
         </p>
         <p className="m-0 text-sm font-light text-gray-500 dark:text-gray-400">
           Forgot your password?{' '}
-          <Link href="/forgot_password">
-            <a
-              onClick={toggleModal}
-              className="mt-0 font-medium text-primary-600 dark:text-primary-500"
-            >
-              Reset password
-            </a>
+          <Link
+            onClick={toggleModal}
+            className="mt-0 font-medium text-primary-600 dark:text-primary-500"
+            href="/forgot_password"
+          >
+            Reset password
           </Link>
         </p>
       </Form>

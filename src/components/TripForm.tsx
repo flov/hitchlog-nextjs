@@ -73,8 +73,8 @@ export const TripForm = ({
         {showTripGoogleDuration(values.googleDuration)}
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-4">
-        <div>
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="col-span-2 sm:col-span-1">
           <Label htmlFor="from_name">Starting point</Label>
           <Field name="from_name">
             {({ field }: FormikValues) => (
@@ -99,7 +99,7 @@ export const TripForm = ({
           </Field>
         </div>
 
-        <div>
+        <div className="col-span-2 sm:col-span-1">
           <Label htmlFor="to_name">Destination</Label>
           <TextInput
             ref={destinationRef}
@@ -119,7 +119,7 @@ export const TripForm = ({
             name="to_name"
           />
         </div>
-        <div>
+        <div className="col-span-2 sm:col-span-1">
           <Label htmlFor="departure">Departure</Label>
           <TextInput
             id="departure"
@@ -140,7 +140,7 @@ export const TripForm = ({
           />
         </div>
 
-        <div>
+        <div className="col-span-2 sm:col-span-1">
           <Label htmlFor="arrival">Arrival</Label>
           <TextInput
             id="arrival"
@@ -162,7 +162,7 @@ export const TripForm = ({
           />
         </div>
 
-        <div>
+        <div className="col-span-2 sm:col-span-1">
           <Label htmlFor="number_of_rides">Number of rides</Label>
           <Select
             color={
@@ -188,7 +188,7 @@ export const TripForm = ({
           </Select>
         </div>
 
-        <div>
+        <div className="col-span-2 sm:col-span-1">
           <Label htmlFor="travelling_with">Travelling with:</Label>
           <Select
             id="travelling_with"
