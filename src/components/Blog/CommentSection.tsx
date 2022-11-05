@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import { Button, Label, Modal, Textarea } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import React, { FC, useEffect, useState } from 'react';
@@ -9,12 +10,20 @@ import { useToasts } from '../contexts/ToastContext';
 import Login from '../Login';
 import CommentComponent from './Comment';
 
-const CommentSection: FC<{ comments: Comment[]; postId: number }> = (props) => {
+const CommentSection: FC<{
+  comments: Comment[];
+  id: number;
+  submitCallback: (
+    id: number,
+    values: FormikValues
+  ) => Promise<AxiosResponse<Comment>>;
+}> = (props) => {
   const [comments, setComments] = useState(props.comments);
   const { addToast } = useToasts();
   const { isAuthenticated } = useAuth();
   const [modal, setModal] = useState(false);
   const toggleModal = () => setModal(!modal);
+  const { id, submitCallback } = props;
 
   useEffect(() => {
     setComments(props.comments);
@@ -31,9 +40,11 @@ const CommentSection: FC<{ comments: Comment[]; postId: number }> = (props) => {
         <Formik
           onSubmit={(values, { setSubmitting }) => {
             isAuthenticated
-              ? createPostComment(props.postId, values)
+              ? submitCallback(id, values)
                   .then((response) => {
                     setComments([...comments, response.data]);
+                    addToast('Comment added');
+                    window.confetti();
                   })
                   .catch((error) => {
                     console.log({ error });

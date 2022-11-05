@@ -19,8 +19,8 @@ const CommentComponent: NextPage<{ comment: Comment }> = ({ comment }) => {
   const createdAtHumanReadable = moment(createdAt).format('MMMM Do YYYY');
 
   return (
-    <article className="p-6 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
-      <footer className="flex items-center justify-between mb-2">
+    <article className="p-6 text-base border-t border-gray-200 bg-col dark:border-gray-700 ">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center">
           <p className="inline-flex items-center mr-2 text-sm text-gray-900 gap-2 dark:text-white">
             <Image
@@ -40,7 +40,7 @@ const CommentComponent: NextPage<{ comment: Comment }> = ({ comment }) => {
             </time>
           </p>
         </div>
-      </footer>
+      </div>
       <p>{comment.body}</p>
     </article>
   );

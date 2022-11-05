@@ -1,33 +1,28 @@
-import { Badge, Card, Timeline, Tooltip } from 'flowbite-react';
+import { Button, Card, Carousel, Tooltip } from 'flowbite-react';
 import moment from 'moment';
 import Image from 'next/image';
-import { BsArrowRight } from 'react-icons/bs';
-import {
-  capitalize,
-  experienceToColor,
-  getOrdinalNumber,
-  profilePicture,
-} from '../utils';
+import { capitalize, getOrdinalNumber, profilePicture } from '../utils';
 import {
   showAgeAtTrip,
-  showNumberOfRides,
   showNumberOfStories,
   showTotalWaitingTimeForRides,
   viewAverageSpeed,
   showTripGoogleDuration,
-  vehicleToIcon,
   showTripDistance,
   showEmbeddedYoutubeVideo,
   countryFlagsForTrip,
   tagsForRides,
-  tagsForRide,
   showUserGender,
+  vehicleIconsForRides,
 } from '../utils/viewHelpers';
-import ReactMarkdown from 'react-markdown';
-import { User, EXPERIENCES, Ride, Trip } from '../types';
-import { CgSandClock } from 'react-icons/cg';
+import { User, Ride, Trip } from '../types';
 import Link from 'next/link';
 import ExperiencesForRides from './helpers/ExperiencesForRides';
+import CommentSection from './Blog/CommentSection';
+import { Fragment } from 'react';
+import { useAuth } from './contexts/AuthContext';
+import ExperienceCircle from './helpers/ExperienceCircle';
+import { createTripComment } from '../db/comments';
 
 export function HitchhikingTrip({
   user,
@@ -39,6 +34,10 @@ export function HitchhikingTrip({
   trip: Trip;
 }) {
   const departure = trip.departure;
+  const { currentUser } = useAuth();
+  const ridesWithPhoto = trip.rides.filter(
+    (ride) => ride?.photo !== null && ride?.photo !== undefined
+  );
 
   return (
     <Card>
@@ -51,7 +50,6 @@ export function HitchhikingTrip({
           alt={`${user?.username}'s profile picture'`}
         />
         <span className="flex items-center mt-2 text-sm text-gray-500 gap-1 dark:text-gray-400">
-          Hitchhiked {moment(departure).fromNow()} by{' '}
           <Link
             className="font-semibold text-gray-900 dark:text-white"
             href={`/hitchhikers/${user.username}`}
@@ -59,6 +57,9 @@ export function HitchhikingTrip({
             {capitalize(user?.username)}
           </Link>
           {showUserGender(user.gender)}
+        </span>
+        <span className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+          Hitchhiked {moment(departure).fromNow()}
         </span>
 
         <div className="flex flex-col items-center justify-between text-gray-500">
@@ -73,11 +74,11 @@ export function HitchhikingTrip({
           )}
         </div>
 
-        <div className="flex items-center mt-2 gap-2 dark:text-white">
+        <div className="flex items-center gap-1 dark:text-white">
           {showTotalWaitingTimeForRides(trip.rides)}
           {showAgeAtTrip(trip, user)}
-          {showNumberOfRides(trip.rides.length)}
           {showTripGoogleDuration(trip.google_duration)}
+          {vehicleIconsForRides(trip.rides)}
         </div>
         <div className="flex items-center mt-2 gap-2 dark:text-white">
           {viewAverageSpeed(trip.average_speed)}
@@ -85,78 +86,127 @@ export function HitchhikingTrip({
           {showNumberOfStories(trip.rides)}
         </div>
 
-        <h5 className="mt-2 text-2xl font-bold tracking-tight text-center text-gray-900 dark:text-white">
-          {trip.origin.sanitized_address} <BsArrowRight className="inline" />{' '}
-          {trip.destination.sanitized_address}
+        <h5 className="mt-2 text-xl tracking-tight text-center text-gray-900 dark:text-white">
+          From {trip.origin?.sanitized_address} to{' '}
+          {trip.destination?.sanitized_address}
         </h5>
       </div>
-      <div className="p-4">
-        <Timeline>
-          {rides.map((ride, index) => {
-            return (
-              <Timeline.Item key={`ride${index}`}>
-                <Timeline.Point className="text-white" />
-                <Timeline.Content>
-                  <Timeline.Time>
-                    <div className="flex items-center text-gray-600 dark:text-white gap-2">
-                      <span>{`${getOrdinalNumber(index + 1)} ride`} </span>
-                      <Badge
-                        color={experienceToColor(
-                          ride.experience as EXPERIENCES
-                        )}
-                      >
-                        {ride.experience}
-                      </Badge>
-                      {tagsForRide(ride)}
-                      {ride.vehicle && vehicleToIcon(ride.vehicle)}
-                      {ride.gender && <span>{ride.gender}</span>}
-                      {ride.waiting_time ? (
-                        <span>
-                          <Tooltip
-                            content={`Waiting time: ${ride.waiting_time} minutes`}
-                          >
-                            <CgSandClock className="inline" />{' '}
-                            {ride.waiting_time}m
-                          </Tooltip>
-                        </span>
-                      ) : (
-                        ''
-                      )}
-                    </div>
-                  </Timeline.Time>
-                  <Timeline.Title className="mt-3">{ride.title}</Timeline.Title>
-                  <Timeline.Body className="max-w-2xl mt-2">
-                    {ride.photo && (
-                      <a
-                        href={ride.photo.url}
-                        rel="noreferrer noopener"
-                        target="_blank"
-                        className="block mb-4"
-                      >
-                        <img
-                          alt={`photo of ${getOrdinalNumber(ride.number)} ride`}
-                          src={ride.photo.small.url}
-                        />
-                        {ride.photo_caption && (
-                          <p className="text-gray-500 text-md dark:text-gray-400">
-                            {ride.photo_caption}
-                          </p>
-                        )}
-                      </a>
-                    )}
-                    <div className="w-full max-w-2xl mx-auto format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
-                      {ride.story && (
-                        <ReactMarkdown>{ride.story}</ReactMarkdown>
-                      )}
-                    </div>
-                    {showEmbeddedYoutubeVideo(ride.youtube)}
-                  </Timeline.Body>
-                </Timeline.Content>
-              </Timeline.Item>
-            );
-          })}
-        </Timeline>
-      </div>
+      {trip.rides.map(
+        (ride, index) =>
+          (ride.tags || []).length > 0 && (
+            <div className="flex items-center overflow-x-auto gap-2 dark:text-white">
+              {tagsForRides(trip.rides)}
+            </div>
+          )
+      )}
+      <article className="">
+        <div
+          className={`h-56 sm:h-64 xl:h-76 ${
+            ridesWithPhoto.length === 0 && 'hidden'
+          }`}
+        >
+          <Carousel slideInterval={5000} slide={true}>
+            {ridesWithPhoto.map(
+              (ride, index) =>
+                ride.photo && (
+                  <div className="relative">
+                    <img
+                      alt={`photo of ${getOrdinalNumber(ride.number)} ride`}
+                      key={index}
+                      src={ride.photo.url}
+                    />
+                    <p className="absolute top-0 w-full font-bold text-center bg-white dark:bg-gray-800 opacity-70">
+                      {ride.photo_caption}
+                    </p>
+                  </div>
+                )
+            )}
+          </Carousel>
+        </div>
+
+        <div className="flex items-center mb-4 overflow-x-auto gap-2 dark:text-white">
+          {tagsForRides(trip.rides)}
+        </div>
+
+        <div className="flex items-center justify-between mb-2 align gap-2">
+          {currentUser && currentUser.username === trip.user.username && (
+            <Link href={`/trips/${trip.to_param}/edit`} passHref>
+              <Button size="xs">Edit</Button>
+            </Link>
+          )}
+        </div>
+        {trip.rides.map((ride, index) => (
+          <Fragment key={`ride${index}`}>
+            {ride.story && (
+              <>
+                <div className="flex items-center gap-2">
+                  <Tooltip content={`${ride.experience} Experience`}>
+                    <ExperienceCircle experience={ride.experience} size={3} />
+                  </Tooltip>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                    <Link href={`/trips/${trip.to_param}`}>
+                      {ride.title
+                        ? ride.title
+                        : `${getOrdinalNumber(ride.number)} ride`}
+                    </Link>
+                  </h2>
+                </div>
+                {ride.story && (
+                  <p className="mt-1 mb-5 font-light text-gray-500 dark:text-gray-400">
+                    {ride.story}
+                  </p>
+                )}
+                {showEmbeddedYoutubeVideo(ride.youtube)}
+              </>
+            )}
+          </Fragment>
+        ))}
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            {trip.user && (
+              <>
+                <Link
+                  className="flex items-center space-x-2"
+                  href={`/hitchhikers/${trip.user.username}`}
+                >
+                  <Image
+                    className="w-6 h-6 border border-gray-600 rounded-full"
+                    width={28}
+                    height={28}
+                    // @ts-ignore
+                    src={profilePicture(trip.user.md5_email)}
+                    alt={`${trip.user.username}'s profile picture'`}
+                  />
+                </Link>
+
+                <span className="font-medium dark:text-white">
+                  <Link
+                    className="no-underline hover:underline"
+                    href={`/hitchhikers/${trip.user.username}`}
+                  >
+                    {trip.user.username}
+                  </Link>
+                </span>
+              </>
+            )}
+          </div>
+          <Link
+            className="inline-flex items-center font-medium no-underline text-primary-600 dark:text-primary-500 hover:underline"
+            href={`/trips/${trip.to_param}`}
+          >
+            <>Read more</>
+          </Link>
+        </div>
+
+        <div className="mt-8">
+          <CommentSection
+            submitCallback={createTripComment}
+            comments={trip.comments}
+            id={trip.id as number}
+          />
+        </div>
+      </article>
     </Card>
   );
 }

@@ -1,4 +1,5 @@
 import { Ride } from './Ride';
+import { Comment } from './Comment';
 
 export type Location = {
   lat: number;
@@ -29,6 +30,13 @@ export type Trip = {
   rides: Ride[];
   total_distance: number;
   user: { username: string; md5_email: string; gender: string };
+  comments: Comment[];
+};
+
+export type TripUser = {
+  username: string;
+  md5_email: string;
+  gender: string;
 };
 
 export type Country = {

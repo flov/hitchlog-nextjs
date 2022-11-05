@@ -2,7 +2,6 @@ import { Button, Label, Textarea, TextInput } from 'flowbite-react';
 import { Field, Form, FormikValues } from 'formik';
 
 export const SendMessageForm = ({ isSubmitting }: FormikValues) => {
-  console.log(isSubmitting);
   return (
     <Form>
       <div className="flex flex-col">
