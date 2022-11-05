@@ -30,7 +30,7 @@ const Blog: NextPage<{ posts: Post[] }> = ({ posts }) => {
         <div className="px-4 py-8 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
           <div className="mx-auto mb-8 text-center max-w-screen-sm lg:mb-16">
             <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 lg:text-4xl dark:text-white">
-              Our Blog
+              Blog
             </h2>
             <p className="font-light text-gray-500 sm:text-xl dark:text-gray-400">
               Here we write about everything related with hitchhiking and the

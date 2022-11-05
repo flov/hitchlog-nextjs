@@ -7,7 +7,7 @@ export const secondsToTime = (seconds: number | null) => {
   hours > 0 ? array.push(hours + 'h') : null;
   minutes > 0 ? array.push(minutes + 'm') : null;
   secondsLeft > 0 && !hours && !minutes ? array.push(secondsLeft + 's') : null;
-  return array.join(' ');
+  return array.join('');
 };
 
 export const durationDiffToString = (durationDiff: number) => {

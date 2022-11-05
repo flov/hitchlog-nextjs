@@ -204,8 +204,9 @@ export const showAgeAtTrip = (trip: Trip, user: User) => {
         user.gender === 'male' ? 'he' : 'she'
       } did the trip`}
     >
-      <div className="flex items-center gap-1">
-        <FiUser className="inline" />({trip.age_at_trip})
+      <div className="flex items-center">
+        <FiUser className="inline" />
+        {trip.age_at_trip}
       </div>
     </Tooltip>
   );
@@ -331,8 +332,10 @@ export const showUserGender = (
         <FaMars className="inline" size={size} />
       ) : gender == 'female' ? (
         <FaVenus className="inline" />
-      ) : (
+      ) : gender == 'non-binary' ? (
         <FaMarsStrokeV className="inline" />
+      ) : (
+        <></>
       )}
     </Tooltip>
   );
