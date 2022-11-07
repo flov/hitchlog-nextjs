@@ -67,9 +67,9 @@ const Home: NextPage = () => {
             </p>
             <p className="mb-4">
               It is a platform for hitchhikers to share their experiences with
-              the world. It's like a blog for hitchhikers. You can share your
-              hitchhiking experience, your stories, your photos and your videos
-              on a map and document your hitchhiking journey.
+              the world. You can share your hitchhiking experience, your
+              stories, your photos and your videos on a map and document your
+              hitchhiking journey.
             </p>
             <div className="flex flex-col sm:flex-row gap-2">
               <Link passHref href={'/register'}>
