@@ -68,7 +68,7 @@ export function HitchhikingTrip({
             {countryFlagsForTrip(trip)}
           </div>
           {trip.rides.length > 0 && (
-            <div className="flex items-center mt-3 gap-2 dark:text-white">
+            <div className="flex items-center mt-3 mb-2 gap-2 dark:text-white">
               {tagsForRides(trip.rides)}
             </div>
           )}
@@ -91,14 +91,6 @@ export function HitchhikingTrip({
           {trip.destination?.sanitized_address}
         </h5>
       </div>
-      {trip.rides.map(
-        (ride, index) =>
-          (ride.tags || []).length > 0 && (
-            <div className="flex items-center overflow-x-auto gap-2 dark:text-white">
-              {tagsForRides(trip.rides)}
-            </div>
-          )
-      )}
       <article className="">
         <div
           className={`h-56 sm:h-64 xl:h-76 ${
@@ -122,10 +114,6 @@ export function HitchhikingTrip({
                 )
             )}
           </Carousel>
-        </div>
-
-        <div className="flex items-center mb-4 overflow-x-auto gap-2 dark:text-white">
-          {tagsForRides(trip.rides)}
         </div>
 
         <div className="flex items-center justify-between mb-2 align gap-2">

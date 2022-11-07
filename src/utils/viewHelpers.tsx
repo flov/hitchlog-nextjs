@@ -56,7 +56,7 @@ export const vehicleIconsForRides = (rides: Ride[]) =>
   removeDuplicates(rides.map((ride) => ride.vehicle)).map((vehicle, index) => (
     <>
       {vehicle && (
-        <Tooltip key={`${index}Vehicles`} content={`${vehicle} ride`}>
+        <Tooltip key={`${index}Vehicles`} content={`${vehicle} rides`}>
           {vehicleToIcon(vehicle)}
         </Tooltip>
       )}
@@ -296,7 +296,7 @@ export const showTripGoogleDuration = (google_duration: number | undefined) => {
     <Tooltip
       content={`Google Maps duration: ${secondsToTime(google_duration)}`}
     >
-      <div className="flex items-center">
+      <div className="flex items-center gap-1">
         <FaGoogle className="inline-block" />
         {secondsToTime(google_duration)}
       </div>

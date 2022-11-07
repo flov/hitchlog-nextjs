@@ -30,7 +30,7 @@ const RandomStories: FC<{ trips: Trip[] }> = ({ trips }) => {
                 {vehicleIconsForRides(trip.rides)}
               </div>
             </div>
-            <div className="mb-2">
+            <div className="mb-4">
               <HitchhikedBy trip={trip} />
             </div>
 
@@ -49,7 +49,7 @@ const RandomStories: FC<{ trips: Trip[] }> = ({ trips }) => {
                           </Link>
                         </h2>
                       </div>
-                      <div>
+                      <div className="flex items-center gap-2">
                         {ride.vehicle && vehicleToIcon(ride.vehicle)}
                         <Tooltip
                           content={`${getOrdinalNumber(ride.number)} Ride, ${
