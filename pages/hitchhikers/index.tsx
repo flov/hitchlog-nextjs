@@ -73,7 +73,7 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
 
       <div className="mt-2 mb-4">
         <div className="mb-2 text-sm text-gray-700 dark:text-gray-400">
-          Shows only Hitchhikers who logged trips
+          Shows only Hitchhikers who have logged trips
           <br />
           Page{' '}
           <span className="font-semibold text-gray-900 dark:text-white">

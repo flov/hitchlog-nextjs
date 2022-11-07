@@ -296,7 +296,7 @@ export const showTripGoogleDuration = (google_duration: number | undefined) => {
     <Tooltip
       content={`Google Maps duration: ${secondsToTime(google_duration)}`}
     >
-      <div className="flex items-center gap-1">
+      <div className="flex items-center">
         <FaGoogle className="inline-block" />
         {secondsToTime(google_duration)}
       </div>

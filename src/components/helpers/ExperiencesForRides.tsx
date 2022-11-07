@@ -29,7 +29,7 @@ const ExperiencesForRides: FC<{ rides: Ride[] }> = ({ rides }) => {
               );
             })}
             {rides.length > 5 && (
-              <div className="relative flex items-center justify-center w-5 h-5 text-xs bg-gray-700 rounded-full font-sm ring-2 ring-gray-300 hover:bg-gray-600 dark:ring-gray-500 ">
+              <div className="relative flex items-center justify-center w-5 h-5 text-xs text-gray-200 bg-gray-700 rounded-full font-sm ring-2 ring-gray-300 hover:bg-gray-600 dark:ring-gray-500 ">
                 {rides.length}
               </div>
             )}

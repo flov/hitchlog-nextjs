@@ -22,6 +22,18 @@ export const getTripsWithQuery = async (query: any) => {
   });
 };
 
+export const getRandomTrips = async (
+  type: 'videos' | 'stories' | 'photos' | '' = ''
+) => {
+  return axios.get(`${API_URL}/trips/latest`, {
+    params: type ? { [type]: true } : {},
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+  });
+};
+
 export const getTrip = async (trip_id: any) => {
   return axios.get(`${API_URL}/trips/${trip_id}`, {
     headers: {

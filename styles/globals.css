@@ -40,9 +40,6 @@ h5 { font-size: 1.25rem; }
 p { font-family: 'Open Sans', sans-serif; }
 nav a { text-decoration: none; }
 
-a:hover { 
-  /* text-decoration: underline; */
-}
 #__next {
   height: 100%;
 }
@@ -121,6 +118,14 @@ a:hover {
 
 .grid-auto-fit {
   grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+}
+
+.thumb-grid {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
 }
 
 .image-shadow span {

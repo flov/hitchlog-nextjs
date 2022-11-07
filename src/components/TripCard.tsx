@@ -67,10 +67,8 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
       <div className="p-6">
         <div className="flex items-center justify-between mb-2 text-gray-500">
           <div className="flex items-center gap-2 dark:text-white">
-            <Badge color="info">Trip</Badge>
             <ExperiencesForRides rides={trip.rides} />
             {vehicleIconsForRides(trip.rides)}
-            {viewNumberOfRides(trip.rides.length)}
             {countryFlagsForTrip(trip)}
           </div>
           <span className="text-sm">
