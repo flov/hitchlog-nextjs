@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { FC } from 'react';
+import React, { FC, Fragment } from 'react';
 import { Trip } from '../../types';
 import { timeAgoInWords } from '../../utils/timeAgoInWords';
 import {
@@ -18,25 +18,23 @@ const RandomVideos: FC<{ trips: Trip[] }> = ({ trips }) => {
 
   return (
     <div>
-      {trips.map((trip: Trip, index: number) => {
-        return (
-          <>
-            <div className="flex items-center justify-between">
-              <Link key={trip.id} href={`/trips/${trip.to_param}`}>
-                From {trip.origin.sanitized_address} to{' '}
-                {trip.destination.sanitized_address}
-              </Link>
-              <div className="flex items-center gap-2">
-                <ExperiencesForRides rides={trip.rides} />
-                {countryFlagsForTrip(trip)}
-                {vehicleIconsForRides(trip.rides)}
-              </div>
+      {trips.map((trip: Trip, index: number) => (
+        <Fragment key={`randomVids${index}`}>
+          <div className="flex items-center justify-between">
+            <Link key={trip.id} href={`/trips/${trip.to_param}`}>
+              From {trip.origin.sanitized_address} to{' '}
+              {trip.destination.sanitized_address}
+            </Link>
+            <div className="flex items-center gap-2">
+              <ExperiencesForRides rides={trip.rides} />
+              {countryFlagsForTrip(trip)}
+              {vehicleIconsForRides(trip.rides)}
             </div>
-            {showEmbeddedYoutubeVideo(ridesWithVideo[0].youtube)}
-            <HitchhikedBy trip={trip} />
-          </>
-        );
-      })}
+          </div>
+          {showEmbeddedYoutubeVideo(ridesWithVideo[0].youtube)}
+          <HitchhikedBy trip={trip} />
+        </Fragment>
+      ))}
     </div>
   );
 };

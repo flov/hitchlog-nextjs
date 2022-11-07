@@ -28,15 +28,19 @@ const Home: NextPage = () => {
   const [latestVideoTrips, setLatestVideoTrips] = useState<Trip[]>([]);
 
   useEffect(() => {
-    getRandomTrips('photos').then((res) => {
-      setLatestPhotoTrips(res.data.trips);
-    });
-    getRandomTrips('stories').then((res) => {
-      setLatestStoryTrips(res.data.trips);
-    });
-    getRandomTrips('videos').then((res) => {
-      setLatestVideoTrips(res.data.trips);
-    });
+    console.log('I fire once');
+    latestPhotoTrips.length === 0 &&
+      getRandomTrips('photos').then((res) => {
+        setLatestPhotoTrips(res.data.trips);
+      });
+    latestStoryTrips.length === 0 &&
+      getRandomTrips('stories').then((res) => {
+        setLatestStoryTrips(res.data.trips);
+      });
+    latestVideoTrips.length === 0 &&
+      getRandomTrips('videos').then((res) => {
+        setLatestVideoTrips(res.data.trips);
+      });
   }, []);
 
   return (
