@@ -5,6 +5,9 @@ import { pluralize, removeDuplicates } from '../../utils';
 import ExperienceCircle from './ExperienceCircle';
 
 const ExperiencesForRides: FC<{ rides: Ride[] }> = ({ rides }) => {
+  const experiences = removeDuplicates(rides.map((x) => x.experience)).join(
+    ', '
+  );
   return (
     <>
       {!!rides?.length && (
@@ -12,7 +15,7 @@ const ExperiencesForRides: FC<{ rides: Ride[] }> = ({ rides }) => {
           content={`${rides.length} ${pluralize(
             rides.length,
             'ride'
-          )}: ${removeDuplicates(rides.map((x) => x.experience)).join(', ')}`}
+          )}: ${experiences}`}
         >
           <div className="flex items-center -space-x-3">
             {rides.map((ride, index) => {

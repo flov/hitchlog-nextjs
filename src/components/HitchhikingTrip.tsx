@@ -10,7 +10,6 @@ import {
   showTripGoogleDuration,
   showTripDistance,
   showEmbeddedYoutubeVideo,
-  countryFlagsForTrip,
   tagsForRides,
   showUserGender,
   vehicleIconsForRides,
@@ -23,6 +22,7 @@ import { Fragment } from 'react';
 import { useAuth } from './contexts/AuthContext';
 import ExperienceCircle from './helpers/ExperienceCircle';
 import { createTripComment } from '../db/comments';
+import CountryFlags from './helpers/CountryFlags';
 
 export function HitchhikingTrip({
   user,
@@ -65,7 +65,7 @@ export function HitchhikingTrip({
         <div className="flex flex-col items-center justify-between text-gray-500">
           <div className="flex items-center mt-2 gap-2 dark:text-white">
             <ExperiencesForRides rides={rides} />
-            {countryFlagsForTrip(trip)}
+            <CountryFlags trip={trip} />
           </div>
           {trip.rides.length > 0 && (
             <div className="flex items-center mt-3 mb-2 gap-2 dark:text-white">
@@ -76,7 +76,7 @@ export function HitchhikingTrip({
 
         <div className="flex items-center gap-1 dark:text-white">
           {showTotalWaitingTimeForRides(trip.rides)}
-          {showAgeAtTrip(trip, user)}
+          {showAgeAtTrip(trip)}
           {showTripGoogleDuration(trip.google_duration)}
           {vehicleIconsForRides(trip.rides)}
         </div>

@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import React, { FC, Fragment } from 'react';
 import { Trip } from '../../types';
-import { timeAgoInWords } from '../../utils/timeAgoInWords';
 import {
-  countryFlagsForTrip,
   showEmbeddedYoutubeVideo,
   vehicleIconsForRides,
 } from '../../utils/viewHelpers';
+import CountryFlags from '../helpers/CountryFlags';
 import ExperiencesForRides from '../helpers/ExperiencesForRides';
 import HitchhikedBy from '../helpers/HitchhikedBy';
 
@@ -27,7 +26,7 @@ const RandomVideos: FC<{ trips: Trip[] }> = ({ trips }) => {
             </Link>
             <div className="flex items-center gap-2">
               <ExperiencesForRides rides={trip.rides} />
-              {countryFlagsForTrip(trip)}
+              <CountryFlags trip={trip} />
               {vehicleIconsForRides(trip.rides)}
             </div>
           </div>

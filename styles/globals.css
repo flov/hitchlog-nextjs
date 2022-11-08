@@ -95,6 +95,10 @@ nav a { text-decoration: none; }
   height: calc(100vh - 8rem);
 }
 
+.blog-full-screen {
+  height: calc(100vh - 10.5rem);
+}
+
 * {
   box-sizing: border-box;
 }

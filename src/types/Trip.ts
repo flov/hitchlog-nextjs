@@ -29,7 +29,11 @@ export type Trip = {
   destination: Location;
   rides: Ride[];
   total_distance: number;
-  user: { username: string; md5_email: string; gender: string };
+  user: {
+    username: string;
+    md5_email: string;
+    gender: 'male' | 'female' | 'non-binary' | null;
+  };
   comments: Comment[];
 };
 

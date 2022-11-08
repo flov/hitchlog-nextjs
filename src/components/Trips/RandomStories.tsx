@@ -3,11 +3,8 @@ import Link from 'next/link';
 import React, { FC, Fragment } from 'react';
 import { Trip } from '../../types';
 import { getOrdinalNumber } from '../../utils';
-import {
-  countryFlagsForTrip,
-  vehicleIconsForRides,
-  vehicleToIcon,
-} from '../../utils/viewHelpers';
+import { showAgeAtTrip, vehicleToIcon } from '../../utils/viewHelpers';
+import CountryFlags from '../helpers/CountryFlags';
 import ExperienceCircle from '../helpers/ExperienceCircle';
 import ExperiencesForRides from '../helpers/ExperiencesForRides';
 import HitchhikedBy from '../helpers/HitchhikedBy';
@@ -25,8 +22,8 @@ const RandomStories: FC<{ trips: Trip[] }> = ({ trips }) => {
 
             <div className="flex items-center gap-2">
               <ExperiencesForRides rides={trip.rides} />
-              {countryFlagsForTrip(trip)}
-              {vehicleIconsForRides(trip.rides)}
+              {showAgeAtTrip(trip)}
+              <CountryFlags trip={trip} />
             </div>
           </div>
           <div className="mb-4">
@@ -78,6 +75,3 @@ const RandomStories: FC<{ trips: Trip[] }> = ({ trips }) => {
 };
 
 export default RandomStories;
-function showVehicleIcon(vehicle: string | undefined): React.ReactNode {
-  throw new Error('Function not implemented.');
-}

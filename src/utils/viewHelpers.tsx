@@ -1,4 +1,5 @@
 import { Badge, Tooltip } from 'flowbite-react';
+import { Fragment } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 import { BsArrowRight, BsChat, BsClock, BsSpeedometer } from 'react-icons/bs';
 import { CgSandClock } from 'react-icons/cg';
@@ -54,13 +55,13 @@ export const vehicleToIcon = (vehicle: VEHICLE) => {
 
 export const vehicleIconsForRides = (rides: Ride[]) =>
   removeDuplicates(rides.map((ride) => ride.vehicle)).map((vehicle, index) => (
-    <>
+    <Fragment key={`vehicle${index}`}>
       {vehicle && (
         <Tooltip key={`${index}Vehicles`} content={`${vehicle} rides`}>
           {vehicleToIcon(vehicle)}
         </Tooltip>
       )}
-    </>
+    </Fragment>
   ));
 
 export const showCountryFlagForUser = (
@@ -111,14 +112,6 @@ export const countryFlagsForProfile = (
     </>
   );
 };
-
-export const countryFlagsForTrip = (trip: Trip) =>
-  trip.country_distances.map((cd) =>
-    countryFlag(
-      cd.country_code,
-      `${cd.country}: ${Math.round(cd.distance / 1000)} km`
-    )
-  );
 
 export const experiencesForProfile = (experiences: ExperiencesRecord) => {
   if (!experiences) return null;
@@ -196,17 +189,17 @@ export const showTotalWaitingTimeForRides = (rides: Ride[]) => {
   );
 };
 
-export const showAgeAtTrip = (trip: Trip, user: User) => {
+export const showAgeAtTrip = (trip: Trip) => {
   if (!trip.age_at_trip) return;
   return (
     <Tooltip
-      content={`${capitalize(user.username)} was ${trip.age_at_trip} when ${
-        user.gender === 'male' ? 'he' : 'she'
-      } did the trip`}
+      content={`${capitalize(trip.user.username)} was ${
+        trip.age_at_trip
+      } when ${trip.user.gender === 'male' ? 'he' : 'she'} did the trip`}
     >
       <div className="flex items-center">
         <FiUser className="inline" />
-        {trip.age_at_trip}
+        <span className="text-xs">{trip.age_at_trip}</span>
       </div>
     </Tooltip>
   );

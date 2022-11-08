@@ -5,7 +5,6 @@ import { timeAgoInWords } from '../utils/timeAgoInWords';
 import RightArrow from './svg/RightArrow';
 import { Badge, Button, Carousel, Tooltip } from 'flowbite-react';
 import {
-  countryFlagsForTrip,
   showEmbeddedYoutubeVideo,
   tagsForRides,
   vehicleIconsForRides,
@@ -16,6 +15,7 @@ import Link from 'next/link';
 import { useAuth } from './contexts/AuthContext';
 import ExperiencesForRides from './helpers/ExperiencesForRides';
 import ExperienceCircle from './helpers/ExperienceCircle';
+import CountryFlags from './helpers/CountryFlags';
 
 const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   map,
@@ -69,7 +69,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
           <div className="flex items-center gap-2 dark:text-white">
             <ExperiencesForRides rides={trip.rides} />
             {vehicleIconsForRides(trip.rides)}
-            {countryFlagsForTrip(trip)}
+            <CountryFlags trip={trip} />
           </div>
           <span className="text-sm">
             <Tooltip content={`Hitchhiked ${timeAgoInWords(trip.departure)}`}>
