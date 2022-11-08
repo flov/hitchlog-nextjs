@@ -1,3 +1,4 @@
+import Footer from '../flowbite/Footer';
 import React, { FC, ReactNode } from 'react';
 import NavBar from './NavBar';
 
@@ -10,6 +11,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
       ></div>
       <NavBar />
       {children}
+      <Footer />
     </div>
   );
 };
