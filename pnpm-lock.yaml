@@ -28,6 +28,7 @@ specifiers:
   google-maps-react: ^2.0.6
   jquery: ^3.6.1
   js-cookie: ^3.0.1
+  logrocket: ^3.0.1
   md5: ^2.3.0
   moment: ^2.29.4
   next: 13.0.1
@@ -64,6 +65,7 @@ dependencies:
   google-maps-react: 2.0.6_biqbaboplfbrettd7655fr4n2y
   jquery: 3.6.1
   js-cookie: 3.0.1
+  logrocket: 3.0.1
   md5: 2.3.0
   moment: 2.29.4
   next: 13.0.1_biqbaboplfbrettd7655fr4n2y
@@ -2475,6 +2477,10 @@ packages:
     dependencies:
       chalk: 4.1.2
       is-unicode-supported: 0.1.0
+    dev: false
+
+  /logrocket/3.0.1:
+    resolution: {integrity: sha512-jOWG+jEzobKVxGytzZ+4KGm2kiMQMRTHab2uDWQyVZcHfEF38BlCH1yjQVY4LCmuQUwZitP9biMzJZnyUQ0dtQ==}
     dev: false
 
   /longest/2.0.1:

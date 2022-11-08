@@ -29,6 +29,7 @@
     "google-maps-react": "^2.0.6",
     "jquery": "^3.6.1",
     "js-cookie": "^3.0.1",
+    "logrocket": "^3.0.1",
     "md5": "^2.3.0",
     "moment": "^2.29.4",
     "next": "13.0.1",
