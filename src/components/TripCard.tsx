@@ -3,12 +3,11 @@ import { Trip } from '../types';
 import Image from 'next/image';
 import { timeAgoInWords } from '../utils/timeAgoInWords';
 import RightArrow from './svg/RightArrow';
-import { Badge, Button, Carousel, Tooltip } from 'flowbite-react';
+import { Button, Carousel, Tooltip } from 'flowbite-react';
 import {
   showEmbeddedYoutubeVideo,
   tagsForRides,
   vehicleIconsForRides,
-  viewNumberOfRides,
 } from '../utils/viewHelpers';
 import { getOrdinalNumber, photoForUser, profilePicture } from '../utils';
 import Link from 'next/link';

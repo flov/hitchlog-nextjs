@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Trip } from '../types';
-import Skeleton from './Skeleton';
+import Skeleton from './Trips/Skeleton';
 import TripCard from './TripCard';
 
 export const ListTrips: FC<{

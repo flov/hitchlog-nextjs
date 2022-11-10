@@ -2,7 +2,7 @@ import { Pagination, Table } from 'flowbite-react';
 import Image from 'next/image';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getUsers } from '../../src/db/users';
 import { User } from '../../src/types';
 import { profilePicture } from '../../src/utils';
@@ -16,31 +16,30 @@ import {
 import { useRouter } from 'next/router';
 import { PuffLoader } from 'react-spinners';
 import Head from 'next/head';
+import Skeleton from '../../src/components/Hitchhikers/Skeleton';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const users = await getUsers(Number(query?.page) || 1);
-  if (users.data?.error) {
-    return {
-      notFound: true,
-    };
-  }
-
   return {
     props: {
-      users: JSON.parse(JSON.stringify(users.data.users)),
       page: Number(query?.page) || 1,
-      totalPages: JSON.parse(JSON.stringify(users.data.total_pages)),
     },
   };
 };
 
-const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
-  props
-) => {
+const Index: NextPage<{ page: number }> = (props) => {
   const [page, setPage] = useState(props.page);
-  const [users, setUsers] = useState(props.users);
-  const [isLoading, setIsLoading] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
+
+  const fetchUsers = async () => {
+    setIsLoading(true);
+    const { data } = await getUsers(page);
+    setUsers(data.users);
+    setTotalPages(data.total_pages);
+    setIsLoading(false);
+  };
 
   const handlePageChange = async (p: number) => {
     router.push(
@@ -52,14 +51,12 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
       { shallow: true }
     );
     setPage(p);
-    const fetchUsers = async () => {
-      setIsLoading(true);
-      const { data } = await getUsers(page);
-      setUsers(data.users);
-      setIsLoading(false);
-    };
     fetchUsers();
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <div className="mx-auto text-center sm:px-4 max-w-screen-lg lg:mb-16">
@@ -81,7 +78,7 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
           </span>{' '}
           of&nbsp;
           <span className="font-semibold text-gray-900 dark:text-white">
-            {props.totalPages}
+            {totalPages}
           </span>{' '}
         </div>
         <Pagination
@@ -89,10 +86,10 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
           currentPage={page}
           layout="navigation"
           showIcons={true}
-          totalPages={props.totalPages}
+          totalPages={totalPages}
         />
       </div>
-      <Table striped>
+      <Table>
         <Table.Head>
           <Table.HeadCell>
             <div className="flex justify-between">Username and Stats</div>
@@ -102,13 +99,15 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
         </Table.Head>
         <Table.Body className="divide-y">
           {isLoading ? (
-            <Table.Row>
-              <Table.Cell colSpan={2}>
-                <div className="flex justify-center">
-                  <PuffLoader color="white" />
-                </div>
-              </Table.Cell>
-            </Table.Row>
+            <>
+              {new Array(10).fill(0).map((_, i) => (
+                <Table.Row key={`userSkeleton${i}`} className="dark:text-white">
+                  <Table.Cell colSpan={2} className="px-2 py-2">
+                    <Skeleton />
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </>
           ) : (
             users.map((user: User, index) => (
               <Table.Row className="dark:text-white" key={`user${index}`}>
@@ -150,7 +149,7 @@ const Index: NextPage<{ totalPages: number; page: number; users: User[] }> = (
           currentPage={page}
           layout="table"
           showIcons={true}
-          totalPages={props.totalPages}
+          totalPages={totalPages}
         />
       </div>
     </div>
