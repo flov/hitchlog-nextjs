@@ -16,46 +16,34 @@ import { FaList, FaMap } from 'react-icons/fa';
 import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const res = await getTripsWithQuery({ q: query.q as Record<string, any> });
-  const trips = JSON.parse(JSON.stringify(res.data.trips));
   const q = query.q ? JSON.parse(query.q as string) : {};
   const page = query.page ? JSON.parse(query.page as string) : 1;
-  const totalPages = JSON.parse(JSON.stringify(res.data.total_pages));
 
   return {
     props: {
       googleMapsKey: process.env.GOOGLE_MAPS_KEY,
-      trips,
       q,
       page,
-      totalPages,
     },
   };
 };
 
 const Index: FC<{
-  trips: Trip[];
   google: GoogleAPI;
   q: any;
   page: number;
-  totalPages: number;
 }> = (props) => {
   const { google } = props;
   let q = props.q;
   if (typeof q === 'string') q = JSON.parse(q);
-  const ref = useRef<HTMLDivElement>(null);
+  const googleMapsRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState({});
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [trips, setTrips] = useState<Trip[]>(props.trips);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [trips, setTrips] = useState<Trip[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState(props.page);
-  const [totalPages, setTotalPages] = useState(props.totalPages);
+  const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
-
-  const setTripsData = (res: AxiosResponse) => {
-    setTrips(res.data.trips);
-    setTotalPages(res.data.total_pages);
-  };
 
   const handlePageChange = async (p: number) => {
     router.push(
@@ -73,20 +61,24 @@ const Index: FC<{
         q: Object.assign(query),
         page,
       });
-      setTripsData(res);
+      setTrips(res.data.trips);
+      setTotalPages(res.data.total_pages);
       setIsLoading(false);
     };
     fetchTrips();
   };
 
   useEffect(() => {
-    setQuery(q);
-    if (ref.current) {
-      let createdMap = new google.maps.Map(ref.current, {
-        center: {
-          lat: trips[0]?.origin?.lat as number,
-          lng: trips[0]?.origin?.lng as number,
-        },
+    getTripsWithQuery({ q: props.q as Record<string, any> }).then((res) => {
+      setTrips(res.data.trips);
+      setTotalPages(res.data.total_pages);
+      setIsLoading(false);
+    });
+    setQuery(props.q);
+
+    if (googleMapsRef.current) {
+      let createdMap = new google.maps.Map(googleMapsRef.current, {
+        center: { lat: 50.85045, lng: 4.34878 },
         zoom: 6,
       });
       setMap(createdMap);
@@ -111,7 +103,9 @@ const Index: FC<{
           }),
         }).then((res: AxiosResponse) => {
           setIsLoading(false);
-          setTripsData(res);
+          setTrips(res.data.trips);
+          setTotalPages(res.data.total_pages);
+
           setQuery(Object.assign(query, res.config.params.q));
           router.push(
             {
@@ -167,7 +161,8 @@ const Index: FC<{
                 { shallow: true }
               );
 
-              setTripsData(res);
+              setTrips(res.data.trips);
+              setTotalPages(res.data.total_pages);
             })
             .catch((err) => {
               console.log(err);
@@ -186,7 +181,7 @@ const Index: FC<{
             ? 'visible trip-map-full-screen animate-fadeIn'
             : 'invisible animate-fadeOut'
         }
-        ref={ref}
+        ref={googleMapsRef}
         id="map"
       >
         {map &&
