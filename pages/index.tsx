@@ -101,18 +101,18 @@ const Home: NextPage = () => {
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
             <Image
-              width={284}
-              height={198}
-              className="w-full rounded-lg"
-              src="https://s3-eu-west-1.amazonaws.com/hitchlog.heroku.com/uploads/ride/25211/hitchhiking-from-hawaii-united-states-to-hawaii-united-states.jpg"
-              alt="Hitting the road"
+              width={360}
+              height={367}
+              className="w-full mt-0 rounded-lg lg:mt-4"
+              src="/landing_page_4.jpg"
+              alt="Hitting the road 2"
             />
             <Image
               width={284}
-              height={187}
-              className="w-full mt-4 rounded-lg lg:mt-10"
-              src="/landing_page_2.png"
-              alt="office content 2"
+              height={198}
+              className="w-full mt-6 rounded-lg lg:mt-14"
+              src="https://s3-eu-west-1.amazonaws.com/hitchlog.heroku.com/uploads/ride/25211/hitchhiking-from-hawaii-united-states-to-hawaii-united-states.jpg"
+              alt="Hitting the road 1"
             />
           </div>
         </div>
