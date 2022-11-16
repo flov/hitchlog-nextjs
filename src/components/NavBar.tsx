@@ -91,9 +91,7 @@ const NavBar = () => {
             </Dropdown>
           </>
         ) : (
-          <Button color="gray" onClick={toggleModal}>
-            Login
-          </Button>
+          <Button onClick={toggleModal}>Login</Button>
         )}
         <DarkThemeToggle onClick={handleThemeSwitch} />
         <Navbar.Toggle />
