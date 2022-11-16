@@ -188,8 +188,10 @@ export class AutocompleteDirectionsHandler {
       }
 
       if (mode === 'origin') {
+        this.setFieldValue('from_name', place.formatted_address);
         this.originPlaceId = place.place_id;
       } else {
+        this.setFieldValue('to_name', place.formatted_address);
         this.destinationPlaceId = place.place_id;
       }
       if (!place.geometry?.location) return;
