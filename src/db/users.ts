@@ -31,6 +31,19 @@ export const sendMessage = async (message: string, username: string) =>
     }
   );
 
+export const postContactForm = async (payload: any) =>
+  axios.post(
+    `${API_URL}/mails/contact_form`,
+    { contact_form: payload },
+    {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('authToken')}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
 export const getGeomap = async (id: string | number) =>
   axios.get(`${API_URL}/users/${id}/geomap`, {
     headers: {
