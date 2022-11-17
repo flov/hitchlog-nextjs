@@ -11,6 +11,8 @@ export type Ride = {
   tags: string[];
   photo?: Photo;
   photo_caption: string;
+  likes: number;
+  already_liked?: boolean;
 };
 
 export type Photo = {
