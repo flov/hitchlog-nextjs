@@ -14,7 +14,6 @@ import {
   viewNumberOfStories,
 } from '../../src/utils/viewHelpers';
 import { useRouter } from 'next/router';
-import { PuffLoader } from 'react-spinners';
 import Head from 'next/head';
 import Skeleton from '../../src/components/Hitchhikers/Skeleton';
 

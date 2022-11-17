@@ -213,8 +213,8 @@ export const TripForm = ({
           </Select>
         </div>
 
-        <div className="flex justify-center col-span-2">
-          <Button disabled={isSubmitting} type="submit">
+        <div className="flex justify-center mt-2 col-span-2">
+          <Button className="w-full" disabled={isSubmitting} type="submit">
             Save Trip
           </Button>
         </div>

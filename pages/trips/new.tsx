@@ -64,7 +64,7 @@ const New: NextPage<{ google: GoogleAPI; ipLocation: IpLocation }> = ({
       zoom: 4,
     });
     setMap(map);
-  }, [google.maps.Map]);
+  }, []);
 
   const initialValues = {
     origin: {},
@@ -97,7 +97,7 @@ const New: NextPage<{ google: GoogleAPI; ipLocation: IpLocation }> = ({
   return (
     <div>
       <Head>
-        <title>Hitchlog - Log new trip</title>
+        <title>Hitchlog - Log a new trip</title>
         <meta name="description" content="Log a new hitchhiking trip" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
