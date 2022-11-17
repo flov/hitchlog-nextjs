@@ -99,7 +99,7 @@ const Show: NextPage<{
 
       <div className="flex flex-col-reverse items-start justify-center max-w-5xl px-4 pt-4 mx-auto sm:flex-row gap-4">
         <section className="w-full p-6 border rounded-lg dark:bg-gray-800 dark:border-gray-700">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-col items-center justify-between sm:flex-row gap-2">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               {capitalize(profile.username)}
             </h1>

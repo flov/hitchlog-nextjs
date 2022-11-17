@@ -151,7 +151,7 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
             href={`/trips/${trip.to_param}`}
           >
             <>
-              Read more
+              Show Trip
               <RightArrow />
             </>
           </Link>
