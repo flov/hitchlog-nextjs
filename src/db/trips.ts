@@ -29,6 +29,7 @@ export const getRandomTrips = async (
     params: type ? { [type]: true } : {},
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
       Accept: 'application/json',
     },
   });
@@ -38,6 +39,7 @@ export const getTrip = async (trip_id: any) => {
   return axios.get(`${API_URL}/trips/${trip_id}`, {
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
       Accept: 'application/json',
     },
   });

@@ -8,6 +8,7 @@ import {
 import CountryFlags from '../helpers/CountryFlags';
 import ExperiencesForRides from '../helpers/ExperiencesForRides';
 import HitchhikedBy from '../helpers/HitchhikedBy';
+import LikeRide from '../helpers/LikeRide';
 
 const RandomVideos: FC<{ trips: Trip[] }> = ({ trips }) => {
   const ridesWithVideo = trips
@@ -16,7 +17,7 @@ const RandomVideos: FC<{ trips: Trip[] }> = ({ trips }) => {
     .filter((ride) => ride.youtube !== null && ride.youtube !== undefined);
 
   return (
-    <div>
+    <div className="mb-8">
       {trips.map((trip: Trip, index: number) => (
         <Fragment key={`randomVids${index}`}>
           <div className="flex items-center justify-between">
@@ -27,6 +28,7 @@ const RandomVideos: FC<{ trips: Trip[] }> = ({ trips }) => {
             <div className="flex items-center gap-2">
               <ExperiencesForRides rides={trip.rides} />
               <CountryFlags trip={trip} />
+              <LikeRide ride={ridesWithVideo[0]} />
               {vehicleIconsForRides(trip.rides)}
             </div>
           </div>

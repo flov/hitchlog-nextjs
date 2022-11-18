@@ -1,13 +1,12 @@
 import { AxiosResponse } from 'axios';
-import { Button, Label, Modal, Textarea } from 'flowbite-react';
+import { Button, Label, Textarea } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import React, { FC, useEffect, useState } from 'react';
-import { createPostComment } from '../../db/comments';
 import { Comment } from '../../types/Comment';
 import { objectToString } from '../../utils';
 import { useAuth } from '../contexts/AuthContext';
+import { useLoginModal } from '../contexts/LoginModal';
 import { useToasts } from '../contexts/ToastContext';
-import Login from '../Login';
 import CommentComponent from './Comment';
 
 const CommentSection: FC<{
@@ -21,9 +20,8 @@ const CommentSection: FC<{
   const [comments, setComments] = useState(props.comments);
   const { addToast } = useToasts();
   const { isAuthenticated } = useAuth();
-  const [modal, setModal] = useState(false);
-  const toggleModal = () => setModal(!modal);
   const { id, submitCallback } = props;
+  const { toggleLoginModal } = useLoginModal();
 
   useEffect(() => {
     setComments(props.comments);
@@ -53,7 +51,7 @@ const CommentSection: FC<{
                   .finally(() => {
                     setSubmitting(false);
                   })
-              : toggleModal();
+              : toggleLoginModal();
             setSubmitting(false);
           }}
           initialValues={{ body: '' }}
@@ -89,17 +87,8 @@ const CommentSection: FC<{
           <CommentComponent key={comment.created_at} comment={comment} />
         ))}
       </section>
-      <Modal size="md" show={modal} onClose={toggleModal}>
-        <Modal.Header>Sign in to your account</Modal.Header>
-        <Modal.Body>
-          <Login toggleModal={toggleModal} />
-        </Modal.Body>
-      </Modal>
     </div>
   );
 };
 
 export default CommentSection;
-function addToast(arg0: any, arg1: string) {
-  throw new Error('Function not implemented.');
-}

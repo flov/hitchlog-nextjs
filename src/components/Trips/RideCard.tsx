@@ -1,36 +1,16 @@
 import { Badge, Tooltip } from 'flowbite-react';
 import Link from 'next/link';
-import React, { FC, Fragment, useState } from 'react';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { putLikeRide } from '../../db/ride';
+import React, { FC, Fragment } from 'react';
 import { Ride } from '../../types';
 import { getOrdinalNumber } from '../../utils';
 import { vehicleToIcon } from '../../utils/viewHelpers';
-import { useToasts } from '../contexts/ToastContext';
 import ExperienceCircle from '../helpers/ExperienceCircle';
+import LikeRide from '../helpers/LikeRide';
 
 const RideCard: FC<{ ride: Ride; trip_param: string }> = ({
   ride,
   trip_param,
 }) => {
-  const { addToast } = useToasts();
-  const [hasLikedTrip, setHasLikedTrip] = useState(false);
-
-  const likeTrip = () => {
-    putLikeRide(ride.id)
-      .then((res) => {
-        addToast('Liked Ride. Thank you ❤️');
-        setHasLikedTrip(true);
-        window.confetti();
-      })
-      .catch((err) => {
-        console.log(err);
-        const errorMessage = err?.response?.data && err.response.data[0];
-        errorMessage
-          ? addToast(errorMessage, 'error')
-          : addToast('Something went wrong', 'error');
-      });
-  };
   return (
     <Fragment>
       {ride.story && (
@@ -53,18 +33,7 @@ const RideCard: FC<{ ride: Ride; trip_param: string }> = ({
               >
                 <ExperienceCircle experience={ride.experience} size={4} />
               </Tooltip>
-              <div
-                onClick={likeTrip}
-                className="rounded-full cursor-pointer  dark:text-white"
-              >
-                <div className="">
-                  {hasLikedTrip || ride.already_liked ? (
-                    <FaHeart className="text-red-500" />
-                  ) : (
-                    <FaRegHeart className="hover:text-red-500 hover:animate-fadeIn" />
-                  )}
-                </div>
-              </div>
+              <LikeRide ride={ride} />
             </div>
           </div>
           {ride.story && (

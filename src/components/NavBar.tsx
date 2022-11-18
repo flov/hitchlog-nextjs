@@ -3,7 +3,6 @@ import {
   Button,
   DarkThemeToggle,
   Dropdown,
-  Modal,
   Navbar,
 } from 'flowbite-react';
 import Link from 'next/link';
@@ -11,16 +10,15 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { useAuth } from './contexts/AuthContext';
 import { capitalize, profilePicture } from '../utils';
-import Login from './Login';
 import Image from 'next/image';
+import { useLoginModal } from './contexts/LoginModal';
 
 const NavBar = () => {
   const { currentUser, logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const [themeSwitcher, setThemeSwitcher] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const hitchlog_logo = '/hitchlog_logo.png';
-  const toggleModal = () => setShowModal(!showModal);
+  const { toggleLoginModal } = useLoginModal();
 
   useEffect(() => {
     setThemeSwitcher(true);
@@ -91,7 +89,7 @@ const NavBar = () => {
             </Dropdown>
           </>
         ) : (
-          <Button onClick={toggleModal}>Login</Button>
+          <Button onClick={toggleLoginModal}>Login</Button>
         )}
         <DarkThemeToggle onClick={handleThemeSwitch} />
         <Navbar.Toggle />
@@ -110,15 +108,6 @@ const NavBar = () => {
           <Link href="/hitchhikers">Hitchhikers</Link>
         </li>
       </Navbar.Collapse>
-
-      <React.Fragment>
-        <Modal size="md" show={showModal} onClose={toggleModal}>
-          <Modal.Header>Sign in to your account</Modal.Header>
-          <Modal.Body>
-            <Login toggleModal={toggleModal} />
-          </Modal.Body>
-        </Modal>
-      </React.Fragment>
     </Navbar>
   );
 };
