@@ -3,19 +3,15 @@ import { Trip } from '../types';
 import Image from 'next/image';
 import { timeAgoInWords } from '../utils/timeAgoInWords';
 import RightArrow from './svg/RightArrow';
-import { Button, Carousel, Tooltip } from 'flowbite-react';
-import {
-  showEmbeddedYoutubeVideo,
-  tagsForRides,
-  vehicleIconsForRides,
-} from '../utils/viewHelpers';
-import { getOrdinalNumber, photoForUser, profilePicture } from '../utils';
+import { Button, Tooltip } from 'flowbite-react';
+import { showEmbeddedYoutubeVideo } from '../utils/viewHelpers';
+import { getOrdinalNumber, profilePicture } from '../utils';
 import Link from 'next/link';
 import { useAuth } from './contexts/AuthContext';
-import ExperiencesForRides from './helpers/ExperiencesForRides';
 import ExperienceCircle from './helpers/ExperienceCircle';
-import CountryFlags from './helpers/CountryFlags';
 import LikeRide from './helpers/LikeRide';
+import CarouselForRides from './Trips/CarouselForRides';
+import RandomStoryCard from './Trips/RandomStoryCard';
 
 const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   map,
@@ -39,47 +35,10 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
       onClick={centerMapToTrip}
       className="bg-white border border-gray-200 rounded-lg animate-fadeIn dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700"
     >
-      <div
-        className={`h-56 sm:h-64 xl:h-76 ${
-          ridesWithPhoto.length === 0 && 'hidden'
-        }`}
-      >
-        <Carousel slideInterval={5000} slide={true}>
-          {ridesWithPhoto.map(
-            (ride, index) =>
-              ride.photo && (
-                <div className="relative">
-                  <img
-                    className="rounded-t-lg"
-                    alt={`photo of ${getOrdinalNumber(ride.number)} ride`}
-                    key={index}
-                    src={ride.photo.url}
-                  />
-                  <p className="absolute top-0 w-full font-bold text-center bg-white dark:bg-gray-800 opacity-70">
-                    {ride.photo_caption}
-                  </p>
-                </div>
-              )
-          )}
-        </Carousel>
-      </div>
+      <CarouselForRides rides={ridesWithPhoto} />
 
       <div className="p-6">
-        <div className="flex items-center justify-between mb-2 text-gray-500">
-          <div className="flex items-center gap-2 dark:text-white">
-            <ExperiencesForRides rides={trip.rides} />
-            {vehicleIconsForRides(trip.rides)}
-            <CountryFlags trip={trip} />
-          </div>
-          <span className="text-sm">
-            <Tooltip content={`Hitchhiked ${timeAgoInWords(trip.departure)}`}>
-              {timeAgoInWords(trip.departure)}
-            </Tooltip>
-          </span>
-        </div>
-        <div className="flex items-center mb-4 overflow-x-auto gap-2 dark:text-white">
-          {tagsForRides(trip.rides)}
-        </div>
+        <RandomStoryCard trip={trip} />
 
         <div className="flex items-center justify-between mb-2 align gap-2">
           <Link href={`/trips/${trip.to_param}`}>
@@ -96,9 +55,6 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
             {ride.story && (
               <>
                 <div className="flex items-center gap-2">
-                  <Tooltip content={`${ride.experience} Experience`}>
-                    <ExperienceCircle experience={ride.experience} size={3} />
-                  </Tooltip>
                   <div className="flex items-center justify-between w-full">
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                       <Link href={`/trips/${trip.to_param}`}>
@@ -107,7 +63,15 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
                           : `${getOrdinalNumber(ride.number)} ride`}
                       </Link>
                     </h2>
-                    <LikeRide ride={ride} />
+                    <div className="flex items-center gap-2">
+                      <Tooltip content={`${ride.experience} Experience`}>
+                        <ExperienceCircle
+                          experience={ride.experience}
+                          size={3}
+                        />
+                      </Tooltip>
+                      <LikeRide ride={ride} />
+                    </div>
                   </div>
                 </div>
                 {ride.story && (

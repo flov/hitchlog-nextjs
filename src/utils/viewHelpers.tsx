@@ -380,19 +380,3 @@ export const showEmbeddedYoutubeVideo = (youtubeId: string | undefined) => {
     </div>
   );
 };
-
-export const tagsForRide = (ride: Ride) =>
-  ride.tags.map((tag) => (
-    <Badge color="purple" key={`${ride.id}${tag}`}>
-      {tag}
-    </Badge>
-  ));
-
-export const tagsForRides = (rides: Ride[]) => {
-  const tags = removeDuplicates(rides.map((x) => x.tags).flat());
-  return tags.map((tag) => (
-    <Badge color="purple" key={tag}>
-      {tag}
-    </Badge>
-  ));
-};

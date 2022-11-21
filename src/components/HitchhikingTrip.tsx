@@ -10,7 +10,6 @@ import {
   showTripGoogleDuration,
   showTripDistance,
   showEmbeddedYoutubeVideo,
-  tagsForRides,
   showUserGender,
   vehicleIconsForRides,
 } from '../utils/viewHelpers';
@@ -23,6 +22,7 @@ import { useAuth } from './contexts/AuthContext';
 import ExperienceCircle from './helpers/ExperienceCircle';
 import { createTripComment } from '../db/comments';
 import CountryFlags from './helpers/CountryFlags';
+import { TagsForRides } from './Trips/TagsForRide';
 
 export function HitchhikingTrip({
   user,
@@ -69,7 +69,7 @@ export function HitchhikingTrip({
           </div>
           {trip.rides.length > 0 && (
             <div className="flex items-center mt-3 mb-2 gap-2 dark:text-white">
-              {tagsForRides(trip.rides)}
+              <TagsForRides rides={trip.rides} />
             </div>
           )}
         </div>

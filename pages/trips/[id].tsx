@@ -1,4 +1,3 @@
-import { Loader } from '@googlemaps/js-api-loader';
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,

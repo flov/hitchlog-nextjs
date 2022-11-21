@@ -50,7 +50,6 @@ const EditBlogPost: NextPage<{ post: Post }> = ({ post }) => {
               })
               .catch((err) => {
                 addToast(objectToString(err.response.data), 'error');
-                console.log(err.response.data);
               })
               .finally(() => {
                 setSubmitting(false);
