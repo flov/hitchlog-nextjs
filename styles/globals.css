@@ -100,7 +100,7 @@ nav a { text-decoration: none; }
 }
 
 .trip-map-full-screen {
-  height: calc(100vh - 8rem);
+  height: calc(100vh - 11.75rem);
 }
 
 .full-height-content {
@@ -117,7 +117,7 @@ nav a { text-decoration: none; }
 }
 @media (min-width: 768px) {
   .md-full-screen {
-    height: calc(100vh - 4.1rem);
+    height: calc(100vh - 8.5rem);
   }
 }
 @media (min-width: 640px) {

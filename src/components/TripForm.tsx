@@ -206,7 +206,7 @@ export const TripForm = ({
             value={values.travelling_with}
             name="travelling_with"
           >
-            <option value="0">yourself</option>
+            <option value="0">alone</option>
             <option value="1">one other person</option>
             <option value="2">two other persons</option>
             <option value="3">three other persons</option>

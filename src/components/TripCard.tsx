@@ -15,6 +15,7 @@ import { useAuth } from './contexts/AuthContext';
 import ExperiencesForRides from './helpers/ExperiencesForRides';
 import ExperienceCircle from './helpers/ExperienceCircle';
 import CountryFlags from './helpers/CountryFlags';
+import LikeRide from './helpers/LikeRide';
 
 const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   map,
@@ -98,13 +99,16 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
                   <Tooltip content={`${ride.experience} Experience`}>
                     <ExperienceCircle experience={ride.experience} size={3} />
                   </Tooltip>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                    <Link href={`/trips/${trip.to_param}`}>
-                      {ride.title
-                        ? ride.title
-                        : `${getOrdinalNumber(ride.number)} ride`}
-                    </Link>
-                  </h2>
+                  <div className="flex items-center justify-between w-full">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                      <Link href={`/trips/${trip.to_param}`}>
+                        {ride.title
+                          ? ride.title
+                          : `${getOrdinalNumber(ride.number)} ride`}
+                      </Link>
+                    </h2>
+                    <LikeRide ride={ride} />
+                  </div>
                 </div>
                 {ride.story && (
                   <p className="mt-1 mb-5 font-light text-gray-500 dark:text-gray-400">

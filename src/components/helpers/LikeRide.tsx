@@ -18,7 +18,7 @@ const LikeRide: FC<{ ride: Ride }> = ({ ride }) => {
     } else {
       putLikeRide(ride.id)
         .then((res) => {
-          addToast('Liked Ride. Thank you ❤️');
+          addToast('Liked Ride ❤️');
           setHasLikedRide(true);
           window.confetti();
         })
