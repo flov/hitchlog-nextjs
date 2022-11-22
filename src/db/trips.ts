@@ -85,6 +85,16 @@ export const deleteTrip = (id: number) => {
   });
 };
 
+export const updateTrip = (payload: any) => {
+  return axios.put(`${API_URL}/trips/${payload.id}`, payload, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
+    },
+  });
+};
+
 export const updateRide = (payload: any) => {
   return axios.patch(`${API_URL}/rides/${payload.id}`, payload, {
     headers: {

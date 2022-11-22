@@ -84,6 +84,7 @@ export const TripForm = ({
                   ref={originRef}
                   placeholder="Enter origin"
                   type="text"
+                  autoFocus
                   required
                   color={
                     touched.from_name && errors.origin?.lat

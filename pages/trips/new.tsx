@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { date, number, object, ref, string } from 'yup';
 import { useAuth } from '../../src/components/contexts/AuthContext';
+import ShowErrors from '../../src/components/helpers/ShowErrors';
 import LoadingContainer from '../../src/components/LoadingContainer';
 import { TripForm } from '../../src/components/TripForm';
 import { createTrip } from '../../src/db/trips';
@@ -66,20 +67,6 @@ const New: NextPage<{ google: GoogleAPI; ipLocation: IpLocation }> = ({
     setMap(map);
   }, []);
 
-  const initialValues = {
-    origin: {},
-    destination: {},
-    country_distances: [],
-    from_name: '',
-    to_name: '',
-    travelling_with: '0',
-    number_of_rides: 1,
-    arrival: '',
-    departure: '',
-    totalDistance: 0,
-    googleDuration: 0,
-  };
-
   const handleSubmit = async (values: any) => {
     const payload = {
       trip: values,
@@ -101,11 +88,17 @@ const New: NextPage<{ google: GoogleAPI; ipLocation: IpLocation }> = ({
         <meta name="description" content="Log a new hitchhiking trip" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="h-48 md:h-80" ref={googlemap} id="map"></div>
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="flex flex-col items-center justify-center mx-auto">
-          <div className="w-full max-w-2xl p-4 bg-white rounded-lg shadow sm:m-6 sm:p-6 dark:border dark:bg-gray-800 dark:border-gray-700">
-            <h2 className="text-xl font-bold tracking-tight text-center sm:text-2xl ">
+
+      <div className="items-center justify-center md:h-full md:flex gap-4 md:flex-row md:flex-row-reverse">
+        <div
+          className="h-48 md:w-128 md-full-screen lg:w-1/2 md:shadow"
+          ref={googlemap}
+          id="map"
+        ></div>
+
+        <section className="flex flex-col items-center lg:w-1/2 sm:m-4 md:m-0">
+          <div className="p-4 bg-white rounded-lg shadow lg:w-122 xl:w-144 sm:p-6 dark:border dark:bg-gray-800 dark:border-gray-700">
+            <h2 className="w-full text-xl font-bold tracking-tight text-center sm:text-2xl ">
               Log a new hitchhiking adventure
             </h2>
             {!currentUser && (
@@ -120,25 +113,35 @@ const New: NextPage<{ google: GoogleAPI; ipLocation: IpLocation }> = ({
             {errors && (
               <Alert color="failure">
                 <span>
-                  <span className="font-medium">{showErrors(errors)}</span>
+                  <span className="font-medium">
+                    <ShowErrors errors={errors} />
+                  </span>
                 </span>
               </Alert>
             )}
-            {map && currentUser ? (
-              <div>
-                <Formik
-                  component={(props) => <TripForm {...props} map={map} />}
-                  initialValues={initialValues}
-                  validationSchema={TripSchema}
-                  onSubmit={handleSubmit}
-                />
-              </div>
-            ) : (
-              <></>
+            {map && currentUser && (
+              <Formik
+                component={(props) => <TripForm {...props} map={map} />}
+                initialValues={{
+                  origin: {},
+                  destination: {},
+                  country_distances: [],
+                  from_name: '',
+                  to_name: '',
+                  travelling_with: '0',
+                  number_of_rides: 1,
+                  arrival: '',
+                  departure: '',
+                  totalDistance: 0,
+                  googleDuration: 0,
+                }}
+                validationSchema={TripSchema}
+                onSubmit={handleSubmit}
+              />
             )}
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   );
 };

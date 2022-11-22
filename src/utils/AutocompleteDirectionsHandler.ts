@@ -54,11 +54,17 @@ export class AutocompleteDirectionsHandler {
 
     this.directionsRenderer.addListener('directions_changed', () => {
       const directions = this.directionsRenderer.getDirections();
-      if (
-        directions &&
-        directions.geocoded_waypoints &&
-        directions.geocoded_waypoints.length > 2
-      ) {
+      console.log(directions);
+      if (directions && directions.geocoded_waypoints) {
+        const originPlaceId = directions.geocoded_waypoints[0].place_id;
+        const destinationPlaceId = directions.geocoded_waypoints[1].place_id;
+        this.geocode({ placeId: originPlaceId }, 'origin');
+        this.geocode({ placeId: destinationPlaceId }, 'destination');
+        this.setFieldValue(
+          'from_name',
+          directions.routes[0].legs[0].start_address
+        );
+        this.setFieldValue('to_name', directions.routes[0].legs[0].end_address);
         this.computeTotalDistance(directions);
       }
     });
@@ -92,7 +98,7 @@ export class AutocompleteDirectionsHandler {
     };
   }
 
-  getCountriesForDirectionsResult(
+  getCountriesWithDistanceForResult(
     directionsResult: google.maps.DirectionsResult
   ) {
     const { routes } = directionsResult;
@@ -130,6 +136,40 @@ export class AutocompleteDirectionsHandler {
     return countries;
   }
 
+  geocode(
+    geocoderRequest: google.maps.GeocoderRequest,
+    mode: 'origin' | 'destination'
+  ) {
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode(geocoderRequest, (results, status) => {
+      if (status === 'OK' && results) {
+        const { city, country, country_code } =
+          this.getDataFromAddressComponent(
+            results[0]
+              .address_components as google.maps.GeocoderAddressComponent[]
+          );
+        const lat = results[0].geometry.location.lat();
+        const lng = results[0].geometry.location.lng();
+        this.setFieldValue(mode, {
+          place_id: results[0].place_id,
+          city,
+          lat,
+          lng,
+          country,
+          country_code,
+          formatted_address: results[0].formatted_address,
+        });
+        if (mode === 'origin') {
+          this.originPlaceId = results[0].place_id;
+          this.setFieldValue('from_name', results[0].formatted_address);
+        } else {
+          this.destinationPlaceId = results[0].place_id;
+          this.setFieldValue('to_name', results[0].formatted_address);
+        }
+      }
+    });
+  }
+
   geocodeCountries(countries: [string, number][]) {
     const geocoder = new google.maps.Geocoder();
     const promises = countries.map((country) => {
@@ -161,7 +201,7 @@ export class AutocompleteDirectionsHandler {
       totalDistance += myroute.legs[i]!.distance!.value;
       totalDuration += myroute.legs[i]!.duration!.value;
     }
-    const countries = this.getCountriesForDirectionsResult(result);
+    const countries = this.getCountriesWithDistanceForResult(result);
     // @ts-ignore
     this.geocodeCountries(countries).then((countries) => {
       this.setFieldValue('country_distances', countries);
@@ -172,16 +212,13 @@ export class AutocompleteDirectionsHandler {
 
   setupPlaceChangedListener(
     autocomplete: google.maps.places.Autocomplete,
-    mode: string
+    mode: 'origin' | 'destination'
   ) {
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace();
       const { city, country, country_code } = this.getDataFromAddressComponent(
         place.address_components as google.maps.GeocoderAddressComponent[]
       );
-      const lat = place.geometry?.location?.lat();
-      const lng = place.geometry?.location?.lng();
-
       if (!place.place_id) {
         window.alert('Please select an option from the dropdown list.');
         return;
@@ -198,25 +235,30 @@ export class AutocompleteDirectionsHandler {
       this.location = place.geometry.location;
       this.setFieldValue(mode, {
         place_id: place.place_id,
-        lat,
-        lng,
+        lat: place.geometry.location?.lat(),
+        lng: place.geometry.location?.lng(),
         city,
         country,
         country_code,
         formatted_address: place.formatted_address,
       });
-      this.route();
+      this.route(mode);
     });
   }
 
-  route() {
+  route(mode: 'origin' | 'destination') {
     if (myXOR(this.originPlaceId, this.destinationPlaceId)) {
       if (!this.location) return;
       this.map.setCenter(this.location);
+      this.map.setZoom(13);
       // set a marker on the map
       this.marker = new google.maps.Marker({
+        draggable: true,
         position: this.location,
         map: this.map,
+      });
+      this.marker.addListener('dragend', (event: google.maps.MapMouseEvent) => {
+        event && this.geocode({ location: event.latLng }, mode);
       });
     }
 

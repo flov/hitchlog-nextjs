@@ -6,6 +6,7 @@ import { getOrdinalNumber } from '../../utils';
 import { vehicleToIcon } from '../../utils/viewHelpers';
 import ExperienceCircle from '../helpers/ExperienceCircle';
 import LikeRide from '../helpers/LikeRide';
+import TagsForRide from './TagsForRide';
 
 const RideCard: FC<{ ride: Ride; trip_param: string }> = ({
   ride,
@@ -36,6 +37,12 @@ const RideCard: FC<{ ride: Ride; trip_param: string }> = ({
               <LikeRide ride={ride} />
             </div>
           </div>
+          <div className="flex items-center overflow-x-scroll gap-2">
+            {ride.tags.map((tag, index) => (
+              <TagsForRide ride={ride} key={`tag${index}`} />
+            ))}
+          </div>
+
           {ride.story && (
             <p className="mt-1 mb-5 font-light text-gray-500 dark:text-gray-400">
               {ride.story}

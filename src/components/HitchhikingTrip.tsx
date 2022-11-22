@@ -22,7 +22,7 @@ import { useAuth } from './contexts/AuthContext';
 import ExperienceCircle from './helpers/ExperienceCircle';
 import { createTripComment } from '../db/comments';
 import CountryFlags from './helpers/CountryFlags';
-import { TagsForRides } from './Trips/TagsForRide';
+import { TagsForRides, TagsForRide } from './Trips/TagsForRide';
 
 export function HitchhikingTrip({
   user,
@@ -35,13 +35,21 @@ export function HitchhikingTrip({
 }) {
   const departure = trip.departure;
   const { currentUser } = useAuth();
-  const ridesWithPhoto = trip.rides.filter(
+  const ridesWithPhoto = rides.filter(
     (ride) => ride?.photo !== null && ride?.photo !== undefined
   );
 
   return (
     <Card>
-      <div className="flex flex-col items-center text-center ">
+      <div className="relative flex flex-col items-center text-center">
+        {currentUser && currentUser.username === trip.user.username && (
+          <div className="absolute top-0 right-0 flex items-center justify-between mb-2 align gap-2">
+            <Link href={`/trips/${trip.to_param}/edit`} passHref>
+              <Button size="xs">Edit</Button>
+            </Link>
+          </div>
+        )}
+
         <Image
           className="w-24 h-24 rounded-full"
           width={96}
@@ -67,23 +75,25 @@ export function HitchhikingTrip({
             <ExperiencesForRides rides={rides} />
             <CountryFlags trip={trip} />
           </div>
-          {trip.rides.length > 0 && (
+          {rides.length > 0 && (
             <div className="flex items-center mt-3 mb-2 gap-2 dark:text-white">
-              <TagsForRides rides={trip.rides} />
+              <TagsForRides rides={rides} />
             </div>
           )}
         </div>
 
-        <div className="flex items-center gap-1 dark:text-white">
-          {showTotalWaitingTimeForRides(trip.rides)}
-          {showAgeAtTrip(trip)}
-          {showTripGoogleDuration(trip.google_duration)}
-          {vehicleIconsForRides(trip.rides)}
-        </div>
-        <div className="flex items-center mt-2 gap-2 dark:text-white">
-          {viewAverageSpeed(trip.average_speed)}
-          {showTripDistance(trip.total_distance)}
-          {showNumberOfStories(trip.rides)}
+        <div className="flex flex-col justify-center gap-2">
+          <div className="flex items-center gap-2 dark:text-white">
+            {showTripDistance(trip.total_distance)}
+            {showTripGoogleDuration(trip.google_duration)}
+            {viewAverageSpeed(trip.average_speed)}
+            {showAgeAtTrip(trip)}
+          </div>
+          <div className="flex items-center justify-center gap-2 dark:text-white">
+            {vehicleIconsForRides(rides)}
+            {showTotalWaitingTimeForRides(rides)}
+            {showNumberOfStories(rides)}
+          </div>
         </div>
 
         <h5 className="mt-2 text-xl tracking-tight text-center text-gray-900 dark:text-white">
@@ -116,14 +126,7 @@ export function HitchhikingTrip({
           </Carousel>
         </div>
 
-        <div className="flex items-center justify-between mb-2 align gap-2">
-          {currentUser && currentUser.username === trip.user.username && (
-            <Link href={`/trips/${trip.to_param}/edit`} passHref>
-              <Button size="xs">Edit</Button>
-            </Link>
-          )}
-        </div>
-        {trip.rides.map((ride, index) => (
+        {rides.map((ride, index) => (
           <Fragment key={`ride${index}`}>
             {ride.story && (
               <>
@@ -131,6 +134,9 @@ export function HitchhikingTrip({
                   <Tooltip content={`${ride.experience} Experience`}>
                     <ExperienceCircle experience={ride.experience} size={3} />
                   </Tooltip>
+                  <div className="flex items-center gap-2">
+                    <TagsForRide ride={ride} />
+                  </div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                     <Link href={`/trips/${trip.to_param}`}>
                       {ride.title

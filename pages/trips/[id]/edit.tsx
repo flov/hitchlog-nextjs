@@ -7,6 +7,7 @@ import {
   Textarea,
   TextInput,
 } from 'flowbite-react';
+import { geocode } from '../../../src/utils/Geocoder';
 import { Field, Form, Formik } from 'formik';
 import {
   GetServerSideProps,
@@ -18,7 +19,12 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Experiences, Ride, Trip, Vehicles } from '../../../src/types';
 import { displayRoute } from '../../../src/utils/DirectionsHandler';
 import { useAuth } from '../../../src/components/contexts/AuthContext';
-import { deleteTrip, getTrip, updateRide } from '../../../src/db/trips';
+import {
+  deleteTrip,
+  getTrip,
+  updateRide,
+  updateTrip,
+} from '../../../src/db/trips';
 import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import LoadingContainer from '../../../src/components/LoadingContainer';
 import { useRouter } from 'next/router';
@@ -68,7 +74,8 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
     const map = new google.maps.Map(mapElement, {
       mapTypeControl: false,
       zoom: 11,
-      center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
+      // lat and lng of central europe
+      center: { lat: 50.5, lng: 10.5 },
     });
     const directionsService = new google.maps.DirectionsService();
     const directionsRenderer = new google.maps.DirectionsRenderer({
@@ -81,16 +88,45 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
       directionsService,
       directionsRenderer
     );
-  }, [
-    currentUser?.id,
-    google.maps.DirectionsRenderer,
-    google.maps.DirectionsService,
-    google.maps.Map,
-    router,
-    trip.destination,
-    trip.origin,
-    trip.user_id,
-  ]);
+    directionsRenderer.addListener('directions_changed', () => {
+      const directions = directionsRenderer.getDirections();
+      if (!directions.routes) return;
+      const route = directions.routes[0];
+      const origin = route.legs[0].start_location;
+      const destination = route.legs[0].end_location;
+      if (
+        origin.lat().toFixed(3) !== trip.origin.lat.toFixed(3) ||
+        origin.lng().toFixed(3) !== trip.origin.lng.toFixed(3)
+      ) {
+        const result = geocode({ location: origin }).then((origin) => {
+          updateTrip({ id: trip.id, trip: { origin } })
+            .then((trip) => {
+              addToast('Trip updated', 'success');
+              window.confetti();
+            })
+            .catch((error) => {
+              addToast('Error updating trip', 'error');
+            });
+        });
+      } else if (
+        destination.lat().toFixed(3) !== trip.destination.lat.toFixed(3) ||
+        destination.lng().toFixed(3) !== trip.destination.lng.toFixed(3)
+      ) {
+        const result = geocode({ location: destination }).then(
+          (destination) => {
+            updateTrip({ id: trip.id, trip: { destination } })
+              .then((trip) => {
+                addToast('Trip updated', 'success');
+                window.confetti();
+              })
+              .catch((error) => {
+                console.log({ error });
+              });
+          }
+        );
+      }
+    });
+  }, []);
 
   const setRidesFromPayload = (payload: Ride) => {
     const newRides = rides.map((ride) => {

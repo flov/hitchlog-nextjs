@@ -3,10 +3,10 @@ import React, { FC } from 'react';
 import { Ride } from '../../types';
 import { removeDuplicates } from '../../utils';
 
-const TagsForRide: FC<{ ride: Ride }> = ({ ride }) => (
+export const TagsForRide: FC<{ ride: Ride }> = ({ ride }) => (
   <>
     {ride.tags.map((tag) => (
-      <Badge color="purple" key={`${ride.id}${tag}`}>
+      <Badge color="info" key={`${ride.id}${tag}`}>
         {tag}
       </Badge>
     ))}
@@ -18,7 +18,7 @@ export const TagsForRides: FC<{ rides: Ride[] }> = ({ rides }) => {
   return (
     <>
       {tags.map((tag) => (
-        <Badge color="purple" key={tag}>
+        <Badge color="info" key={tag}>
           {tag}
         </Badge>
       ))}

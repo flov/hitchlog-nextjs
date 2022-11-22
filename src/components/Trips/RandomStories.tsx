@@ -1,12 +1,12 @@
 import React, { FC, Fragment } from 'react';
 import { Trip } from '../../types';
-import RandomStoryCard from './RandomStoryCard';
+import StoryCard from './StoryCard';
 
 const RandomStories: FC<{ trips: Trip[] }> = ({ trips }) => {
   return (
     <div>
       {trips.map((trip: Trip, index: number) => (
-        <RandomStoryCard trip={trip} key={`randomStory${index}`} />
+        <StoryCard trip={trip} key={`randomStory${index}`} />
       ))}
     </div>
   );
