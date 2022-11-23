@@ -83,10 +83,11 @@ export function HitchhikingTrip({
         </div>
 
         <div className="flex flex-col justify-center gap-2">
-          <div className="flex items-center gap-2 dark:text-white">
-            {showTripDistance(trip.total_distance)}
-            {showTripGoogleDuration(trip.google_duration)}
-            {viewAverageSpeed(trip.average_speed)}
+          <div className="flex items-center justify-center gap-2 dark:text-white">
+            {trip.total_distance && showTripDistance(trip.total_distance)}
+            {trip.google_duration &&
+              showTripGoogleDuration(trip.google_duration)}
+            {!!trip.average_speed && viewAverageSpeed(trip.average_speed)}
             {showAgeAtTrip(trip)}
           </div>
           <div className="flex items-center justify-center gap-2 dark:text-white">

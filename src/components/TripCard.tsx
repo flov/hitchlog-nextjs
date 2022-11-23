@@ -1,8 +1,7 @@
-import React, { FC, Fragment } from 'react';
+import React, { FC } from 'react';
 import { Trip } from '../types';
 import RightArrow from './svg/RightArrow';
 import Link from 'next/link';
-import { useAuth } from './contexts/AuthContext';
 import CarouselForRides from './Trips/CarouselForRides';
 import StoryCard from './Trips/StoryCard';
 
@@ -11,8 +10,9 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   trip,
 }) => {
   const centerMapToTrip = () => {
-    if (map && trip.origin?.lat && trip.origin?.lng) {
-      map.panTo(new google.maps.LatLng(trip.origin.lat, trip.origin.lng));
+    if (map && trip.center) {
+      const center = trip.center.split(',');
+      map.panTo({ lat: Number(center[0]), lng: Number(center[1]) });
       map.setZoom(6);
     }
   };
@@ -20,8 +20,6 @@ const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   const ridesWithPhoto = trip.rides.filter(
     (ride) => ride?.photo !== null && ride?.photo !== undefined
   );
-
-  const { currentUser } = useAuth();
 
   return (
     <article

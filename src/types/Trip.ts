@@ -7,8 +7,8 @@ export type Location = {
   city?: string;
   country?: string;
   country_code?: string;
-  place_id: string | null;
-  sanitized_address: string;
+  place_id?: string | null;
+  sanitized_address?: string;
 };
 
 export type Timestamp = { seconds: number; nanoseconds: number };
@@ -29,6 +29,7 @@ export type Trip = {
   destination: Location;
   rides: Ride[];
   total_distance: number;
+  center: string;
   user: {
     username: string;
     md5_email: string;

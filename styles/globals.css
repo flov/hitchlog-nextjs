@@ -54,6 +54,7 @@ nav a { text-decoration: none; }
 #map {
   transition: height 1s ease-in-out;
 }
+
 /* The popup bubble styling. */
 .popup-bubble {
   /* Position the bubble centred-above its parent. */
@@ -62,19 +63,14 @@ nav a { text-decoration: none; }
   left: 0;
   transform: translate(-50%, -100%);
   /* Style the bubble. */
-  background-color: white;
-  padding: 5px;
-  border-radius: 5px;
-  font-family: 'Roboto';
   overflow-y: auto;
   max-height: 60px;
-  box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   color: black;
 }
-.popup-bubble.opened {
-  background-color: #222222;
-  color: #fff;
+
+.dark .popup-bubble {
+  color: black;
 }
 
 /* The parent of the bubble. A zero-height div at the top of the tip. */
@@ -92,8 +88,10 @@ nav a { text-decoration: none; }
   height: 0;
   position: absolute;
   /* The max width of the info window. */
-  width: 200px;
+  width: 400px;
+
 }
+
 
 .dark input {
   color: #000;

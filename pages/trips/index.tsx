@@ -10,10 +10,12 @@ import LoadingContainer from '../../src/components/LoadingContainer';
 import { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { Formik } from 'formik';
-import SearchForm from '../../src/components/SearchForm';
-import { Pagination } from 'flowbite-react';
-import { FaList, FaMap } from 'react-icons/fa';
+import TripsSearchInterface from '../../src/components/Trips/SearchInterface';
+import { Button, Pagination } from 'flowbite-react';
+import { FaList, FaMap, FaSearch } from 'react-icons/fa';
 import Head from 'next/head';
+import { useToasts } from '../../src/components/contexts/ToastContext';
+import { countries } from '../../src/utils/country_codes';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const q = query.q ? JSON.parse(query.q as string) : {};
@@ -36,14 +38,28 @@ const Index: FC<{
   const { google } = props;
   let q = props.q;
   if (typeof q === 'string') q = JSON.parse(q);
-  const googleMapsRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState({});
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [trips, setTrips] = useState<Trip[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState(props.page);
   const [totalPages, setTotalPages] = useState(1);
+
+  const googleMapsRef = useRef<HTMLDivElement>(null);
+
   const router = useRouter();
+  const { addToast } = useToasts();
+
+  const fetchTrips = async () => {
+    setIsLoading(true);
+    const res = await getTripsWithQuery({
+      q: Object.assign(query),
+      page,
+    });
+    setTrips(res.data.trips);
+    setTotalPages(res.data.total_pages);
+    setIsLoading(false);
+  };
 
   const handlePageChange = async (p: number) => {
     router.push(
@@ -55,74 +71,73 @@ const Index: FC<{
       { shallow: true }
     );
     setPage(p);
-    const fetchTrips = async () => {
-      setIsLoading(true);
-      const res = await getTripsWithQuery({
-        q: Object.assign(query),
-        page,
-      });
-      setTrips(res.data.trips);
-      setTotalPages(res.data.total_pages);
-      setIsLoading(false);
-    };
     fetchTrips();
   };
 
+  const [bounds, setBounds] = useState<google.maps.LatLngBounds>();
+
   useEffect(() => {
-    getTripsWithQuery({ q: props.q as Record<string, any> }).then((res) => {
-      setTrips(res.data.trips);
-      setTotalPages(res.data.total_pages);
-      setIsLoading(false);
-    });
-    setQuery(props.q);
+    fetchTrips();
+    setQuery(q);
 
     if (googleMapsRef.current) {
+      let lat: number, lng: number;
+      // if country was selected in filter, pan to that country
+      if (q.from_country_code_eq) {
+        // @ts-ignore
+        lat = countries[q.from_country_code_eq].lat;
+        // @ts-ignore
+        lng = countries[q.from_country_code_eq].lng;
+      } else {
+        // center of europe
+        lat = 50.85045;
+        lng = 4.34878;
+      }
+
       let createdMap = new google.maps.Map(googleMapsRef.current, {
-        center: { lat: 50.85045, lng: 4.34878 },
+        center: { lat, lng },
         zoom: 6,
+        gestureHandling: 'greedy',
       });
       setMap(createdMap);
 
       google.maps.event.addListener(createdMap, 'dragend', function () {
-        const bounds = createdMap.getBounds();
-        const ne = bounds?.getNorthEast();
-        const sw = bounds?.getSouthWest();
-        const northLat = ne?.lat() as number;
-        const southLat = sw?.lat() as number;
-        const westLng = sw?.lng() as number;
-        const eastLng = ne?.lng() as number;
-        //do whatever you want with those bounds
-        if (!ne || !sw) return;
-        setIsLoading(true);
-        getTripsWithQuery({
-          q: Object.assign(query, {
-            from_lat_lt: northLat,
-            from_lat_gt: southLat,
-            from_lng_gt: westLng,
-            from_lng_lt: eastLng,
-          }),
-        }).then((res: AxiosResponse) => {
-          setIsLoading(false);
-          setTrips(res.data.trips);
-          setTotalPages(res.data.total_pages);
-
-          setQuery(Object.assign(query, res.config.params.q));
-          router.push(
-            {
-              pathname: '/trips',
-              query: {
-                q: JSON.stringify(res.config.params.q),
-              },
-            },
-            undefined,
-            { shallow: true }
-          );
-        });
+        setBounds(createdMap.getBounds());
       });
     }
   }, []);
 
   const [isShowingMap, setIsShowingMap] = useState(false);
+  console.log({ bounds });
+
+  const searchMapWithinBounds = async () => {
+    if (bounds) {
+      const ne = bounds.getNorthEast();
+      const sw = bounds.getSouthWest();
+      const res = await getTripsWithQuery({
+        q: {
+          from_lat_lt: ne.lat(),
+          from_lat_gt: sw.lat(),
+          from_lng_lt: ne.lng(),
+          from_lng_gt: sw.lng(),
+        },
+        page: 1,
+      });
+      setTrips(res.data.trips);
+      setTotalPages(res.data.total_pages);
+      setIsLoading(false);
+      router.push(
+        {
+          pathname: '/trips',
+          query: {
+            q: JSON.stringify(res.config.params.q),
+          },
+        },
+        undefined,
+        { shallow: true }
+      );
+    }
+  };
 
   return (
     <>
@@ -131,7 +146,7 @@ const Index: FC<{
       </Head>
 
       <div
-        className="fixed z-10 flex items-center justify-center p-2 cursor-pointer gap-2 left-1/2 fixed-button"
+        className="fixed z-10 flex items-center justify-center p-2 cursor-pointer sm:hidden gap-2 left-1/2 fixed-button"
         onClick={() => setIsShowingMap(!isShowingMap)}
       >
         {isShowingMap ? (
@@ -165,38 +180,56 @@ const Index: FC<{
               setTotalPages(res.data.total_pages);
             })
             .catch((err) => {
-              console.log(err);
+              addToast(err.message, 'error');
             })
             .finally(() => {
               setSubmitting(false);
             });
         }}
         initialValues={{ ...Object.assign(query, q) }}
-        component={(p) => <SearchForm {...p} />}
+        component={(p) => (
+          <TripsSearchInterface {...p} map={map} bounds={bounds} />
+        )}
       />
 
-      <div
-        className={
-          isShowingMap
-            ? 'visible trip-map-full-screen animate-fadeIn'
-            : 'invisible animate-fadeOut'
-        }
-        ref={googleMapsRef}
-        id="map"
-      >
-        {map &&
-          trips.map((trip, index) => (
-            <OverlayContainer
-              map={map}
-              position={{
-                lat: trip?.origin?.lat as number,
-                lng: trip?.origin?.lng as number,
-              }}
-              key={`uniqueKey${index}`}
-            >
-              <OverlayBubble trip={trip} />
-            </OverlayContainer>
-          ))}
+      <div className="relative">
+        {!!bounds && (
+          <Button
+            color="light"
+            className="absolute z-10 flex items-center justify-center p-2 text-gray-800 bg-white rounded-full cursor-pointer animate-fadeIn top-5 gap-2 left-1/2"
+            onClick={() => searchMapWithinBounds()}
+            size="sm"
+          >
+            Search this Area
+          </Button>
+        )}
+
+        <div
+          className={
+            isShowingMap
+              ? 'visible trip-map-full-screen animate-fadeIn'
+              : 'invisible animate-fadeOut sm:visible md:h-74'
+          }
+          ref={googleMapsRef}
+          id="map"
+        >
+          {map && (
+            <>
+              {trips.map((trip, index) => (
+                <OverlayContainer
+                  map={map}
+                  position={{
+                    lat: Number(trip?.center.split(',')[0]),
+                    lng: Number(trip?.center.split(',')[1]),
+                  }}
+                  key={`uniqueKey${index}`}
+                >
+                  <OverlayBubble trip={trip} map={map} />
+                </OverlayContainer>
+              ))}
+            </>
+          )}
+        </div>
       </div>
 
       <div

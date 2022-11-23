@@ -13,7 +13,6 @@ import { TripForm } from '../../src/components/TripForm';
 import { createTrip } from '../../src/db/trips';
 import { IpLocation } from '../../src/types';
 import { fetchLocationFromClient } from '../../src/utils';
-import { showErrors } from '../../src/utils/viewHelpers';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const ipLocation = await fetchLocationFromClient();

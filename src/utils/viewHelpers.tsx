@@ -1,4 +1,4 @@
-import { Badge, Tooltip } from 'flowbite-react';
+import { Tooltip } from 'flowbite-react';
 import { Fragment } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 import { BsArrowRight, BsChat, BsClock, BsSpeedometer } from 'react-icons/bs';
@@ -76,7 +76,7 @@ export const countryFlag = (countryCode: string | undefined, tip = '') => {
   return (
     <Tooltip
       //@ts-ignore
-      content={`${tip ? tip : countries[countryCode.toUpperCase()]}`}
+      content={`${tip ? tip : countries[countryCode.toUpperCase()].name}`}
     >
       <ReactCountryFlag
         style={{ fontSize: '1.5rem' }}
@@ -97,10 +97,10 @@ export const countryFlagsForProfile = (
         return (
           <Tooltip
             key={`${index}CountryFlag`}
-            //@ts-ignore
-            content={`${countries[countryCode.toUpperCase()]}: ${Math.round(
-              hitchhiked_countries[countryCode] / 1000
-            )} kms`}
+            content={`${
+              /*@ts-ignore*/
+              countries[countryCode.toUpperCase()].name
+            }: ${Math.round(hitchhiked_countries[countryCode] / 1000)} kms`}
           >
             <ReactCountryFlag
               style={{ fontSize: '1.5rem' }}
