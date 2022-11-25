@@ -192,11 +192,15 @@ const Index: FC<{
         )}
       />
 
-      <div className={`relative ${isShowingMap ? 'visible' : 'invisible'}`}>
+      <div
+        className={`relative md:visible ${
+          isShowingMap ? 'visible' : 'invisible'
+        }`}
+      >
         {!!bounds && (
           <Button
             color="light"
-            className="absolute z-10 flex items-center justify-center p-2 text-gray-800 bg-white rounded-full cursor-pointer animate-fadeIn top-5 gap-2 left-1/2"
+            className="absolute z-10 flex items-center justify-center p-2 text-gray-800 bg-white rounded-full cursor-pointer translate--50p animate-fadeIn top-5 gap-2 left-1/2"
             onClick={() => searchMapWithinBounds()}
             size="sm"
           >

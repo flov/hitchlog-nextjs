@@ -92,6 +92,10 @@ nav a { text-decoration: none; }
 
 }
 
+.translate--50 {
+  transform: translate(-50%, 0);
+}
+
 
 .dark input {
   color: #000;

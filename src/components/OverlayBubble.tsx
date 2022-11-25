@@ -54,7 +54,7 @@ const OverlayBubble: FC<{ trip: Trip; map: google.maps.Map }> = ({
   return (
     <>
       {isOpened ? (
-        <div className="relative max-w-lg p-3 text-lg text-gray-900 bg-white rounded-lg -top-16 -left-12">
+        <div className="relative max-w-lg p-3 text-black bg-white rounded-lg w-78">
           <button
             className="absolute top-0 right-0"
             onClick={handleBubbleClick}
