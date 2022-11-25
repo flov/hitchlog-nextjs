@@ -192,7 +192,7 @@ const Index: FC<{
         )}
       />
 
-      <div className="relative">
+      <div className={`relative ${isShowingMap ? 'visible' : 'invisible'}`}>
         {!!bounds && (
           <Button
             color="light"

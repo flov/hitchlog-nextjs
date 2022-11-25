@@ -23,6 +23,7 @@ import ExperienceCircle from './helpers/ExperienceCircle';
 import { createTripComment } from '../db/comments';
 import CountryFlags from './helpers/CountryFlags';
 import { TagsForRides, TagsForRide } from './Trips/TagsForRide';
+import { RideCardHeader } from './Trips/RideCard';
 
 export function HitchhikingTrip({
   user,
@@ -131,21 +132,7 @@ export function HitchhikingTrip({
           <Fragment key={`ride${index}`}>
             {ride.story && (
               <>
-                <div className="flex items-center gap-2">
-                  <Tooltip content={`${ride.experience} Experience`}>
-                    <ExperienceCircle experience={ride.experience} size={3} />
-                  </Tooltip>
-                  <div className="flex items-center gap-2">
-                    <TagsForRide ride={ride} />
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                    <Link href={`/trips/${trip.to_param}`}>
-                      {ride.title
-                        ? ride.title
-                        : `${getOrdinalNumber(ride.number)} ride`}
-                    </Link>
-                  </h2>
-                </div>
+                <RideCardHeader ride={ride} trip_param={trip.to_param} />
                 {ride.story && (
                   <p className="mt-1 mb-5 font-light text-gray-500 dark:text-gray-400">
                     {ride.story}
