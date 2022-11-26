@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { Profile } from '../../types';
 import { capitalize, profilePicture } from '../../utils';
 import {
-  countryFlagsForProfile,
   showCountryFlagForUser,
   showHitchhikedKms,
   showUserGender,
@@ -17,6 +16,7 @@ import {
 } from '../../utils/viewHelpers';
 import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
+import CountryFlagsForProfile from '../helpers/CountryFlagsForProfile';
 
 const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
   const createdAt = moment(profile.created_at).format('MMM YYYY');
@@ -53,7 +53,9 @@ const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
         {showHitchhikedKms(profile.hitchhiked_kms)}
       </div>
       <div className="grid grid-auto-fit gap-1">
-        {countryFlagsForProfile(profile.hitchhiked_countries)}
+        <CountryFlagsForProfile
+          hitchhiked_countries={profile.hitchhiked_countries}
+        />
       </div>
       {profile.trustroots && (
         <div className="mt-2">

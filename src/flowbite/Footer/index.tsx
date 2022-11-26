@@ -10,23 +10,18 @@ const Footer: FC = () => {
         </Link>
       </span>
       <ul className="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
-        {['Trips', 'Hitchhikers', 'Blog', 'Contact'].map((item) => (
-          <li key={item} className="mr-4 hover:underline md:mr-6">
-            <Link
-              href={`/${item.toLowerCase()}`}
-              className="mr-4 hover:underline md:mr-6 "
-            >
-              {item}
-            </Link>
-          </li>
-        ))}
-        {/*
-        <li>
-          <a href="/contact" className="hover:underline">
-            Contact
-          </a>
-        </li>
-        */}
+        {['Trips', 'Hitchhikers', 'Blog', 'Contact', 'Statistics'].map(
+          (item) => (
+            <li key={item} className="mr-4 hover:underline md:mr-6">
+              <Link
+                href={`/${item.toLowerCase()}`}
+                className="mr-4 hover:underline md:mr-6 "
+              >
+                {item}
+              </Link>
+            </li>
+          )
+        )}
       </ul>
     </footer>
   );

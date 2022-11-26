@@ -1,4 +1,9 @@
 export const countries = {
+  '': {
+    name: 'Unknown',
+    lat: 0,
+    lng: 0,
+  },
   AF: {
     name: 'Afghanistan',
     lat: 33.7680065,
@@ -814,7 +819,7 @@ export const countries = {
     lat: 15.1753648,
     lng: 145.7379338,
   },
-  false: {
+  NO: {
     name: 'Norway',
     lat: 60.5000209,
     lng: 9.0999715,

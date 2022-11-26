@@ -86,33 +86,6 @@ export const countryFlag = (countryCode: string | undefined, tip = '') => {
   );
 };
 
-export const countryFlagsForProfile = (
-  hitchhiked_countries: Record<string, number>
-) => {
-  if (!hitchhiked_countries) return null;
-  return (
-    <>
-      {Object.keys(hitchhiked_countries).map((countryCode, index) => {
-        if (!countryCode) return null;
-        return (
-          <Tooltip
-            key={`${index}CountryFlag`}
-            content={`${
-              /*@ts-ignore*/
-              countries[countryCode.toUpperCase()].name
-            }: ${Math.round(hitchhiked_countries[countryCode] / 1000)} kms`}
-          >
-            <ReactCountryFlag
-              style={{ fontSize: '1.5rem' }}
-              countryCode={countryCode}
-            />
-          </Tooltip>
-        );
-      })}
-    </>
-  );
-};
-
 export const experiencesForProfile = (experiences: ExperiencesRecord) => {
   if (!experiences) return null;
   return Object.keys(experiences).map((exp, index) => {
