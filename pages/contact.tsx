@@ -16,13 +16,33 @@ const Contact: NextPage = () => {
 
   return (
     <div className="p-4 sm:pt-8">
-      <div className="w-full p-4 bg-white rounded-lg sm:p-6 sm:mx-auto dark:border sm:max-w-lg dark:bg-gray-800 dark:border-gray-700">
+      <div className="w-full p-4 bg-white border rounded-lg sm:p-6 sm:mx-auto sm:max-w-lg dark:bg-gray-800 dark:border-gray-700">
         <h4 className="mb-4">Contact us</h4>
-        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+        <p className="mb-4">
           We love to hear your feedback, so please feel free to contact us.
         </p>
+        <p>
+          If you find any bugs please{' '}
+          <a
+            className="underline"
+            href="https://github.com/flov/hitchlog-nextjs/issues"
+          >
+            file an issue in Github
+          </a>
+          .
+        </p>
+        <p className="mb-4">
+          If you have any suggestions, let's discuss it under{' '}
+          <a
+            className="underline"
+            href="https://github.com/flov/hitchlog-nextjs/discussions/1"
+          >
+            discussions on Github
+          </a>
+          .
+        </p>
         <Formik
-          onSubmit={(values, { setSubmitting }) => {
+          onSubmit={(values, { resetForm, setSubmitting }) => {
             postContactForm(values)
               .then(() => {
                 addToast('Thank you! Your message has been sent');
@@ -34,6 +54,7 @@ const Contact: NextPage = () => {
                 );
               })
               .finally(() => {
+                resetForm();
                 setSubmitting(false);
               });
           }}
