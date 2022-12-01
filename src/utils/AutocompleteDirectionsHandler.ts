@@ -1,4 +1,5 @@
 import { myXOR } from '.';
+import { getCountriesForResult } from './getCountriesForResult';
 
 export class AutocompleteDirectionsHandler {
   map: google.maps.Map;
@@ -54,7 +55,6 @@ export class AutocompleteDirectionsHandler {
 
     this.directionsRenderer.addListener('directions_changed', () => {
       const directions = this.directionsRenderer.getDirections();
-      console.log(directions);
       if (directions && directions.geocoded_waypoints) {
         const originPlaceId = directions.geocoded_waypoints[0].place_id;
         const destinationPlaceId = directions.geocoded_waypoints[1].place_id;
@@ -96,44 +96,6 @@ export class AutocompleteDirectionsHandler {
       country: country ? country.long_name : '',
       country_code: country ? country.short_name : '',
     };
-  }
-
-  getCountriesWithDistanceForResult(
-    directionsResult: google.maps.DirectionsResult
-  ) {
-    const { routes } = directionsResult;
-    const leg = routes[0].legs[0];
-    const { steps } = leg;
-    const start_country = leg.start_address.split(', ').pop();
-    const end_country = leg.end_address.split(', ').pop();
-    let countries: [string, number][] = [];
-
-    if (countries.length === 0 && start_country && leg.distance)
-      countries.push([start_country, leg.distance?.value]);
-
-    if (start_country == end_country)
-      return [[start_country, leg.distance?.value]];
-    let distance = 0;
-    for (let i = 0; i < steps.length; i++) {
-      const step = steps[i];
-      const { instructions } = step;
-      if (step.distance) distance += step.distance.value;
-      if (instructions.includes('Entering')) {
-        let country = instructions.split('Entering ').pop();
-        country?.includes('</div>')
-          ? (country = country.split('</div>')[0])
-          : country;
-        if (country) {
-          countries[countries.length - 1][1] = distance;
-          countries.push([country, 0]);
-          distance = 0;
-        }
-      }
-      if (i == steps.length - 1) {
-        countries[countries.length - 1][1] = distance;
-      }
-    }
-    return countries;
   }
 
   geocode(
@@ -201,7 +163,7 @@ export class AutocompleteDirectionsHandler {
       totalDistance += myroute.legs[i]!.distance!.value;
       totalDuration += myroute.legs[i]!.duration!.value;
     }
-    const countries = this.getCountriesWithDistanceForResult(result);
+    const countries = getCountriesForResult(result);
     // @ts-ignore
     this.geocodeCountries(countries).then((countries) => {
       this.setFieldValue('country_distances', countries);
