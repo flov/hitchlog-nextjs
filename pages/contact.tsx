@@ -32,7 +32,7 @@ const Contact: NextPage = () => {
           .
         </p>
         <p className="mb-4">
-          If you have any suggestions, let's discuss it under{' '}
+          If you have any suggestions, let us discuss it under{' '}
           <a
             className="underline"
             href="https://github.com/flov/hitchlog-nextjs/discussions/1"

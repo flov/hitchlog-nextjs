@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { Formik } from 'formik';
 import TripsSearchInterface from '../../src/components/Trips/SearchInterface';
 import { Button, Pagination } from 'flowbite-react';
-import { FaList, FaMap, FaSearch } from 'react-icons/fa';
+import { FaList, FaMap } from 'react-icons/fa';
 import Head from 'next/head';
 import { useToasts } from '../../src/components/contexts/ToastContext';
 import { countries } from '../../src/utils/country_codes';

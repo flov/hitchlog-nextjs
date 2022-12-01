@@ -8,7 +8,7 @@ import { useAuth } from '../../src/components/contexts/AuthContext';
 import { useToasts } from '../../src/components/contexts/ToastContext';
 import EditProfileForm from '../../src/components/EditProfileForm';
 import LoadingContainer from '../../src/components/LoadingContainer';
-import { authenticateToken, updateUser } from '../../src/db/users';
+import { updateUser } from '../../src/db/users';
 import { profilePicture, showErrors } from '../../src/utils/viewHelpers';
 import Image from 'next/image';
 import Head from 'next/head';
