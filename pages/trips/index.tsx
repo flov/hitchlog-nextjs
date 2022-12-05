@@ -108,7 +108,6 @@ const Index: FC<{
   }, []);
 
   const [isShowingMap, setIsShowingMap] = useState(false);
-  console.log({ bounds });
 
   const searchMapWithinBounds = async () => {
     if (bounds) {
