@@ -1,5 +1,6 @@
 import React, { MouseEventHandler, useEffect, useRef } from 'react';
 import {
+  ArcElement,
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -10,14 +11,24 @@ import {
   Legend,
   BarElement,
 } from 'chart.js';
-import { Bar, getElementAtEvent, Line } from 'react-chartjs-2';
+import { Pie, Bar, getElementAtEvent, Line } from 'react-chartjs-2';
 import { GetServerSideProps, NextPage } from 'next';
-import { getAgeForTrips, getTop10 } from '../src/db/statistics';
-import { AgeForTrip, Top10 } from '../src/types/Statistics';
-import { ageForTripsConfig, top10Config } from '../src/config/statistics';
+import {
+  getAgeForTrips,
+  getTop10,
+  genderStats,
+  waitingTimeStats,
+} from '../src/db/statistics';
+import { AgeForTrip, LabelValue, Top10 } from '../src/types/Statistics';
+import {
+  ageForTripsChart,
+  labelValuePieChartData,
+  top10Chart,
+} from '../src/config/statistics';
 import { useRouter } from 'next/router';
 
 ChartJS.register(
+  ArcElement,
   CategoryScale,
   LinearScale,
   PointElement,
@@ -31,18 +42,27 @@ ChartJS.register(
 export const getServerSideProps: GetServerSideProps = async () => {
   const ageRes = await getAgeForTrips();
   const top10Res = await getTop10();
+  const genderStatsRes = await genderStats();
+  const waitingTimeStatsRes = await waitingTimeStats();
 
   return {
-    props: { ageForTrips: ageRes.data, top10: top10Res.data },
+    props: {
+      ageForTrips: ageRes.data,
+      top10: top10Res.data,
+      genderStats: genderStatsRes.data,
+      waitingTimeStats: waitingTimeStatsRes.data,
+    },
   };
 };
 
-const Statistics: NextPage<{ ageForTrips: AgeForTrip[]; top10: Top10[] }> = ({
-  ageForTrips,
-  top10,
-}) => {
-  const ageC = ageForTripsConfig(ageForTrips);
-  const top10C = top10Config(top10);
+const Statistics: NextPage<{
+  genderStats: LabelValue[];
+  waitingTimeStats: LabelValue[];
+  ageForTrips: AgeForTrip[];
+  top10: Top10[];
+}> = ({ ageForTrips, top10, genderStats, waitingTimeStats }) => {
+  const ageC = ageForTripsChart(ageForTrips);
+  const top10C = top10Chart(top10);
   const router = useRouter();
 
   const chartRef = useRef();
@@ -70,6 +90,16 @@ const Statistics: NextPage<{ ageForTrips: AgeForTrip[]; top10: Top10[] }> = ({
         onClick={onClick}
         data={top10C.data}
       />
+      <div className="flex flex-col justify-center gap-4 sm:flex-row">
+        <div>
+          <h3 className="my-4 text-center">Hitchhikers by gender</h3>
+          <Pie data={labelValuePieChartData(genderStats)} />
+        </div>
+        <div>
+          <h3 className="my-4 text-center">Average Waiting Time in percent</h3>
+          <Pie data={labelValuePieChartData(waitingTimeStats)} />
+        </div>
+      </div>
     </section>
   );
 };

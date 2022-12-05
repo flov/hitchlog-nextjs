@@ -1,4 +1,4 @@
-import { AgeForTrip, Top10 } from '../types/Statistics';
+import { AgeForTrip, LabelValue, Top10 } from '../types/Statistics';
 
 export const CHART_COLORS = {
   red: 'rgb(255, 99, 132)',
@@ -8,6 +8,7 @@ export const CHART_COLORS = {
   blue: 'rgb(54, 162, 235)',
   purple: 'rgb(153, 102, 255)',
   grey: 'rgb(201, 203, 207)',
+  pink: 'rgb(255, 99, 132)',
 };
 
 const NAMED_COLORS = [
@@ -20,7 +21,7 @@ const NAMED_COLORS = [
   CHART_COLORS.grey,
 ];
 
-export const ageForTripsConfig = (ageForTrips: AgeForTrip[]) => {
+export const ageForTripsChart = (ageForTrips: AgeForTrip[]) => {
   const options = {
     responsive: true,
     interaction: {
@@ -62,7 +63,7 @@ export const ageForTripsConfig = (ageForTrips: AgeForTrip[]) => {
   return { options, data };
 };
 
-export const top10Config = (top10: Top10[]) => {
+export const top10Chart = (top10: Top10[]) => {
   const labels = top10.map((x) => x.username);
   // lgba of a blue color
   // const backgroundColor = rbga(0, 0, 255, 0.5);
@@ -71,7 +72,7 @@ export const top10Config = (top10: Top10[]) => {
     labels: labels,
     datasets: [
       {
-        label: 'Hitchhiked kms',
+        label: 'kilometers',
         data: top10.map((x) => x.total_distance),
         backgroundColor: top10.map((x) =>
           x.gender === 'female' ? 'rgba(255, 99, 132)' : 'rgb(54, 162, 235)'
@@ -100,4 +101,23 @@ export const top10Config = (top10: Top10[]) => {
   };
 
   return { options, data };
+};
+
+export const labelValuePieChartData = (genderStats: LabelValue[]) => {
+  return {
+    labels: genderStats.map((x) => x.label),
+    datasets: [
+      {
+        label: 'Gender of hitchhikers',
+        data: Object.values(genderStats),
+        backgroundColor: NAMED_COLORS,
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
 };

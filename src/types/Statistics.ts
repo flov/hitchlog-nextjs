@@ -8,3 +8,8 @@ export type Top10 = {
   total_distance: number;
   gender: 'male' | 'female';
 };
+
+export type LabelValue = {
+  label: string;
+  value: string;
+};

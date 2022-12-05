@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { API_URL } from '../config';
-import { AgeForTrip, Top10 } from '../types/Statistics';
+import { AgeForTrip, LabelValue, Top10 } from '../types/Statistics';
 
 export const getAgeForTrips = () =>
   axios.get<any, AxiosResponse<AgeForTrip[]>>(
@@ -19,3 +19,25 @@ export const getTop10 = () =>
       Accept: 'application/json',
     },
   });
+
+export const genderStats = () =>
+  axios.get<any, AxiosResponse<LabelValue[]>>(
+    `${API_URL}/statistics/users_by_gender`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    }
+  );
+
+export const waitingTimeStats = () =>
+  axios.get<any, AxiosResponse<LabelValue[]>>(
+    `${API_URL}/statistics/waiting_time`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    }
+  );
