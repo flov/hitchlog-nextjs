@@ -211,7 +211,7 @@ const Index: FC<{
           className={
             isShowingMap
               ? 'visible trip-map-full-screen animate-fadeIn'
-              : 'invisible animate-fadeOut sm:visible md:h-74'
+              : 'invisible animate-fadeOut sm:visible md:h-0'
           }
           ref={googleMapsRef}
           id="map"
