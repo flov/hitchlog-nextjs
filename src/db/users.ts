@@ -31,8 +31,12 @@ export const getUsers = async (page = 1) =>
     params: { page },
   });
 
+export const createUser = async (values: any) =>
+  axios.post(`/users`, { user: values });
 export const updateUser = async (username: string, values: any) =>
   axios.patch(`/users/${username}`, { user: values });
+export const resetPassword = async (values: { email: string }) =>
+  axios.put('/users/password', { user: { ...values } });
 
 export const postResetPassword = async (values: { email: string }) =>
   axios.post(`/users/password`, { user: values });

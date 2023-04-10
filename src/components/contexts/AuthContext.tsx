@@ -9,8 +9,7 @@ import {
 } from 'react';
 import Cookies from 'js-cookie';
 import { User } from '../../types';
-import axios from 'axios';
-import { API_URL } from '../../config';
+import axios from '../../config/axios';
 import { authenticateToken } from '../../db/users';
 
 type AuthProps = {
@@ -55,12 +54,7 @@ export const AuthProvider: React.FC<{ children: JSX.Element }> = ({
     const token = Cookies.get('authToken');
 
     axios
-      .delete(`${API_URL}/users/sign_out`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          accept: 'application/json',
-        },
-      })
+      .delete('/users/sign_out')
       .then(() => {
         Cookies.remove('authToken');
         setCurrentUser(null);

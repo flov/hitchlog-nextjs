@@ -1,11 +1,10 @@
-import axios from 'axios';
+import axios from '../src/config/axios';
 import { Alert, Button, TextInput } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useToasts } from '../src/components/contexts/ToastContext';
-import { API_URL } from '../src/config';
 import { showErrors } from '../src/utils/viewHelpers';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
@@ -39,7 +38,7 @@ const Reset: NextPage<{ token: string }> = ({ token }) => {
             <Formik
               onSubmit={(values) => {
                 axios
-                  .put(`${API_URL}/users/password`, { user: { ...values } })
+                  .put(`/users/password`, { user: { ...values } })
                   .then(() => {
                     router.push('/login');
                   })

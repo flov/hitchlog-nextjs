@@ -73,7 +73,6 @@ const Statistics: NextPage<{
     if (elementAtEvent.length > 0) {
       const index = elementAtEvent[0].index;
       router.push(`/hitchhikers/${top10[index].username}`);
-      console.log(top10[index]);
     }
   };
 

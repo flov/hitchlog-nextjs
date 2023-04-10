@@ -42,7 +42,7 @@ export const RideCardHeader: FC<{
           <LikeRide ride={ride} />
         </div>
       </div>
-      <div className="flex items-center overflow-x-scroll gap-2">
+      <div className="flex items-center gap-2">
         <TagsForRide ride={ride} />
       </div>
     </>

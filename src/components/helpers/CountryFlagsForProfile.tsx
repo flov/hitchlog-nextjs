@@ -7,7 +7,6 @@ const CountryFlagsForProfile: FC<{
   hitchhiked_countries: Record<string, number>;
 }> = ({ hitchhiked_countries }) => {
   if (!hitchhiked_countries) return null;
-  console.log(hitchhiked_countries);
   return (
     <>
       {Object.keys(hitchhiked_countries).map((countryCode, index) => {

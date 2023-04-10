@@ -1,14 +1,13 @@
-import axios from 'axios';
 import { Alert, Button, Label, Select, TextInput } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FC, useState } from 'react';
 import { object, string } from 'yup';
-import { API_URL } from '../src/config';
 import { FiMail } from 'react-icons/fi';
 import { useToasts } from '../src/components/contexts/ToastContext';
 import Head from 'next/head';
+import { createUser } from '../src/db/users';
 
 const UserSchema = object().shape({
   username: string().required(),
@@ -44,11 +43,8 @@ const Register: FC = () => {
               }}
               validationSchema={UserSchema}
               onSubmit={(values, { setSubmitting }) => {
-                axios
-                  .post(`${API_URL}/users`, {
-                    user: values,
-                  })
-                  .then((response) => {
+                createUser(values)
+                  .then(() => {
                     window.confetti();
                     addToast(
                       'Welcome to the Hitchlog! Please check your mails and confirm your email.'
