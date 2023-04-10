@@ -1,7 +1,7 @@
 import { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PostCard from '../../src/components/Blog/PostCard';
 import { getPosts } from '../../src/db/posts';
 import { Post } from '../../src/types/Post';
