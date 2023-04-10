@@ -15,7 +15,7 @@ jobs:
         node-version: 16
     - run: npm install -g pnpm
     - name: Install dependencies
-      run: pnpm install
+      run: npm install
     # run: npx playwright install --with-deps
     # run: pnpm dlx playwright test
     # - uses: actions/upload-artifact@v3
