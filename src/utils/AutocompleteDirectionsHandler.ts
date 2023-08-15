@@ -168,8 +168,8 @@ export class AutocompleteDirectionsHandler {
     this.geocodeCountries(countries).then((countries) => {
       this.setFieldValue('country_distances', countries);
     });
-    this.setFieldValue('totalDistance', totalDistance);
-    this.setFieldValue('googleDuration', totalDuration);
+    this.setFieldValue('distance', totalDistance);
+    this.setFieldValue('google_duration', totalDuration);
   }
 
   setupPlaceChangedListener(

@@ -24,6 +24,8 @@ export const TripForm = ({
   const originRef = useRef<HTMLInputElement>(null);
   const destinationRef = useRef<HTMLInputElement>(null);
 
+  console.log(values)
+
   useEffect(() => {
     if (typeof window === 'object' && window?.google) {
       new AutocompleteDirectionsHandler(
@@ -68,9 +70,9 @@ export const TripForm = ({
       </div>
 
       <div className="flex items-center justify-center gap-2">
-        {showTripDistance(values.totalDistance)}
+        {showTripDistance(values.distance)}
         {showTripDuration(values.departure, values.arrival)}
-        {showTripGoogleDuration(values.googleDuration)}
+        {showTripGoogleDuration(values.google_duration)}
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-2">

@@ -131,8 +131,8 @@ const New: NextPage<{ google: GoogleAPI; ipLocation: IpLocation }> = ({
                   number_of_rides: 1,
                   arrival: '',
                   departure: '',
-                  totalDistance: 0,
-                  googleDuration: 0,
+                  distance: 0,
+                  google_duration: 0,
                 }}
                 validationSchema={TripSchema}
                 onSubmit={handleSubmit}
