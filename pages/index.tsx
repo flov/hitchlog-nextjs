@@ -136,7 +136,7 @@ const Home: NextPage = () => {
         </div>
       </section>
 
-      <section className="px-4 mx-auto bg-white lg:px-0 max-w-screen-xl dark:bg-gray-900">
+      <section className="px-4 mx-auto bg-white max-w-screen-xl dark:bg-gray-900">
         <div className="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-16 md:space-y-0">
           <div>
             <div className="flex items-center mb-2 gap-4">
