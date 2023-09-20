@@ -22,12 +22,10 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
 }) => {
   try {
-    const geomap = await getGeomap(params?.id as string);
     const page = query.page ? JSON.parse(query.page as string) : 1;
     return {
       props: {
         id: params?.id,
-        geomap: JSON.parse(JSON.stringify(geomap.data)),
         page,
       },
     };
@@ -39,7 +37,6 @@ export const getServerSideProps: GetServerSideProps = async ({
 };
 
 const Show: NextPage<{
-  geomap: Geomap;
   totalPages: number;
   page: number;
   id: string;
@@ -51,6 +48,7 @@ const Show: NextPage<{
   const [trips, setTrips] = useState<Trip[]>();
   const [totalPages, setTotalPages] = useState(props.totalPages);
   const [profile, setProfile] = useState<Profile>();
+  const [geoMap, setGeoMap] = useState<Geomap>();
 
   const setTripsData = (res: AxiosResponse) => {
     setTrips(res.data.trips);
@@ -62,7 +60,12 @@ const Show: NextPage<{
       const res = await fetchProfile(props.id as string);
       setProfile(res.data);
     };
+    const fetchGeoMap = async () => {
+      const res = await getGeomap(props.id as string);
+      setGeoMap(res.data);
+    };
     fetchProfileData();
+    fetchGeoMap();
   }, []);
 
   useEffect(() => {
@@ -80,7 +83,7 @@ const Show: NextPage<{
     fetchTrips();
   }, [page, profile]);
 
-  if (!profile || !trips ) return null;
+  if (!profile || !trips) return null;
 
   const handlePageChange = async (p: number) => {
     router.push(
@@ -156,9 +159,9 @@ const Show: NextPage<{
             </div>
           )}
 
-          {props.geomap && !!Object.keys(props.geomap.distances).length && (
+          {geoMap && !!Object.keys(geoMap.distances).length && (
             <div className="mt-4">
-              <JVectorMap geomap={props.geomap} />
+              <JVectorMap geomap={geoMap} />
             </div>
           )}
         </section>

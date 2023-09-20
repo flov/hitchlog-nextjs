@@ -6,20 +6,19 @@ import PostCard from '../../src/components/Blog/PostCard';
 import { getPosts } from '../../src/db/posts';
 import { Post } from '../../src/types/Post';
 
-export const getStaticProps: GetStaticProps = async () => {
-  try {
-    const posts = await getPosts();
-    return {
-      props: { posts: JSON.parse(JSON.stringify(posts.data)) },
-    };
-  } catch (error) {
-    return {
-      props: { posts: [] },
-    };
-  }
-};
+const Blog: NextPage = () => {
+  const [posts, setPosts] = useState<Post[]>();
 
-const Blog: NextPage<{ posts: Post[] }> = ({ posts }) => {
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await getPosts();
+      setPosts(res.data);
+    };
+    fetchPosts();
+  }, []);
+
+  if (!posts) return null;
+
   return (
     <>
       <Head>

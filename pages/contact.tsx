@@ -1,15 +1,9 @@
 import { Button, Label, Textarea, TextInput } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import React from 'react';
 import { useToasts } from '../src/components/contexts/ToastContext';
 import { postContactForm } from '../src/db/users';
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    props: {},
-  };
-};
 
 const Contact: NextPage = () => {
   const { addToast } = useToasts();

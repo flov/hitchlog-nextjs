@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Post } from '../../../src/types/Post';
 import { getPost } from '../../../src/db/posts';
 import ReactMarkdown from 'react-markdown';
@@ -11,25 +11,28 @@ import Head from 'next/head';
 import { createPostComment } from '../../../src/db/comments';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  try {
-    const id = query?.id;
+  const id = query?.id as string;
 
-    const res = await getPost(id as string);
-    const post = res.data;
-
-    return {
-      props: {
-        post: JSON.parse(JSON.stringify(post)),
-      },
-    };
-  } catch (error) {
-    return {
-      notFound: true,
-    };
-  }
+  return {
+    props: {
+      id,
+    },
+  };
 };
 
-const BlogPost: NextPage<{ post: Post }> = ({ post }) => {
+const BlogPost: NextPage<{ id: string }> = ({ id }) => {
+  const [post, setPost] = useState<Post>();
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      const res = await getPost(id as string);
+      setPost(JSON.parse(JSON.stringify(res.data)));
+    };
+    fetchPost();
+  }, []);
+
+  if (!post) return <div>Loading...</div>;
+
   return (
     <main className="pb-16 bg-white lg:pb-24 dark:bg-gray-900">
       <Head>
