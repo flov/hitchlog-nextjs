@@ -22,18 +22,12 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
 }) => {
   try {
-    const profile = await fetchProfile(params?.id as string);
     const geomap = await getGeomap(params?.id as string);
     const page = query.page ? JSON.parse(query.page as string) : 1;
-    const trips = await getTripsWithQuery({
-      q: { user_id_eq: profile.data.id },
-    });
     return {
       props: {
-        profile: JSON.parse(JSON.stringify(profile.data)),
-        trips: JSON.parse(JSON.stringify(trips.data.trips)),
+        id: params?.id,
         geomap: JSON.parse(JSON.stringify(geomap.data)),
-        totalPages: JSON.parse(JSON.stringify(trips.data.total_pages)),
         page,
       },
     };
@@ -45,18 +39,18 @@ export const getServerSideProps: GetServerSideProps = async ({
 };
 
 const Show: NextPage<{
-  profile: Profile;
-  trips: Trip[];
   geomap: Geomap;
   totalPages: number;
   page: number;
+  id: string;
 }> = (props) => {
-  const { profile } = props;
   const router = useRouter();
+  const { currentUser } = useAuth();
   const [page, setPage] = useState(props.page);
   const [isLoading, setIsLoading] = useState(false);
-  const [trips, setTrips] = useState(props.trips);
+  const [trips, setTrips] = useState<Trip[]>();
   const [totalPages, setTotalPages] = useState(props.totalPages);
+  const [profile, setProfile] = useState<Profile>();
 
   const setTripsData = (res: AxiosResponse) => {
     setTrips(res.data.trips);
@@ -64,6 +58,16 @@ const Show: NextPage<{
   };
 
   useEffect(() => {
+    const fetchProfileData = async () => {
+      const res = await fetchProfile(props.id as string);
+      setProfile(res.data);
+    };
+    fetchProfileData();
+  }, []);
+
+  useEffect(() => {
+    if (!profile) return;
+
     const fetchTrips = async () => {
       setIsLoading(true);
       const res = await getTripsWithQuery({
@@ -74,7 +78,9 @@ const Show: NextPage<{
       setIsLoading(false);
     };
     fetchTrips();
-  }, [page, profile.id]);
+  }, [page, profile]);
+
+  if (!profile || !trips ) return null;
 
   const handlePageChange = async (p: number) => {
     router.push(
@@ -88,7 +94,6 @@ const Show: NextPage<{
     setPage(p);
   };
 
-  const { currentUser } = useAuth();
   const isOwner = profile.username === currentUser?.username;
 
   return (
