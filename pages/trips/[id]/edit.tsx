@@ -38,33 +38,36 @@ declare global {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const trip = await getTrip(params?.id);
-
-  if (!trip.data) {
-    return {
-      notFound: true,
-    };
-  }
-
   return {
     props: {
-      trip: JSON.parse(JSON.stringify(trip.data)),
+      id: params?.id,
       googleMapsKey: process.env.GOOGLE_MAPS_KEY,
     },
   };
 };
 
-const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
+const ShowTrip: NextPage<{ google: GoogleAPI; id: string }> = ({
   google,
-  trip,
+  id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { currentUser } = useAuth();
   const router = useRouter();
 
-  const [rides, setRides] = useState<Ride[]>(trip?.rides);
+  const [trip, setTrip] = useState<Trip>();
+  const [rides, setRides] = useState<Ride[] | undefined>(trip?.rides);
   const { addToast } = useToasts();
 
   useEffect(() => {
+    const fetchTrip = async () => {
+      const res = await getTrip(id as string);
+      setTrip(res.data);
+      setRides(res.data.rides);
+    };
+    fetchTrip();
+  }, [id]);
+
+  useEffect(() => {
+    if (!trip) return;
     if (currentUser?.id !== trip.user_id) {
       addToast('You are not authorized to edit this trip', 'error');
       router.push('/login');
@@ -98,7 +101,7 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
         origin.lat().toFixed(3) !== trip.origin.lat.toFixed(3) ||
         origin.lng().toFixed(3) !== trip.origin.lng.toFixed(3)
       ) {
-        const result = geocode({ location: origin }).then((origin) => {
+        geocode({ location: origin }).then((origin) => {
           updateTrip({ id: trip.id, trip: { origin } })
             .then((trip) => {
               addToast('Trip updated', 'success');
@@ -126,7 +129,9 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
         );
       }
     });
-  }, []);
+  }, [trip, currentUser]);
+
+  if (!trip || !rides ) return null
 
   const setRidesFromPayload = (payload: Ride) => {
     const newRides = rides.map((ride) => {
@@ -150,9 +155,13 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
     setRides(newRides);
   };
 
+  if (!trip) {
+    return null;
+  }
+
   const handleDeleteTrip = () => {
     if (window.confirm('Are you sure you want to delete this trip?')) {
-      deleteTrip(trip.id).then(() => {
+      deleteTrip(trip.id as number).then(() => {
         addToast('Trip deleted successfully');
         router.push('/hitchhikers/' + currentUser?.id);
       });
@@ -176,7 +185,8 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
             </div>
 
             <Accordion>
-              {trip?.rides &&
+              {trip &&
+                trip?.rides &&
                 trip?.rides.map((ride: Ride, index: number) => (
                   <Accordion.Panel key={`ride${index}`}>
                     <Accordion.Title as="h6">Ride {index + 1}</Accordion.Title>

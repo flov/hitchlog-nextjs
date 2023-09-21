@@ -250,7 +250,9 @@ const Index: FC<{
             totalPages={totalPages}
           />
         </div>
+
         <ListTrips map={map} isLoading={isLoading} trips={trips} />
+
         <div className="flex justify-center w-full my-4 itmes-center">
           <Pagination
             onPageChange={handlePageChange}

@@ -30,6 +30,7 @@ export type Trip = {
   rides: Ride[];
   total_distance: number;
   center: string;
+  user_id: number;
   user: {
     username: string;
     md5_email: string;
