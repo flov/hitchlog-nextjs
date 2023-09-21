@@ -104,7 +104,7 @@ export function HitchhikingTrip({
       </div>
       <article className="">
         <div
-          className={`h-56 sm:h-64 xl:h-76 ${
+          className={`h-56 sm:h-64 xl:h-76 pb-4 ${
             ridesWithPhoto.length === 0 && 'hidden'
           }`}
         >
