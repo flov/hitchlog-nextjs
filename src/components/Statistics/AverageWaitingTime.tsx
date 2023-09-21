@@ -13,7 +13,7 @@ export const AverageWaitingTime: FC = () => {
       setWaitingTimeStatsData(waitingTimeStatsRes.data);
     };
     fetchWaitingTimeStats();
-  }, [waitingTimeStatsData]);
+  }, []);
 
   if (!waitingTimeStatsData) return null;
 
