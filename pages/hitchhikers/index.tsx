@@ -93,7 +93,6 @@ const Index: NextPage<{ page: number }> = (props) => {
           <Table.HeadCell>
             <div className="flex justify-between">Username and Stats</div>
           </Table.HeadCell>
-
           <Table.HeadCell>Member since</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">

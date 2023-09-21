@@ -1,18 +1,12 @@
-import { Formik } from 'formik';
-import { GetServerSideProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import React from 'react';
+
+import { Formik } from 'formik';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import PostForm from '../../src/components/Blog/PostForm';
-import { useAuth } from '../../src/components/contexts/AuthContext';
 import { useToasts } from '../../src/components/contexts/ToastContext';
 import { createPost } from '../../src/db/posts';
 import Head from 'next/head';
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    props: {},
-  };
-};
 
 const New: NextPage = () => {
   const { addToast } = useToasts();

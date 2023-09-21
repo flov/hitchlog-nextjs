@@ -102,7 +102,7 @@ export function HitchhikingTrip({
           {trip.destination?.sanitized_address}
         </h5>
       </div>
-      <article className="">
+      <article>
         <div
           className={`h-56 sm:h-64 xl:h-76 pb-4 ${
             ridesWithPhoto.length === 0 && 'hidden'
