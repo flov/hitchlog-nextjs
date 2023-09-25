@@ -12,6 +12,7 @@ import LoadingContainer from '../../src/components/LoadingContainer';
 import { getTrip } from '../../src/db/trips';
 import { getUser } from '../../src/db/users';
 import Head from 'next/head';
+import { Alert, Spinner } from 'flowbite-react';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   // params.id looks like: hitchhike-from-${fromCity}-to-${toCity}-${id}
@@ -34,14 +35,17 @@ const ShowTrip: NextPage<{
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [trip, setTrip] = useState<Trip>();
-  const [user, setUser] = useState<User>()
+  const [user, setUser] = useState<User>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchTripAndUser = async () => {
+      setIsLoading(true);
       const res = await getTrip(id);
       setTrip(res.data);
       const userRes = await getUser(res.data.user_id);
       setUser(userRes.data);
+      setIsLoading(false);
     };
     fetchTripAndUser();
   }, []);
@@ -71,7 +75,17 @@ const ShowTrip: NextPage<{
     );
   }, [googleMapsKey, trip]);
 
-  if (!trip) return null;
+  if (!isLoading || !trip) {
+    return (
+      <div className="max-w-4xl p-4 mx-auto">
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <Alert color="info">This trip does not exist</Alert>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div>
