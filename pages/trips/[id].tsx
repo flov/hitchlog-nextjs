@@ -36,18 +36,18 @@ const ShowTrip: NextPage<{
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [trip, setTrip] = useState<Trip>();
   const [user, setUser] = useState<User>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchTripAndUser = async () => {
-      setIsLoading(true);
       const res = await getTrip(id);
       setTrip(res.data);
       const userRes = await getUser(res.data.user_id);
       setUser(userRes.data);
-      setIsLoading(false);
     };
+    setIsLoading(true);
     fetchTripAndUser();
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -75,17 +75,14 @@ const ShowTrip: NextPage<{
     );
   }, [googleMapsKey, trip]);
 
-  if (!isLoading || !trip) {
+  if (isLoading) {
     return (
-      <div className="max-w-4xl p-4 mx-auto">
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <Alert color="info">This trip does not exist</Alert>
-        )}
+      <div className="max-w-4xl text-center px-4 py-4 mx-auto">
+        <Spinner />
       </div>
     );
   }
+  if (!trip) return null;
 
   return (
     <div>
