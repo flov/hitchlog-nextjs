@@ -1,5 +1,7 @@
 import axios from '../config/axios';
 
+export const getLatestTrips = async () => axios.get('/trips')
+
 export const getTripsWithQuery = async (query: any) => {
   return axios.get('/trips', { params: query });
 };

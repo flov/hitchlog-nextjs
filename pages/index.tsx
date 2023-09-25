@@ -1,16 +1,9 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { Button, Carousel } from 'flowbite-react';
-import { useRouter } from 'next/router';
-import {
-  FaMap,
-  FaPhotoVideo,
-  FaScroll,
-  FaUsers,
-  FaVideo,
-} from 'react-icons/fa';
+import { Button } from 'flowbite-react';
+import { FaMap, FaUsers } from 'react-icons/fa';
 import Link from 'next/link';
-import { getRandomTrips } from '../src/db/trips';
+import { getLatestTrips, getRandomTrips } from '../src/db/trips';
 import { useEffect, useState } from 'react';
 import {
   RandomPhotos,
@@ -20,14 +13,19 @@ import {
 import Image from 'next/image';
 import { timeAgoInWords } from '../src/utils/timeAgoInWords';
 import { Trip } from '../src/types';
+import { LatestTrips } from '@/components/Trips/LatestTrips';
 
 const Home: NextPage = () => {
-  const router = useRouter();
   const [latestPhotoTrips, setLatestPhotoTrips] = useState<Trip[]>([]);
   const [latestStoryTrips, setLatestStoryTrips] = useState<Trip[]>([]);
   const [latestVideoTrips, setLatestVideoTrips] = useState<Trip[]>([]);
+  const [latestTrips, setLatestTrips] = useState<Trip[]>([]);
 
   useEffect(() => {
+    latestTrips.length === 0 &&
+      getLatestTrips().then((res) => {
+        setLatestTrips(res.data.trips);
+      });
     latestPhotoTrips.length === 0 &&
       getRandomTrips('photos').then((res) => {
         setLatestPhotoTrips(res.data.trips);
@@ -138,41 +136,10 @@ const Home: NextPage = () => {
 
       <section className="px-4 mx-auto bg-white max-w-screen-xl dark:bg-gray-900">
         <div className="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-16 md:space-y-0">
-          <div>
-            <div className="flex items-center mb-2 gap-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
-                <FaScroll className="" />
-              </div>
-              <h5>Random Hitchhiking Story</h5>
-            </div>
-            <RandomStories trips={latestStoryTrips} />
-          </div>
-          <div>
-            <div className="flex items-center mb-4 gap-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
-                <FaPhotoVideo />
-              </div>
-              <h3 className="text-xl font-bold dark:text-white">
-                Random Pictures from the road
-              </h3>
-            </div>
-
-            <RandomPhotos trips={latestPhotoTrips} />
-          </div>
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-100 lg:h-12 lg:w-12 dark:bg-primary-900">
-                  <FaVideo />
-                </div>
-                <h5>Random Video</h5>
-              </div>
-              <p className="text-sm">
-                {timeAgoInWords(latestVideoTrips[0]?.departure)}
-              </p>
-            </div>
-            <RandomVideos trips={latestVideoTrips} />
-          </div>
+          <RandomStories trips={latestStoryTrips} />
+          <RandomPhotos trips={latestPhotoTrips} />
+          <RandomVideos trips={latestVideoTrips} />
+          <LatestTrips trips={latestTrips} />
         </div>
       </section>
     </>

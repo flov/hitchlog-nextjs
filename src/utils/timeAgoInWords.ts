@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { Timestamp } from '../types';
 
 //unix timestamp to date
 export const unixToDate = (unix: number) => {
