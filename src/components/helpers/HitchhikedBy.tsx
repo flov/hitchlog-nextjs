@@ -28,7 +28,6 @@ const HitchhikedBy: FC<{ trip: Trip }> = ({ trip }) => {
               className="w-6 h-6 border border-gray-600 rounded-full"
               width={34}
               height={34}
-              // @ts-ignore
               src={profilePicture(trip.user.md5_email)}
               alt={`${trip.user.username}'s profile picture'`}
             />

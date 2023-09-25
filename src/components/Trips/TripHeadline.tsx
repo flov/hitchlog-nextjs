@@ -1,7 +1,12 @@
-import Link from 'next/link';
 import React, { FC } from 'react';
-import { Trip } from '../../types';
-import { showAgeAtTrip } from '../../utils/viewHelpers';
+
+import Link from 'next/link';
+import { Tooltip } from 'flowbite-react';
+import { FaClock } from 'react-icons/fa';
+
+import { timeAgoInWords } from '@/utils/timeAgoInWords';
+import { Trip } from '@/types';
+import { showAgeAtTrip } from '@/utils/viewHelpers';
 import CountryFlags from '../helpers/CountryFlags';
 import ExperiencesForRides from '../helpers/ExperiencesForRides';
 
@@ -14,6 +19,9 @@ const TripHeadline: FC<{ trip: Trip }> = ({ trip }) => {
       </Link>
 
       <div className="flex items-center gap-2">
+        <Tooltip content={`Created ${timeAgoInWords(trip.created_at)}`}>
+          <FaClock />
+        </Tooltip>
         <ExperiencesForRides rides={trip.rides} />
         {showAgeAtTrip(trip)}
         <CountryFlags trip={trip} />
