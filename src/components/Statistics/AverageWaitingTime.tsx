@@ -5,7 +5,8 @@ import { LabelValue } from '@/types/Statistics';
 import { waitingTimeStats } from '@/db/statistics';
 
 export const AverageWaitingTime: FC = () => {
-  const [waitingTimeStatsData, setWaitingTimeStatsData] = useState<LabelValue[]>();
+  const [waitingTimeStatsData, setWaitingTimeStatsData] =
+    useState<LabelValue[]>();
 
   useEffect(() => {
     const fetchWaitingTimeStats = async () => {

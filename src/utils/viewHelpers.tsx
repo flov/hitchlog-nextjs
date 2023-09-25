@@ -76,7 +76,7 @@ export const countryFlag = (countryCode: string | undefined, tip = '') => {
   return (
     <Tooltip
       //@ts-ignore
-      content={`${tip ? tip : countries[countryCode.toUpperCase()].name}`}
+      content={`${tip ? tip : countries[countryCode.toUpperCase()]?.name}`}
     >
       <ReactCountryFlag
         style={{ fontSize: '1.5rem' }}
