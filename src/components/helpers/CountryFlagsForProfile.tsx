@@ -11,13 +11,13 @@ const CountryFlagsForProfile: FC<{
     <>
       {Object.keys(hitchhiked_countries).map((countryCode, index) => {
         if (!countryCode) return null;
-        if (countryCode === '') return null;
+        if (countryCode.length !== 2) return null;
         return (
           <Tooltip
             key={`${index}CountryFlag`}
             content={`${
               /*@ts-ignore*/
-              countries[countryCode.toUpperCase()].name
+              countries[countryCode.toUpperCase()]?.name
             }: ${Math.round(hitchhiked_countries[countryCode] / 1000)} kms`}
           >
             <ReactCountryFlag
