@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Bar, getElementAtEvent } from 'react-chartjs-2';
 
 import { top10Chart } from '@/config';
 import { getTop10 } from '@/db/statistics';
@@ -26,7 +26,6 @@ export const HallOfFame = () => {
 
   // taken from https://react-chartjs-2.js.org/docs/working-with-events/
   const onClick = (event: any) => {
-    // @ts-ignore
     const elementAtEvent = getElementAtEvent(chartRef.current, event);
     if (elementAtEvent.length > 0) {
       const index = elementAtEvent[0].index;
