@@ -11,7 +11,6 @@ import {
   RandomStories,
 } from '../src/components/Trips';
 import Image from 'next/image';
-import { timeAgoInWords } from '../src/utils/timeAgoInWords';
 import { Trip } from '../src/types';
 import { LatestTrips } from '@/components/Trips/LatestTrips';
 
@@ -135,7 +134,7 @@ const Home: NextPage = () => {
       </section>
 
       <section className="px-4 mx-auto bg-white max-w-screen-xl dark:bg-gray-900">
-        <div className="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-16 md:space-y-0">
+        <div className="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-2 md:gap-16 md:space-y-0">
           <RandomStories trips={latestStoryTrips} />
           <RandomPhotos trips={latestPhotoTrips} />
           <RandomVideos trips={latestVideoTrips} />
