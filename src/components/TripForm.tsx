@@ -24,8 +24,6 @@ export const TripForm = ({
   const originRef = useRef<HTMLInputElement>(null);
   const destinationRef = useRef<HTMLInputElement>(null);
 
-  console.log(values)
-
   useEffect(() => {
     if (typeof window === 'object' && window?.google) {
       new AutocompleteDirectionsHandler(

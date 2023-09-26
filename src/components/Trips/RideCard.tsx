@@ -1,6 +1,7 @@
 import { Badge, Tooltip } from 'flowbite-react';
 import Link from 'next/link';
 import React, { FC, Fragment } from 'react';
+import { FaHourglassHalf } from 'react-icons/fa';
 import { Ride } from '../../types';
 import { getOrdinalNumber } from '../../utils';
 import { vehicleToIcon } from '../../utils/viewHelpers';
@@ -26,10 +27,8 @@ export const RideCardHeader: FC<{
         <div className="flex items-center gap-2">
           {ride.vehicle && vehicleToIcon(ride.vehicle)}
           {ride.waiting_time && (
-            <Tooltip content="Waiting time">
-              <Badge size="xs" color="purple">
-                {ride.waiting_time}
-              </Badge>
+            <Tooltip content={`${ride.waiting_time}mins waiting time`}>
+              <FaHourglassHalf />
             </Tooltip>
           )}
           <Tooltip
