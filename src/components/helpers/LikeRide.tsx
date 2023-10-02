@@ -5,6 +5,7 @@ import { Ride } from '../../types';
 import { useLoginModal } from '../contexts/LoginModal';
 import { useToasts } from '../contexts/ToastContext';
 import { useAuth } from '../../components/contexts/AuthContext';
+import { Tooltip } from 'flowbite-react';
 
 const LikeRide: FC<{ ride: Ride }> = ({ ride }) => {
   const { addToast } = useToasts();
@@ -33,19 +34,21 @@ const LikeRide: FC<{ ride: Ride }> = ({ ride }) => {
   };
 
   return (
-    <div
-      onClick={likeTrip}
-      className="rounded-full cursor-pointer dark:text-white"
-    >
-      <span className="sr-only">Like Ride</span>
-      <div className="">
-        {hasLikedRide || ride.already_liked ? (
-          <FaHeart className="text-red-500" />
-        ) : (
-          <FaRegHeart className="text-red-500 hover:animate-ping" />
-        )}
+    <Tooltip content="like ride">
+      <div
+        onClick={likeTrip}
+        className="rounded-full cursor-pointer dark:text-white"
+      >
+        <span className="sr-only">Like Ride</span>
+        <div className="">
+          {hasLikedRide || ride.already_liked ? (
+            <FaHeart className="text-red-500" />
+          ) : (
+            <FaRegHeart className="text-red-500 hover:animate-ping" />
+          )}
+        </div>
       </div>
-    </div>
+    </Tooltip>
   );
 };
 

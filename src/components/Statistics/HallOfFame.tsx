@@ -26,7 +26,8 @@ export const HallOfFame = () => {
 
   // taken from https://react-chartjs-2.js.org/docs/working-with-events/
   const onClick = (event: any) => {
-    const elementAtEvent = getElementAtEvent(chartRef.current, event);
+    // @ts-ignore
+    const elementAtEvent = getElementAtEvent(chartRef?.current, event);
     if (elementAtEvent.length > 0) {
       const index = elementAtEvent[0].index;
       router.push(`/hitchhikers/${top10[index].username}`);

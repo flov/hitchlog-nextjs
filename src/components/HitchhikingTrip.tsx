@@ -1,6 +1,10 @@
+import { Fragment } from 'react';
+
 import { Button, Card, Carousel, Tooltip } from 'flowbite-react';
 import moment from 'moment';
 import Image from 'next/image';
+import Link from 'next/link';
+
 import { capitalize, getOrdinalNumber, profilePicture } from '../utils';
 import {
   showAgeAtTrip,
@@ -13,11 +17,10 @@ import {
   showUserGender,
   vehicleIconsForRides,
 } from '../utils/viewHelpers';
+import LikeRide from './helpers/LikeRide';
 import { User, Ride, Trip } from '../types';
-import Link from 'next/link';
 import ExperiencesForRides from './helpers/ExperiencesForRides';
 import CommentSection from './Blog/CommentSection';
-import { Fragment } from 'react';
 import { useAuth } from './contexts/AuthContext';
 import ExperienceCircle from './helpers/ExperienceCircle';
 import { createTripComment } from '../db/comments';
@@ -132,6 +135,7 @@ export function HitchhikingTrip({
             {ride.story && (
               <>
                 <div className="flex items-center gap-2">
+                  <LikeRide ride={ride} />
                   <Tooltip content={`${ride.experience} Experience`}>
                     <ExperienceCircle experience={ride.experience} size={3} />
                   </Tooltip>
