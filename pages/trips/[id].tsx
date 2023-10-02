@@ -48,7 +48,7 @@ const ShowTrip: NextPage<{
     setIsLoading(true);
     fetchTripAndUser();
     setIsLoading(false);
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (!trip) {
