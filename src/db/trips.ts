@@ -1,6 +1,8 @@
+import Cookies from 'js-cookie';
 import axios from '../config/axios';
+import actualAxios from 'axios';
 
-export const getLatestTrips = async () => axios.get('/trips')
+export const getLatestTrips = async () => axios.get('/trips');
 
 export const getTripsWithQuery = async (query: any) => {
   return axios.get('/trips', { params: query });
@@ -29,7 +31,16 @@ export const getTripsByLocation = async (
     },
   });
 
-export const getTrip = async (trip_id: any) => axios.get(`/trips/${trip_id}`);
+export const getTrip = async (trip_id: any) => {
+  return actualAxios.get(`${process.env.NEXT_PUBLIC_API_URL}/trips/${trip_id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
+      Accept: 'application/json',
+    },
+  });
+};
+
 export const createTrip = (payload: any) => axios.post(`/trips`, payload);
 export const deleteTrip = (id: number) => axios.delete(`/trips/${id}`);
 export const updateTrip = (payload: any) =>

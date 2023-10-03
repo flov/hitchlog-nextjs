@@ -1,4 +1,6 @@
+import Cookies from 'js-cookie';
 import axios from '../config/axios';
+import actualAxios from 'axios';
 
 export const authenticateToken = async (token: string | undefined) =>
   axios.get('/users/me');
@@ -18,7 +20,15 @@ export const getGeomap = async (id: string | number) =>
 export const postLogin = async (values: { email: string; password: string }) =>
   axios.post(`/users/sign_in`, { user: values });
 
-export const getUser = async (id: number | string) => axios.get(`/users/${id}`);
+export const getUser = async (id: number | string) => {
+  return actualAxios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${Cookies.get('authToken')}`,
+    },
+  });
+};
 
 export const fetchProfile = async (id: number | string) =>
   axios.get(`/users/${id}/profile`);
