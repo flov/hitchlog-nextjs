@@ -84,7 +84,10 @@ const CommentSection: FC<{
         </Formik>
 
         {comments.map((comment: Comment) => (
-          <CommentComponent key={comment.created_at} comment={comment} />
+          <>
+            {/* @ts-ignore */}
+            <CommentComponent key={comment.created_at} comment={comment} />
+          </>
         ))}
       </section>
     </div>

@@ -42,6 +42,7 @@ const JVectorMap: FC<{ geomap: Geomap }> = ({ geomap }) => {
     <>
       <h2 className="mb-2 text-xl font-bold">Geomap of hitchhiking trips</h2>
       <div style={{ height: '20rem' }} className="w-full ">
+        {/* @ts-ignore */}
         <VectorMap
           map={worldMill}
           regionStyle={{

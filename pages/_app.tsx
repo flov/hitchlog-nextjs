@@ -1,3 +1,5 @@
+import React from 'react';
+
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import Layout from '../src/components/Layout';
@@ -20,6 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <LoginModalProvider>
             <Layout>
               <GoogleAnalyticsSetup />
+              {/** @ts-ignore */}
               <Component {...pageProps} />
             </Layout>
           </LoginModalProvider>
