@@ -1,20 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
-
 import { Alert } from 'flowbite-react';
 import { Formik } from 'formik';
 import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
 import { date, number, object, ref, string } from 'yup';
 
 import LoadingContainer from '@/components/LoadingContainer';
-import ShowErrors from '@/components/helpers/ShowErrors';
-import { IpLocation } from '@/types';
 import { TripForm } from '@/components/TripForm';
-import { createTrip } from '@/db/trips';
-import { fetchLocationFromClient } from '@/utils';
 import { useAuth } from '@/components/contexts/AuthContext';
+import ShowErrors from '@/components/helpers/ShowErrors';
+import { createTrip } from '@/db/trips';
+import { IpLocation } from '@/types';
+import { fetchLocationFromClient } from '@/utils';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const ipLocation = await fetchLocationFromClient();

@@ -1,10 +1,11 @@
-import { GetServerSideProps, NextPage } from 'next';
-import React from 'react';
-import Image from 'next/image';
-import { Comment } from '../../types/Comment';
 import moment from 'moment';
-import { timeAgoInWords } from '../../utils/timeAgoInWords';
+import { GetServerSideProps, NextPage } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
+import React from 'react';
+
+import { Comment } from '../../types/Comment';
+import { timeAgoInWords } from '../../utils/timeAgoInWords';
 
 export const getServerSideProps: GetServerSideProps = async () => {
   return {

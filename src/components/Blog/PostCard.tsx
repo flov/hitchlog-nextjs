@@ -1,11 +1,12 @@
 import { Badge, Button } from 'flowbite-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react';
 import { HiClock } from 'react-icons/hi';
+
 import { Post } from '../../types/Post';
 import { pluralize } from '../../utils';
 import { timeAgoInWords } from '../../utils/timeAgoInWords';
-import Image from 'next/image';
 import { useAuth } from '../contexts/AuthContext';
 
 const PostCard: FC<{ post: Post }> = ({ post }) => {

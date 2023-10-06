@@ -1,6 +1,7 @@
 import { Tooltip } from 'flowbite-react';
 import React, { FC } from 'react';
 import ReactCountryFlag from 'react-country-flag';
+
 import { countries } from '../../utils/country_codes';
 
 const CountryFlagsForProfile: FC<{

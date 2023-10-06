@@ -1,5 +1,6 @@
 import { Badge } from 'flowbite-react';
 import React, { FC } from 'react';
+
 import { Ride } from '../../types';
 import { removeDuplicates } from '../../utils';
 

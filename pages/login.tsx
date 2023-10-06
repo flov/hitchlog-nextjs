@@ -1,14 +1,15 @@
-import React, { FC, useState } from 'react';
-import { Field, Form, Formik, FormikHelpers, FormikValues } from 'formik';
-import { useRouter } from 'next/router';
-import { useAuth } from '../src/components/contexts/AuthContext';
-import Cookies from 'js-cookie';
 import { Alert, Label, TextInput } from 'flowbite-react';
-import Link from 'next/link';
-import { FiKey, FiMail } from 'react-icons/fi';
-import { useToasts } from '../src/components/contexts/ToastContext';
-import { postLogin } from '../src/db/users';
+import { Field, Form, Formik, FormikHelpers, FormikValues } from 'formik';
+import Cookies from 'js-cookie';
 import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { FC, useState } from 'react';
+import { FiKey, FiMail } from 'react-icons/fi';
+
+import { useAuth } from '@/components/contexts/AuthContext';
+import { useToasts } from '@/components/contexts/ToastContext';
+import { postLogin } from '@/db/users';
 
 type Values = {
   password: string;

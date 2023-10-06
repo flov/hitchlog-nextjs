@@ -1,16 +1,17 @@
+import Cookies from 'js-cookie';
 import {
-  createContext,
   Dispatch,
   FC,
   SetStateAction,
+  createContext,
   useContext,
   useEffect,
   useState,
 } from 'react';
-import Cookies from 'js-cookie';
-import { User } from '../../types';
+
 import axios from '../../config/axios';
 import { authenticateToken } from '../../db/users';
+import { User } from '../../types';
 
 type AuthProps = {
   currentUser: User | null;

@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
+
 import { labelValuePieChartData } from '@/config/statistics';
-import { LabelValue } from '@/types/Statistics';
 import { waitingTimeStats } from '@/db/statistics';
+import { LabelValue } from '@/types/Statistics';
 
 export const AverageWaitingTime: FC = () => {
   const [waitingTimeStatsData, setWaitingTimeStatsData] =

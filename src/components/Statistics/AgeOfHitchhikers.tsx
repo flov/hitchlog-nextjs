@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { ageForTripsChart } from '../../config';
-import { getAgeForTrips } from '../../db/statistics';
-import { AgeForTrip } from '../../types/Statistics';
+
+import { ageForTripsChart } from '@/config/statistics';
+import { getAgeForTrips } from '@/db/statistics';
+import { AgeForTrip } from '@/types/Statistics';
 
 export const AgeOfHitchhikers: FC = () => {
   const [ageOfHitchhikers, setAgeOfHitchhikers] = useState<AgeForTrip[]>();

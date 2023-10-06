@@ -1,22 +1,22 @@
-import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
 import { AxiosResponse } from 'axios';
 import { Alert, Button, Pagination } from 'flowbite-react';
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 import JVectorMap from '@/components/JVectorMap';
-import ProfileStats from '@/components/users/ProfileStats';
-import VehiclesForProfile from '@/components/helpers/VehiclesForProfile';
-import { Geomap, Profile, Trip } from '@/types';
 import { ListTrips } from '@/components/ListTrips';
+import { useAuth } from '@/components/contexts/AuthContext';
+import VehiclesForProfile from '@/components/helpers/VehiclesForProfile';
+import ProfileStats from '@/components/users/ProfileStats';
+import { getTripsWithQuery } from '@/db/trips';
+import { fetchProfile, getGeomap } from '@/db/users';
+import { Geomap, Profile, Trip } from '@/types';
 import { capitalize } from '@/utils';
 import { experiencesForProfile } from '@/utils/viewHelpers';
-import { fetchProfile, getGeomap } from '@/db/users';
-import { getTripsWithQuery } from '@/db/trips';
-import { useAuth } from '@/components/contexts/AuthContext';
 
 export const getServerSideProps: GetServerSideProps = async ({
   query,

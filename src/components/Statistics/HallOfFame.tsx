@@ -1,10 +1,10 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { Bar, getElementAtEvent } from 'react-chartjs-2';
 
 import { top10Chart } from '@/config';
 import { getTop10 } from '@/db/statistics';
 import { Top10 } from '@/types/Statistics';
-import { useRouter } from 'next/router';
 
 export const HallOfFame = () => {
   const router = useRouter();

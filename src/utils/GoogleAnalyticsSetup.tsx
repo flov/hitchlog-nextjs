@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import React, { FC, useEffect } from 'react';
+
 import * as gtag from './gtag';
 
 const GoogleAnalyticsSetup: FC = () => {

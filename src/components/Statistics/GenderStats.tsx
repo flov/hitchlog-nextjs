@@ -1,10 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
+import { Pie } from 'react-chartjs-2';
 
 import { labelValuePieChartData } from '@/config';
 import { genderStats } from '@/db/statistics';
 import { LabelValue } from '@/types/Statistics';
-
-import { Pie } from 'react-chartjs-2';
 
 export const GenderStats: FC = () => {
   const [genderStatsData, setGenderStatsData] = useState<LabelValue[]>();

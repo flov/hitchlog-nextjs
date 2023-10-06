@@ -19,7 +19,7 @@ import {
   FaVenus,
 } from 'react-icons/fa';
 import { FiThumbsUp, FiUser } from 'react-icons/fi';
-import { capitalize, pluralize, removeDuplicates } from '.';
+
 import ExperienceCircle from '../components/helpers/ExperienceCircle';
 import {
   ExperienceKey,
@@ -31,8 +31,11 @@ import {
   VEHICLE,
 } from '../types';
 import { countries } from '../utils/country_codes';
+
 import { calculateTimeBetweenDates } from './calculateTimeBetweenDates';
 import { secondsToTime } from './secondsToTime';
+
+import { capitalize, pluralize, removeDuplicates } from '.';
 
 export const vehicleToIcon = (vehicle: VEHICLE) => {
   switch (vehicle) {

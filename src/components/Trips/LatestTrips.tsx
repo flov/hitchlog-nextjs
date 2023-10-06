@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
+import { FaThumbsUp } from 'react-icons/fa';
+
+import StoryCard from './StoryCard';
 
 import { Trip } from '@/types';
-import { FaThumbsUp } from 'react-icons/fa';
-import StoryCard from './StoryCard';
 
 export const LatestTrips: FC<{ trips: Trip[] }> = ({ trips }) => {
   return (

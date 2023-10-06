@@ -1,6 +1,8 @@
 import { FC, Fragment } from 'react';
+
 import { Trip } from '../../types';
 import HitchhikedBy from '../helpers/HitchhikedBy';
+
 import RideCard from './RideCard';
 import TripHeadline from './TripHeadline';
 

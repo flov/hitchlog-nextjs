@@ -1,7 +1,7 @@
-import {timeAgoInWords} from '@/utils/timeAgoInWords';
 import Link from 'next/link';
 import React, { FC, Fragment } from 'react';
 import {FaVideo} from 'react-icons/fa';
+
 import { Trip } from '../../types';
 import {
   showEmbeddedYoutubeVideo,
@@ -11,6 +11,8 @@ import CountryFlags from '../helpers/CountryFlags';
 import ExperiencesForRides from '../helpers/ExperiencesForRides';
 import HitchhikedBy from '../helpers/HitchhikedBy';
 import LikeRide from '../helpers/LikeRide';
+
+import {timeAgoInWords} from '@/utils/timeAgoInWords';
 
 const RandomVideos: FC<{ trips: Trip[] }> = ({ trips }) => {
   const ridesWithVideo = trips

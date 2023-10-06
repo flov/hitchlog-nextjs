@@ -1,9 +1,10 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react';
+
 import { Trip } from '../../types';
-import { timeAgoInWords } from '../../utils/timeAgoInWords';
-import Image from 'next/image';
 import { profilePicture } from '../../utils';
+import { timeAgoInWords } from '../../utils/timeAgoInWords';
 import { showUserGender } from '../../utils/viewHelpers';
 
 const HitchhikedBy: FC<{ trip: Trip }> = ({ trip }) => {

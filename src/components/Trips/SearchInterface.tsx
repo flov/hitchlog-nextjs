@@ -1,6 +1,7 @@
 import { Button, Checkbox, Label, Select, Spinner } from 'flowbite-react';
 import { Field, Form, FormikValues } from 'formik';
 import { FaCamera, FaScroll, FaVideo } from 'react-icons/fa';
+
 import { Experiences } from '../../types';
 import { countries } from '../../utils/country_codes';
 

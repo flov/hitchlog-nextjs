@@ -4,32 +4,33 @@ import {
   FileInput,
   Label,
   Spinner,
-  Textarea,
   TextInput,
+  Textarea,
 } from 'flowbite-react';
-import { geocode } from '../../../src/utils/Geocoder';
 import { Field, Form, Formik } from 'formik';
+import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Experiences, Ride, Trip, Vehicles } from '../../../src/types';
-import { displayRoute } from '../../../src/utils/DirectionsHandler';
+
+import { HitchhikingTrip } from '../../../src/components/HitchhikingTrip';
+import LoadingContainer from '../../../src/components/LoadingContainer';
 import { useAuth } from '../../../src/components/contexts/AuthContext';
+import { useToasts } from '../../../src/components/contexts/ToastContext';
 import {
   deleteTrip,
   getTrip,
   updateRide,
   updateTrip,
 } from '../../../src/db/trips';
-import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
-import LoadingContainer from '../../../src/components/LoadingContainer';
-import { useRouter } from 'next/router';
-import { HitchhikingTrip } from '../../../src/components/HitchhikingTrip';
-import { useToasts } from '../../../src/components/contexts/ToastContext';
+import { Experiences, Ride, Trip, Vehicles } from '../../../src/types';
+import { displayRoute } from '../../../src/utils/DirectionsHandler';
+import { geocode } from '../../../src/utils/Geocoder';
 
 declare global {
   interface Window {

@@ -1,6 +1,8 @@
 import moment from 'moment';
-import { FC } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { FC } from 'react';
+
 import { Profile } from '../../types';
 import { capitalize, profilePicture } from '../../utils';
 import {
@@ -14,7 +16,6 @@ import {
   viewNumberOfStories,
   viewNumberOfTrips,
 } from '../../utils/viewHelpers';
-import Link from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 import CountryFlagsForProfile from '../helpers/CountryFlagsForProfile';
 

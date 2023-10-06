@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+
 import { VEHICLE } from '../../types';
 import { vehicleToIcon } from '../../utils/viewHelpers';
 

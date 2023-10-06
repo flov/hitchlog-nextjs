@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import React, { FC } from 'react';
+import { FaPhotoVideo } from 'react-icons/fa';
+
 import { Trip } from '../../types';
 import { getOrdinalNumber } from '../../utils';
-import Link from 'next/link';
-import { FaPhotoVideo } from 'react-icons/fa';
 
 const RandomPhotos: FC<{ trips: Trip[] }> = ({ trips }) => {
   return (

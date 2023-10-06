@@ -2,11 +2,13 @@ import { Badge, Tooltip } from 'flowbite-react';
 import Link from 'next/link';
 import React, { FC, Fragment } from 'react';
 import { FaHourglassHalf } from 'react-icons/fa';
+
 import { Ride } from '../../types';
 import { getOrdinalNumber } from '../../utils';
 import { vehicleToIcon } from '../../utils/viewHelpers';
 import ExperienceCircle from '../helpers/ExperienceCircle';
 import LikeRide from '../helpers/LikeRide';
+
 import TagsForRide from './TagsForRide';
 
 export const RideCardHeader: FC<{

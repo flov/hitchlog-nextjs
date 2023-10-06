@@ -1,9 +1,11 @@
-import React, { FC } from 'react';
-import { Trip } from '../types';
-import RightArrow from './svg/RightArrow';
 import Link from 'next/link';
+import React, { FC } from 'react';
+
+import { Trip } from '../types';
+
 import CarouselForRides from './Trips/CarouselForRides';
 import StoryCard from './Trips/StoryCard';
+import RightArrow from './svg/RightArrow';
 
 const TripCard: FC<{ map?: google.maps.Map | null; trip: Trip }> = ({
   map,

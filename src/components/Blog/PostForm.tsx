@@ -1,9 +1,11 @@
-import { Button, Label, Textarea, TextInput } from 'flowbite-react';
+import { Button, Label, TextInput, Textarea } from 'flowbite-react';
 import { Field, Form, FormikValues } from 'formik';
 import React, { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useAuth } from '../contexts/AuthContext';
+
 import { Post } from '../../types/Post';
+import { useAuth } from '../contexts/AuthContext';
+
 import PostComponent from './Post';
 import PostCard from './PostCard';
 

@@ -1,31 +1,31 @@
-import { Fragment } from 'react';
-
 import { Button, Card, Carousel, Tooltip } from 'flowbite-react';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Fragment } from 'react';
 
+import { createTripComment } from '../db/comments';
+import { Ride, Trip, User } from '../types';
 import { capitalize, getOrdinalNumber, profilePicture } from '../utils';
 import {
   showAgeAtTrip,
+  showEmbeddedYoutubeVideo,
   showNumberOfStories,
   showTotalWaitingTimeForRides,
-  viewAverageSpeed,
-  showTripGoogleDuration,
   showTripDistance,
-  showEmbeddedYoutubeVideo,
+  showTripGoogleDuration,
   showUserGender,
   vehicleIconsForRides,
+  viewAverageSpeed,
 } from '../utils/viewHelpers';
-import LikeRide from './helpers/LikeRide';
-import { User, Ride, Trip } from '../types';
-import ExperiencesForRides from './helpers/ExperiencesForRides';
+
 import CommentSection from './Blog/CommentSection';
+import { TagsForRide, TagsForRides } from './Trips/TagsForRide';
 import { useAuth } from './contexts/AuthContext';
-import ExperienceCircle from './helpers/ExperienceCircle';
-import { createTripComment } from '../db/comments';
 import CountryFlags from './helpers/CountryFlags';
-import { TagsForRides, TagsForRide } from './Trips/TagsForRide';
+import ExperienceCircle from './helpers/ExperienceCircle';
+import ExperiencesForRides from './helpers/ExperiencesForRides';
+import LikeRide from './helpers/LikeRide';
 
 export function HitchhikingTrip({
   user,

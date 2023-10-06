@@ -1,5 +1,6 @@
-import { myXOR } from '.';
 import { getCountriesForResult } from './getCountriesForResult';
+
+import { myXOR } from '.';
 
 export class AutocompleteDirectionsHandler {
   map: google.maps.Map;

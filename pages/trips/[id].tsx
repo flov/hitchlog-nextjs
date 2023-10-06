@@ -1,19 +1,18 @@
-import React, { useEffect } from 'react';
-
+import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
   NextPage,
 } from 'next';
 import Head from 'next/head';
-import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
+import React, { useEffect } from 'react';
 
-import { displayRoute } from '../../src/utils/DirectionsHandler';
 import { HitchhikingTrip } from '../../src/components/HitchhikingTrip';
-import { Trip, User } from '../../src/types';
 import LoadingContainer from '../../src/components/LoadingContainer';
 import { getTrip } from '../../src/db/trips';
 import { getUser } from '../../src/db/users';
+import { Trip, User } from '../../src/types';
+import { displayRoute } from '../../src/utils/DirectionsHandler';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   // params.id looks like: hitchhike-from-${fromCity}-to-${toCity}-${id}

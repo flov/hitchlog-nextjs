@@ -1,4 +1,5 @@
 import { getCountriesForResult } from '../getCountriesForResult';
+
 import croatia_serbia from './croatia_serbia.json';
 import istanbul_zagreb from './istanbul_zagreb.json';
 

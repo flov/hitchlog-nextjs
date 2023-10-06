@@ -1,12 +1,11 @@
-import React from 'react';
-
+import { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { GetStaticProps, NextPage } from 'next';
+import React from 'react';
 
 import PostCard from '@/components/Blog/PostCard';
-import { Post } from '@/types/Post';
 import { getPosts } from '@/db/posts';
+import { Post } from '@/types/Post';
 
 export const getStaticProps: GetStaticProps = async () => {
   try {

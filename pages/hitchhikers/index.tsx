@@ -1,21 +1,22 @@
 import { Pagination, Table } from 'flowbite-react';
-import Image from 'next/image';
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+
+import Skeleton from '../../src/components/Hitchhikers/Skeleton';
 import { getUsers } from '../../src/db/users';
 import { User } from '../../src/types';
 import { profilePicture } from '../../src/utils';
 import {
   countryFlag,
   showNumberOfRides,
-  viewNumberOfTrips,
   showUserGender,
   viewNumberOfStories,
+  viewNumberOfTrips,
 } from '../../src/utils/viewHelpers';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import Skeleton from '../../src/components/Hitchhikers/Skeleton';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return {

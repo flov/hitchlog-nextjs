@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
-
-import Head from 'next/head';
-import Image from 'next/image';
 import { Alert, Button } from 'flowbite-react';
 import { Formik, FormikValues } from 'formik';
-import { GetServerSideProps, NextPage } from 'next';
 import { GoogleApiWrapper } from 'google-maps-react';
+import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 import EditProfileForm from '@/components/EditProfileForm';
 import LoadingContainer from '@/components/LoadingContainer';
-import { profilePicture, showErrors } from '@/utils/viewHelpers';
-import { updateUser } from '@/db/users';
 import { useAuth } from '@/components/contexts/AuthContext';
 import { useToasts } from '@/components/contexts/ToastContext';
+import { updateUser } from '@/db/users';
+import { profilePicture, showErrors } from '@/utils/viewHelpers';
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {

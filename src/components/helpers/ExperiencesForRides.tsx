@@ -1,7 +1,9 @@
 import { Tooltip } from 'flowbite-react';
 import React, { FC } from 'react';
+
 import { Ride } from '../../types';
 import { pluralize, removeDuplicates } from '../../utils';
+
 import ExperienceCircle from './ExperienceCircle';
 
 const ExperiencesForRides: FC<{ rides: Ride[] }> = ({ rides }) => {

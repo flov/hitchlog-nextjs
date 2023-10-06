@@ -1,17 +1,17 @@
 import { Toast } from 'flowbite-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import React, {
   FC,
   createContext,
-  useState,
   useCallback,
-  useMemo,
-  useEffect,
   useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { v4 as uuidv4 } from 'uuid';
 import { HiCheck, HiExclamation, HiX } from 'react-icons/hi';
-import { AnimatePresence, motion } from 'framer-motion';
+import { v4 as uuidv4 } from 'uuid';
 
 type ToastProps = {
   addToast: (

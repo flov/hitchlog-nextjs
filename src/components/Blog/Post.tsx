@@ -1,7 +1,8 @@
+import Image from 'next/image';
 import React, { FC } from 'react';
+
 import { Post } from '../../types/Post';
 import { timeAgoInWords } from '../../utils/timeAgoInWords';
-import Image from 'next/image';
 
 const PostComponent: FC<{ post: Post }> = ({ post }) => {
   const createdAtDate = new Date(post.created_at);

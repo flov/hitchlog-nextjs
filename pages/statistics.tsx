@@ -1,21 +1,22 @@
-import React from 'react';
 import {
   ArcElement,
-  Chart as ChartJS,
+  BarElement,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LineElement,
   LinearScale,
   PointElement,
-  LineElement,
   Title,
   Tooltip,
-  Legend,
-  BarElement,
 } from 'chart.js';
 import { NextPage } from 'next';
+import React from 'react';
+
 import { AgeOfHitchhikers } from '@/components/Statistics/AgeOfHitchhikers';
-import { HallOfFame } from '@/components/Statistics/HallOfFame';
-import { GenderStats } from '@/components/Statistics/GenderStats';
 import { AverageWaitingTime } from '@/components/Statistics/AverageWaitingTime';
+import { GenderStats } from '@/components/Statistics/GenderStats';
+import { HallOfFame } from '@/components/Statistics/HallOfFame';
 
 ChartJS.register(
   ArcElement,

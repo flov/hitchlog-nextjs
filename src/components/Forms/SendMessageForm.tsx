@@ -1,4 +1,4 @@
-import { Button, Label, Textarea, TextInput } from 'flowbite-react';
+import { Button, Label, TextInput, Textarea } from 'flowbite-react';
 import { Field, Form, FormikValues } from 'formik';
 
 export const SendMessageForm = ({ isSubmitting }: FormikValues) => {

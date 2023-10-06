@@ -1,5 +1,6 @@
 import { Carousel } from 'flowbite-react';
 import React, { FC } from 'react';
+
 import { Ride } from '../../types';
 import { getOrdinalNumber } from '../../utils';
 

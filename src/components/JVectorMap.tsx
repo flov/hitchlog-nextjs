@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
 import worldMill from '@react-jvectormap/world/worldMill.json';
 import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
+import React, { FC } from 'react';
+
 import { Geomap } from '../types';
 
 // JVector for Map statistics (https://jvectormap.com/)

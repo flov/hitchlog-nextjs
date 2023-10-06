@@ -1,5 +1,6 @@
-import { EXPERIENCES, Trip, IpLocation, User } from '../types';
 import axios from 'axios';
+
+import { EXPERIENCES, IpLocation, Trip, User } from '../types';
 
 export const capitalize = (s: string) => {
   if (typeof s !== 'string') return '';

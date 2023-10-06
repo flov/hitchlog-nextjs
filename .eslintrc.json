@@ -1,6 +1,23 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "parent", "sibling", "index"],
+        "alphabetize": {
+          "order": "asc"
+        },
+        "newlines-between": "always"
+      }
+    ],
+    "sort-imports": [
+      "error",
+      {
+        "allowSeparatedGroups": true,
+        "ignoreDeclarationSort": true
+      }
+    ]
   }
 }

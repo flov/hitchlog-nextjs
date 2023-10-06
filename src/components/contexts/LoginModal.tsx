@@ -1,12 +1,13 @@
 import { Modal } from 'flowbite-react';
 import {
-  createContext,
   FC,
+  createContext,
   useCallback,
   useContext,
   useMemo,
   useState,
 } from 'react';
+
 import Login from '../Login';
 
 const LoginModalContext = createContext<{ toggleLoginModal: () => void }>({

@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+
 import { getOrdinalNumber } from '../../utils';
 
 const ExperienceCircle: FC<{

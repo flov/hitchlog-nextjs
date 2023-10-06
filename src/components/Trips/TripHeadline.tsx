@@ -1,14 +1,14 @@
-import React, { FC } from 'react';
-
-import Link from 'next/link';
 import { Tooltip } from 'flowbite-react';
+import Link from 'next/link';
+import React, { FC } from 'react';
 import { FaClock } from 'react-icons/fa';
 
-import { timeAgoInWords } from '@/utils/timeAgoInWords';
-import { Trip } from '@/types';
-import { showAgeAtTrip } from '@/utils/viewHelpers';
 import CountryFlags from '../helpers/CountryFlags';
 import ExperiencesForRides from '../helpers/ExperiencesForRides';
+
+import { Trip } from '@/types';
+import { timeAgoInWords } from '@/utils/timeAgoInWords';
+import { showAgeAtTrip } from '@/utils/viewHelpers';
 
 const TripHeadline: FC<{ trip: Trip }> = ({ trip }) => {
   return (

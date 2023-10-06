@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
   // Runs before each test and signs in each page.

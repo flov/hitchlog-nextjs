@@ -5,12 +5,14 @@ import {
   Dropdown,
   Navbar,
 } from 'flowbite-react';
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
-import { useAuth } from './contexts/AuthContext';
-import { capitalize, profilePicture } from '../utils';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import React, { useEffect, useState } from 'react';
+
+import { capitalize, profilePicture } from '../utils';
+
+import { useAuth } from './contexts/AuthContext';
 import { useLoginModal } from './contexts/LoginModal';
 
 const NavBar = () => {

@@ -1,17 +1,19 @@
+import { Button } from 'flowbite-react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { Button } from 'flowbite-react';
-import { FaMap, FaUsers } from 'react-icons/fa';
+import Image from 'next/image';
 import Link from 'next/link';
-import { getLatestTrips, getRandomTrips } from '../src/db/trips';
 import { useEffect, useState } from 'react';
+import { FaMap, FaUsers } from 'react-icons/fa';
+
 import {
   RandomPhotos,
-  RandomVideos,
   RandomStories,
+  RandomVideos,
 } from '../src/components/Trips';
-import Image from 'next/image';
+import { getLatestTrips, getRandomTrips } from '../src/db/trips';
 import { Trip } from '../src/types';
+
 import { LatestTrips } from '@/components/Trips/LatestTrips';
 
 const Home: NextPage = () => {

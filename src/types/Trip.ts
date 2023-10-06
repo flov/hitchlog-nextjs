@@ -1,5 +1,5 @@
-import { Ride } from './Ride';
 import { Comment } from './Comment';
+import { Ride } from './Ride';
 
 export type Location = {
   lat: number;

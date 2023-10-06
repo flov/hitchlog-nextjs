@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+
 import { useToasts } from '../src/components/contexts/ToastContext';
 import { confirmAccount } from '../src/db/users';
 import { objectToString } from '../src/utils';

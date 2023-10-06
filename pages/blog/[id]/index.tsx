@@ -1,16 +1,15 @@
-import React from 'react';
-
-import Head from 'next/head';
-import ReactMarkdown from 'react-markdown';
 import { Breadcrumb } from 'flowbite-react';
-import { FaHome } from 'react-icons/fa';
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import React from 'react';
+import { FaHome } from 'react-icons/fa';
+import ReactMarkdown from 'react-markdown';
 
 import CommentSection from '@/components/Blog/CommentSection';
 import PostComponent from '@/components/Blog/Post';
-import { Post } from '@/types/Post';
 import { createPostComment } from '@/db/comments';
 import { getPost } from '@/db/posts';
+import { Post } from '@/types/Post';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   try {

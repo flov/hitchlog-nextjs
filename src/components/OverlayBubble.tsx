@@ -1,7 +1,9 @@
 import React, { FC, useState } from 'react';
 import { BsArrowRight } from 'react-icons/bs';
 import { IoIosClose } from 'react-icons/io';
+
 import { Trip } from '../types';
+
 import StoryCard from './Trips/StoryCard';
 
 const OverlayBubble: FC<{ trip: Trip; map: google.maps.Map }> = ({

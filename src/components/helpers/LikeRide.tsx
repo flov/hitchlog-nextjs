@@ -1,11 +1,12 @@
+import { Tooltip } from 'flowbite-react';
 import React, { FC, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+
+import { useAuth } from '../../components/contexts/AuthContext';
 import { putLikeRide } from '../../db/ride';
 import { Ride } from '../../types';
 import { useLoginModal } from '../contexts/LoginModal';
 import { useToasts } from '../contexts/ToastContext';
-import { useAuth } from '../../components/contexts/AuthContext';
-import { Tooltip } from 'flowbite-react';
 
 const LikeRide: FC<{ ride: Ride }> = ({ ride }) => {
   const { addToast } = useToasts();

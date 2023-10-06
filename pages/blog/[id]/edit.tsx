@@ -1,14 +1,15 @@
 import { Breadcrumb } from 'flowbite-react';
 import { Formik } from 'formik';
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import React from 'react';
 import { FaHome } from 'react-icons/fa';
+
 import PostForm from '../../../src/components/Blog/PostForm';
 import { useToasts } from '../../../src/components/contexts/ToastContext';
 import { getPost, updatePost } from '../../../src/db/posts';
 import { Post } from '../../../src/types/Post';
 import { objectToString } from '../../../src/utils';
-import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const id = query.id;

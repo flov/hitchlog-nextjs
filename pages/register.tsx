@@ -1,12 +1,13 @@
 import { Alert, Button, Label, Select, TextInput } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FC, useState } from 'react';
-import { object, string } from 'yup';
 import { FiMail } from 'react-icons/fi';
+import { object, string } from 'yup';
+
 import { useToasts } from '../src/components/contexts/ToastContext';
-import Head from 'next/head';
 import { createUser } from '../src/db/users';
 
 const UserSchema = object().shape({

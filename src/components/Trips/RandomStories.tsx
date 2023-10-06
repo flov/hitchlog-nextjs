@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import { FaScroll } from 'react-icons/fa';
+
 import { Trip } from '../../types';
+
 import StoryCard from './StoryCard';
 
 const RandomStories: FC<{ trips: Trip[] }> = ({ trips }) => {
