@@ -12,7 +12,7 @@ const CarouselForRides: FC<{ rides: Ride[] }> = ({ rides }) => {
             {rides.map(
               (ride, index) =>
                 ride.photo && (
-                  <div className="relative">
+                  <div className="relative" key={`${ride.id}`}>
                     <img
                       className="rounded-t-lg"
                       alt={`photo of ${getOrdinalNumber(ride.number)} ride`}

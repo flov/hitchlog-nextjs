@@ -1,18 +1,18 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import { getCookie } from 'cookies-next';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
-    Accept: "application/json",
-  }
+    Accept: 'application/json',
+  },
 });
 
 // set standard authentication header
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = Cookies.get('authToken');
+    const token = getCookie('authToken');
     if (token && config && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -24,4 +24,3 @@ axiosInstance.interceptors.request.use(
 );
 
 export default axiosInstance;
-
