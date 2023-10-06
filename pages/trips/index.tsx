@@ -1,21 +1,23 @@
-import { GetServerSideProps } from 'next';
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
-import OverlayContainer from '../../src/components/OverlayContainer';
-import OverlayBubble from '../../src/components/OverlayBubble';
-import { Trip } from '../../src/types';
-import { ListTrips } from '../../src/components/ListTrips';
-import { getTripsWithQuery } from '../../src/db/trips';
-import LoadingContainer from '../../src/components/LoadingContainer';
-import { AxiosResponse } from 'axios';
-import { useRouter } from 'next/router';
-import { Formik } from 'formik';
-import TripsSearchInterface from '../../src/components/Trips/SearchInterface';
-import { Button, Pagination } from 'flowbite-react';
-import { FaList, FaMap } from 'react-icons/fa';
+
 import Head from 'next/head';
-import { useToasts } from '../../src/components/contexts/ToastContext';
-import { countries } from '../../src/utils/country_codes';
+import { AxiosResponse } from 'axios';
+import { FaList, FaMap } from 'react-icons/fa';
+import { Formik } from 'formik';
+import { GetServerSideProps } from 'next';
+import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
+import { useRouter } from 'next/router';
+
+import LoadingContainer from '@/components/LoadingContainer';
+import OverlayBubble from '@/components/OverlayBubble';
+import OverlayContainer from '@/components/OverlayContainer';
+import TripsSearchInterface from '@/components/Trips/SearchInterface';
+import { Button, Pagination } from 'flowbite-react';
+import { ListTrips } from '@/components/ListTrips';
+import { Trip } from '@/types';
+import { countries } from '@/utils/country_codes';
+import { getTripsWithQuery } from '@/db/trips';
+import { useToasts } from '@/components/contexts/ToastContext';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const q = query.q ? JSON.parse(query.q as string) : {};
