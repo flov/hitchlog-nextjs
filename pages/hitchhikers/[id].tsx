@@ -1,31 +1,40 @@
+import Head from 'next/head';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
 import { AxiosResponse } from 'axios';
 import { Alert, Button, Pagination } from 'flowbite-react';
 import { GetServerSideProps, NextPage } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { useAuth } from '../../src/components/contexts/AuthContext';
-import VehiclesForProfile from '../../src/components/helpers/VehiclesForProfile';
-import JVectorMap from '../../src/components/JVectorMap';
-import { ListTrips } from '../../src/components/ListTrips';
-import ProfileStats from '../../src/components/users/ProfileStats';
-import { getTripsWithQuery } from '../../src/db/trips';
-import { fetchProfile, getGeomap } from '../../src/db/users';
-import { Geomap, Profile, Trip } from '../../src/types';
-import { capitalize } from '../../src/utils';
-import { experiencesForProfile } from '../../src/utils/viewHelpers';
-import Head from 'next/head';
+
+import JVectorMap from '@/components/JVectorMap';
+import ProfileStats from '@/components/users/ProfileStats';
+import VehiclesForProfile from '@/components/helpers/VehiclesForProfile';
+import { Geomap, Profile, Trip } from '@/types';
+import { ListTrips } from '@/components/ListTrips';
+import { capitalize } from '@/utils';
+import { experiencesForProfile } from '@/utils/viewHelpers';
+import { fetchProfile, getGeomap } from '@/db/users';
+import { getTripsWithQuery } from '@/db/trips';
+import { useAuth } from '@/components/contexts/AuthContext';
 
 export const getServerSideProps: GetServerSideProps = async ({
   query,
   params,
 }) => {
   try {
+    const profile = await fetchProfile(params?.id as string);
+    const geomap = await getGeomap(params?.id as string);
     const page = query.page ? JSON.parse(query.page as string) : 1;
+    const trips = await getTripsWithQuery({
+      q: { user_id_eq: profile.data.id },
+    });
     return {
       props: {
-        id: params?.id,
+        profile: JSON.parse(JSON.stringify(profile.data)),
+        trips: JSON.parse(JSON.stringify(trips.data.trips)),
+        geomap: JSON.parse(JSON.stringify(geomap.data)),
+        totalPages: JSON.parse(JSON.stringify(trips.data.total_pages)),
         page,
       },
     };
@@ -37,18 +46,18 @@ export const getServerSideProps: GetServerSideProps = async ({
 };
 
 const Show: NextPage<{
+  profile: Profile;
+  trips: Trip[];
+  geomap: Geomap;
   totalPages: number;
   page: number;
-  id: string;
 }> = (props) => {
+  const { profile } = props;
   const router = useRouter();
-  const { currentUser } = useAuth();
   const [page, setPage] = useState(props.page);
   const [isLoading, setIsLoading] = useState(false);
-  const [trips, setTrips] = useState<Trip[]>();
+  const [trips, setTrips] = useState(props.trips);
   const [totalPages, setTotalPages] = useState(props.totalPages);
-  const [profile, setProfile] = useState<Profile>();
-  const [geoMap, setGeoMap] = useState<Geomap>();
 
   const setTripsData = (res: AxiosResponse) => {
     setTrips(res.data.trips);
@@ -56,21 +65,6 @@ const Show: NextPage<{
   };
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      const res = await fetchProfile(props.id as string);
-      setProfile(res.data);
-    };
-    const fetchGeoMap = async () => {
-      const res = await getGeomap(props.id as string);
-      setGeoMap(res.data);
-    };
-    fetchProfileData();
-    fetchGeoMap();
-  }, []);
-
-  useEffect(() => {
-    if (!profile) return;
-
     const fetchTrips = async () => {
       setIsLoading(true);
       const res = await getTripsWithQuery({
@@ -81,9 +75,7 @@ const Show: NextPage<{
       setIsLoading(false);
     };
     fetchTrips();
-  }, [page, profile]);
-
-  if (!profile || !trips) return null;
+  }, [page, profile.id]);
 
   const handlePageChange = async (p: number) => {
     router.push(
@@ -97,6 +89,7 @@ const Show: NextPage<{
     setPage(p);
   };
 
+  const { currentUser } = useAuth();
   const isOwner = profile.username === currentUser?.username;
 
   return (
@@ -159,9 +152,9 @@ const Show: NextPage<{
             </div>
           )}
 
-          {geoMap && !!Object.keys(geoMap.distances).length && (
+          {props.geomap && !!Object.keys(props.geomap.distances).length && (
             <div className="mt-4">
-              <JVectorMap geomap={geoMap} />
+              <JVectorMap geomap={props.geomap} />
             </div>
           )}
         </section>
