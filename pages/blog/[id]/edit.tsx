@@ -12,10 +12,14 @@ import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const id = query.id;
-  const post = await getPost(id as string);
-  return {
-    props: { post: JSON.parse(JSON.stringify(post.data)) },
-  };
+  try {
+    const post = await getPost(id as string);
+    return {
+      props: { post: JSON.parse(JSON.stringify(post.data)) },
+    };
+  } catch (error) {
+    return { notFound: true };
+  }
 };
 
 const EditBlogPost: NextPage<{ post: Post }> = ({ post }) => {

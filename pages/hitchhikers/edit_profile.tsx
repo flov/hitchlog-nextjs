@@ -1,17 +1,19 @@
+import React, { useState } from 'react';
+
+import Head from 'next/head';
+import Image from 'next/image';
 import { Alert, Button } from 'flowbite-react';
 import { Formik, FormikValues } from 'formik';
-import { GoogleApiWrapper } from 'google-maps-react';
 import { GetServerSideProps, NextPage } from 'next';
+import { GoogleApiWrapper } from 'google-maps-react';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { useAuth } from '../../src/components/contexts/AuthContext';
-import { useToasts } from '../../src/components/contexts/ToastContext';
-import EditProfileForm from '../../src/components/EditProfileForm';
-import LoadingContainer from '../../src/components/LoadingContainer';
-import { updateUser } from '../../src/db/users';
-import { profilePicture, showErrors } from '../../src/utils/viewHelpers';
-import Image from 'next/image';
-import Head from 'next/head';
+
+import EditProfileForm from '@/components/EditProfileForm';
+import LoadingContainer from '@/components/LoadingContainer';
+import { profilePicture, showErrors } from '@/utils/viewHelpers';
+import { updateUser } from '@/db/users';
+import { useAuth } from '@/components/contexts/AuthContext';
+import { useToasts } from '@/components/contexts/ToastContext';
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {

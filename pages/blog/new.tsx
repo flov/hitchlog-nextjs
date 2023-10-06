@@ -1,12 +1,13 @@
 import React from 'react';
 
+import Head from 'next/head';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import PostForm from '../../src/components/Blog/PostForm';
-import { useToasts } from '../../src/components/contexts/ToastContext';
-import { createPost } from '../../src/db/posts';
-import Head from 'next/head';
+
+import PostForm from '@/components/Blog/PostForm';
+import { createPost } from '@/db/posts';
+import { useToasts } from '@/components/contexts/ToastContext';
 
 const New: NextPage = () => {
   const { addToast } = useToasts();

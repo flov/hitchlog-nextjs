@@ -1,24 +1,27 @@
-import { GetStaticProps, NextPage } from 'next';
+import React from 'react';
+
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import PostCard from '../../src/components/Blog/PostCard';
-import { getPosts } from '../../src/db/posts';
-import { Post } from '../../src/types/Post';
+import { GetStaticProps, NextPage } from 'next';
 
-const Blog: NextPage = () => {
-  const [posts, setPosts] = useState<Post[]>();
+import PostCard from '@/components/Blog/PostCard';
+import { Post } from '@/types/Post';
+import { getPosts } from '@/db/posts';
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const res = await getPosts();
-      setPosts(res.data);
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    const posts = await getPosts();
+    return {
+      props: { posts: JSON.parse(JSON.stringify(posts.data)) },
     };
-    fetchPosts();
-  }, []);
+  } catch (error) {
+    return {
+      props: { posts: [] },
+    };
+  }
+};
 
-  if (!posts) return null;
-
+const Blog: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (
     <>
       <Head>

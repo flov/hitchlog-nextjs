@@ -1,38 +1,37 @@
-import { GetServerSideProps, NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
-import { Post } from '../../../src/types/Post';
-import { getPost } from '../../../src/db/posts';
+import React from 'react';
+
+import Head from 'next/head';
 import ReactMarkdown from 'react-markdown';
-import CommentSection from '../../../src/components/Blog/CommentSection';
-import PostComponent from '../../../src/components/Blog/Post';
 import { Breadcrumb } from 'flowbite-react';
 import { FaHome } from 'react-icons/fa';
-import Head from 'next/head';
-import { createPostComment } from '../../../src/db/comments';
+import { GetServerSideProps, NextPage } from 'next';
+
+import CommentSection from '@/components/Blog/CommentSection';
+import PostComponent from '@/components/Blog/Post';
+import { Post } from '@/types/Post';
+import { createPostComment } from '@/db/comments';
+import { getPost } from '@/db/posts';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const id = query?.id as string;
+  try {
+    const id = query?.id;
 
-  return {
-    props: {
-      id,
-    },
-  };
+    const res = await getPost(id as string);
+    const post = res.data;
+
+    return {
+      props: {
+        post: JSON.parse(JSON.stringify(post)),
+      },
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
 };
 
-const BlogPost: NextPage<{ id: string }> = ({ id }) => {
-  const [post, setPost] = useState<Post>();
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      const res = await getPost(id as string);
-      setPost(JSON.parse(JSON.stringify(res.data)));
-    };
-    fetchPost();
-  }, []);
-
-  if (!post) return <div>Loading...</div>;
-
+const BlogPost: NextPage<{ post: Post }> = ({ post }) => {
   return (
     <main className="pb-16 bg-white lg:pb-24 dark:bg-gray-900">
       <Head>

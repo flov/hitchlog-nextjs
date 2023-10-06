@@ -1,14 +1,16 @@
 import React from 'react';
+
 import Head from 'next/head';
+import { Alert } from 'flowbite-react';
 import { Formik, FormikValues } from 'formik';
 import { GetServerSideProps, NextPage } from 'next';
-import { SendMessageForm } from '../../../src/components/Forms';
-import { capitalize } from '../../../src/utils';
-import { sendMessage } from '../../../src/db/users';
-import { useToasts } from '../../../src/components/contexts/ToastContext';
-import { useAuth } from '../../../src/components/contexts/AuthContext';
-import { Alert } from 'flowbite-react';
 import { useRouter } from 'next/router';
+
+import { SendMessageForm } from '@/components/Forms';
+import { capitalize } from '@/utils';
+import { sendMessage } from '@/db/users';
+import { useAuth } from '@/components/contexts/AuthContext';
+import { useToasts } from '@/components/contexts/ToastContext';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const id = params?.id;
