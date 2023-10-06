@@ -38,36 +38,33 @@ declare global {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  return {
-    props: {
-      id: params?.id,
-      googleMapsKey: process.env.GOOGLE_MAPS_KEY,
-    },
-  };
+  try {
+    const trip = await getTrip(params?.id);
+
+    return {
+      props: {
+        trip: JSON.parse(JSON.stringify(trip.data)),
+        googleMapsKey: process.env.GOOGLE_MAPS_KEY,
+      },
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
 };
 
-const ShowTrip: NextPage<{ google: GoogleAPI; id: string }> = ({
+const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
   google,
-  id,
+  trip,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { currentUser } = useAuth();
   const router = useRouter();
 
-  const [trip, setTrip] = useState<Trip>();
-  const [rides, setRides] = useState<Ride[] | undefined>(trip?.rides);
+  const [rides, setRides] = useState<Ride[]>(trip?.rides);
   const { addToast } = useToasts();
 
   useEffect(() => {
-    const fetchTrip = async () => {
-      const res = await getTrip(id as string);
-      setTrip(res.data);
-      setRides(res.data.rides);
-    };
-    fetchTrip();
-  }, [id]);
-
-  useEffect(() => {
-    if (!trip) return;
     if (currentUser?.id !== trip.user_id) {
       addToast('You are not authorized to edit this trip', 'error');
       router.push('/login');
@@ -115,23 +112,19 @@ const ShowTrip: NextPage<{ google: GoogleAPI; id: string }> = ({
         destination.lat().toFixed(3) !== trip.destination.lat.toFixed(3) ||
         destination.lng().toFixed(3) !== trip.destination.lng.toFixed(3)
       ) {
-        const result = geocode({ location: destination }).then(
-          (destination) => {
-            updateTrip({ id: trip.id, trip: { destination } })
-              .then((trip) => {
-                addToast('Trip updated', 'success');
-                window.confetti();
-              })
-              .catch((error) => {
-                console.log({ error });
-              });
-          }
-        );
+        geocode({ location: destination }).then((destination) => {
+          updateTrip({ id: trip.id, trip: { destination } })
+            .then((trip) => {
+              addToast('Trip updated', 'success');
+              window.confetti();
+            })
+            .catch((error) => {
+              console.log({ error });
+            });
+        });
       }
     });
-  }, [trip, currentUser]);
-
-  if (!trip || !rides ) return null
+  }, []);
 
   const setRidesFromPayload = (payload: Ride) => {
     const newRides = rides.map((ride) => {
@@ -155,13 +148,9 @@ const ShowTrip: NextPage<{ google: GoogleAPI; id: string }> = ({
     setRides(newRides);
   };
 
-  if (!trip) {
-    return null;
-  }
-
   const handleDeleteTrip = () => {
     if (window.confirm('Are you sure you want to delete this trip?')) {
-      deleteTrip(trip.id as number).then(() => {
+      deleteTrip(trip.id).then(() => {
         addToast('Trip deleted successfully');
         router.push('/hitchhikers/' + currentUser?.id);
       });
@@ -185,8 +174,7 @@ const ShowTrip: NextPage<{ google: GoogleAPI; id: string }> = ({
             </div>
 
             <Accordion>
-              {trip &&
-                trip?.rides &&
+              {trip?.rides &&
                 trip?.rides.map((ride: Ride, index: number) => (
                   <Accordion.Panel key={`ride${index}`}>
                     <Accordion.Title as="h6">Ride {index + 1}</Accordion.Title>

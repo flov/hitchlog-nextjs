@@ -115,7 +115,7 @@ export function HitchhikingTrip({
             {ridesWithPhoto.map(
               (ride, index) =>
                 ride.photo && (
-                  <div className="relative">
+                  <div key={`photo${ride.id}`} className="relative">
                     <img
                       alt={`photo of ${getOrdinalNumber(ride.number)} ride`}
                       key={index}
