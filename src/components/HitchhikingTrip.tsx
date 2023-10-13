@@ -26,6 +26,7 @@ import CountryFlags from './helpers/CountryFlags';
 import ExperienceCircle from './helpers/ExperienceCircle';
 import ExperiencesForRides from './helpers/ExperiencesForRides';
 import LikeRide from './helpers/LikeRide';
+import { NumberOfLikesCount } from './helpers/NumberOfLikesCount';
 
 export function HitchhikingTrip({
   user,
@@ -76,6 +77,7 @@ export function HitchhikingTrip({
         <div className="flex flex-col items-center justify-between text-gray-500">
           <div className="flex items-center mt-2 gap-2 dark:text-white">
             <ExperiencesForRides rides={rides} />
+            <NumberOfLikesCount trip={trip} />
             <CountryFlags trip={trip} />
           </div>
           {rides.length > 0 && (
@@ -107,9 +109,8 @@ export function HitchhikingTrip({
       </div>
       <article>
         <div
-          className={`h-56 sm:h-64 xl:h-76 pb-4 ${
-            ridesWithPhoto.length === 0 && 'hidden'
-          }`}
+          className={`h-56 sm:h-64 xl:h-76 pb-4 ${ridesWithPhoto.length === 0 && 'hidden'
+            }`}
         >
           <Carousel slideInterval={5000} slide={true}>
             {ridesWithPhoto.map(

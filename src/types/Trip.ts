@@ -14,29 +14,30 @@ export type Location = {
 export type Timestamp = { seconds: number; nanoseconds: number };
 
 export type Trip = {
-  id: number | string;
-  to_param: string;
-  arrival: Date;
-  departure: Date;
-  created_at: Date;
-  google_duration?: number;
-  distance?: number;
-  travelling_with: number;
   age_at_trip: number;
+  arrival: Date;
   average_speed: string;
-  country_distances: Country[];
-  origin: Location;
-  destination: Location;
-  rides: Ride[];
-  total_distance: number;
   center: string;
-  user_id: number;
+  comments: Comment[];
+  country_distances: Country[];
+  created_at: Date;
+  departure: Date;
+  destination: Location;
+  distance?: number;
+  google_duration?: number;
+  id: number | string;
+  likes_count: number;
+  origin: Location;
+  rides: Ride[];
+  to_param: string;
+  total_distance: number;
+  travelling_with: number;
   user: {
     username: string;
     md5_email: string;
     gender: 'male' | 'female' | 'non-binary' | null;
   };
-  comments: Comment[];
+  user_id: number;
 };
 
 export type TripUser = {
