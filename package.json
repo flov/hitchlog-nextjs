@@ -9,7 +9,8 @@
     "fix": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.14.3",
