@@ -172,7 +172,7 @@ const Show: NextPage<{
           </div>
 
           {totalPages > 1 && (
-            <div className="flex justify-center mb-4 overflow-x-scroll">
+            <div className="flex justify-center mb-4">
               <Pagination
                 onPageChange={handlePageChange}
                 currentPage={page}
@@ -185,7 +185,7 @@ const Show: NextPage<{
           <div className="px-4">
             <ListTrips isLoading={isLoading} trips={trips} map={null} />
           </div>
-          <div className="flex justify-center my-4 overflow-x-scroll">
+          <div className="flex justify-center my-4">
             <Pagination
               onPageChange={handlePageChange}
               currentPage={page}
