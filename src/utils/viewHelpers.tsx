@@ -181,14 +181,6 @@ export const showAgeAtTrip = (trip: Trip) => {
   );
 };
 
-export const showNumberOfRides = (ridesLength: number) => (
-  <Tooltip content={`${ridesLength} ${pluralize(ridesLength, 'ride')}`}>
-    <div className="flex items-center gap-1">
-      <FiThumbsUp className="inline " /> {ridesLength}
-    </div>
-  </Tooltip>
-);
-
 export const showHitchhikedKms = (size: number) => (
   <Tooltip content={`${size} hitchhiked kms`}>
     <div className="flex items-center gap-1">

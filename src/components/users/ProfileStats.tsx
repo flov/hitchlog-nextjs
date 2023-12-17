@@ -18,6 +18,7 @@ import {
 } from '../../utils/viewHelpers';
 import { useAuth } from '../contexts/AuthContext';
 import CountryFlagsForProfile from '../helpers/CountryFlagsForProfile';
+import { UserGender } from '../helpers/UserGender';
 
 const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
   const createdAt = moment(profile.created_at).format('MMM YYYY');
@@ -26,7 +27,7 @@ const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
     <>
       <div className="flex justify-center image-shadow">
         <Image
-          className="rounded-full shadow shadow-lg"
+          className="rounded-full shadow"
           alt="Profile picture"
           width={128}
           height={128}
@@ -35,7 +36,7 @@ const ProfileStats: FC<{ profile: Profile }> = ({ profile }) => {
       </div>
       <div className="flex items-center justify-center mt-4 gap-2">
         {capitalize(profile.username)} {profile.age && `(${profile.age})`}
-        {showUserGender(profile.gender, 20)}
+        <UserGender gender={profile.gender} size={20} />
         {showCountryFlagForUser(profile)}
       </div>
       <div className="flex items-center justify-center text-gray-400 gap-1">

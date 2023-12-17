@@ -1,3 +1,4 @@
+import { UserGender } from '@/components/helpers/UserGender';
 import { Pagination, Table } from 'flowbite-react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
@@ -12,8 +13,7 @@ import { User } from '../../src/types';
 import { profilePicture } from '../../src/utils';
 import {
   countryFlag,
-  showNumberOfRides,
-  showUserGender,
+  viewNumberOfRides,
   viewNumberOfStories,
   viewNumberOfTrips,
 } from '../../src/utils/viewHelpers';
@@ -48,7 +48,7 @@ const Index: NextPage<{ page: number }> = (props) => {
         query: { page: p },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
     setPage(p);
     fetchUsers();
@@ -127,9 +127,9 @@ const Index: NextPage<{ page: number }> = (props) => {
                     </Link>
                     <div className="flex items-center">
                       ({user.age}
-                      {showUserGender(user.gender)})
+                      <UserGender gender={user?.gender} />)
                     </div>
-                    {showNumberOfRides(user.number_of_rides)}
+                    {viewNumberOfRides(user.number_of_rides)}
                     {viewNumberOfTrips(user.number_of_trips)}
                     {user.number_of_stories > 0 &&
                       viewNumberOfStories(user.number_of_stories)}

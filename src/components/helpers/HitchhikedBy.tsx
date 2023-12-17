@@ -5,7 +5,7 @@ import React, { FC } from 'react';
 import { Trip } from '../../types';
 import { profilePicture } from '../../utils';
 import { timeAgoInWords } from '../../utils/timeAgoInWords';
-import { showUserGender } from '../../utils/viewHelpers';
+import { UserGender } from './UserGender';
 
 const HitchhikedBy: FC<{ trip: Trip }> = ({ trip }) => {
   return (
@@ -19,7 +19,7 @@ const HitchhikedBy: FC<{ trip: Trip }> = ({ trip }) => {
           >
             {trip.user.username}
           </Link>
-          {showUserGender(trip.user.gender)}
+          <UserGender gender={trip.user.gender} />
 
           <Link
             className="flex items-center space-x-2"

@@ -27,6 +27,8 @@ import ExperienceCircle from './helpers/ExperienceCircle';
 import ExperiencesForRides from './helpers/ExperiencesForRides';
 import LikeRide from './helpers/LikeRide';
 import { NumberOfLikesCount } from './helpers/NumberOfLikesCount';
+import { ProfileImage } from './Hitchhikers/ProfileImage';
+import { UserGender } from './helpers/UserGender';
 
 export function HitchhikingTrip({
   user,
@@ -40,7 +42,7 @@ export function HitchhikingTrip({
   const departure = trip.departure;
   const { currentUser } = useAuth();
   const ridesWithPhoto = rides.filter(
-    (ride) => ride?.photo !== null && ride?.photo !== undefined
+    (ride) => ride?.photo !== null && ride?.photo !== undefined,
   );
 
   return (
@@ -54,13 +56,8 @@ export function HitchhikingTrip({
           </div>
         )}
 
-        <Image
-          className="w-24 h-24 rounded-full"
-          width={96}
-          height={96}
-          src={profilePicture(user.md5_email, 96)}
-          alt={`${user?.username}'s profile picture'`}
-        />
+        <ProfileImage user={user} />
+
         <span className="flex items-center mt-2 text-sm text-gray-500 gap-1 dark:text-gray-400">
           <Link
             className="font-semibold text-gray-900 dark:text-white"
@@ -68,7 +65,7 @@ export function HitchhikingTrip({
           >
             {capitalize(user?.username)}
           </Link>
-          {showUserGender(user.gender)}
+          <UserGender gender={user?.gender} />
         </span>
         <span className="flex items-center text-sm text-gray-500 dark:text-gray-400">
           Hitchhiked {moment(departure).fromNow()}
@@ -109,8 +106,9 @@ export function HitchhikingTrip({
       </div>
       <article>
         <div
-          className={`h-56 sm:h-64 xl:h-76 pb-4 ${ridesWithPhoto.length === 0 && 'hidden'
-            }`}
+          className={`h-56 sm:h-64 xl:h-76 pb-4 ${
+            ridesWithPhoto.length === 0 && 'hidden'
+          }`}
         >
           <Carousel slideInterval={5000} slide={true}>
             {ridesWithPhoto.map(
@@ -126,7 +124,7 @@ export function HitchhikingTrip({
                       {ride.photo_caption}
                     </p>
                   </div>
-                )
+                ),
             )}
           </Carousel>
         </div>

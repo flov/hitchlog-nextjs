@@ -36,7 +36,7 @@ export const fetchIpAddressOfClient = async () => {
 export const fetchLocationFromClient = async () => {
   const ipAddress = await fetchIpAddressOfClient();
   const response = await axios.get(
-    `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPLOCATION}&ip=${ipAddress}`
+    `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.NEXT_PUBLIC_IPLOCATION}&ip=${ipAddress}`,
   );
   const IpLocation = response.data;
   return IpLocation as IpLocation;
@@ -88,14 +88,14 @@ export const randomConfetti = () => {
 };
 
 export const getDataFromAddressComponents = (
-  address_components: google.maps.GeocoderAddressComponent[] | undefined
+  address_components: google.maps.GeocoderAddressComponent[] | undefined,
 ) => {
   if (!address_components) return {};
   const city = address_components.find((component) =>
-    component.types.includes('locality')
+    component.types.includes('locality'),
   );
   const country = address_components.find((component) =>
-    component.types.includes('country')
+    component.types.includes('country'),
   );
   return {
     city: city ? city.long_name : '',
@@ -126,3 +126,5 @@ export const objectToString = (obj: any) => {
     .map(([key, value]) => `${key}: ${value}`)
     .join(' ');
 };
+
+export * from './timeAgoInWords';
