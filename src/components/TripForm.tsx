@@ -74,7 +74,7 @@ export const TripForm = ({
         {showTripGoogleDuration(values.google_duration)}
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-2 mt-4">
         <div className="col-span-2 sm:col-span-1">
           <Label htmlFor="from_name">Starting point</Label>
           <Field name="from_name">
@@ -176,7 +176,6 @@ export const TripForm = ({
             }
             id="number_of_rides"
             required={true}
-            placeholder="Number of rides"
             onChange={handleChange}
             onBlur={handleBlur}
             defaultValue={1}
@@ -215,7 +214,7 @@ export const TripForm = ({
           </Select>
         </div>
 
-        <div className="flex justify-center mt-2 col-span-2">
+        <div className="flex justify-center col-span-2 mt-2">
           <Button className="w-full" disabled={isSubmitting} type="submit">
             Save Trip
           </Button>

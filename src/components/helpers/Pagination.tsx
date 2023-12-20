@@ -1,29 +1,27 @@
 import React, { FC } from 'react';
-import { Pagination } from 'flowbite-react';
+
+import { Pagination as FlowPagination } from 'flowbite-react';
 
 type PaginationProps = {
   currentPage: number;
-  layout?: string;
+  layout?: 'navigation' | 'pagination' | 'table';
   onPageChange: (page: number) => void;
-  showIcons?: boolean;
   totalPages: number;
-  page: number;
 };
 
 export const Pagination: FC<PaginationProps> = ({
-  handlePageChange,
+  onPageChange,
   totalPages,
-  page,
+  currentPage,
 }) => {
   return (
     <div className="flex justify-center my-4">
-      <Pagination
-        onPageChange={handlePageChange}
-        currentPage={page}
+      <FlowPagination
+        onPageChange={onPageChange}
+        currentPage={currentPage}
         showIcons={true}
         layout="pagination"
         totalPages={totalPages}
-        page={0}
       />
     </div>
   );

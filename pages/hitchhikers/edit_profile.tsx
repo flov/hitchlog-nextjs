@@ -3,7 +3,6 @@ import { Formik, FormikValues } from 'formik';
 import { GoogleApiWrapper } from 'google-maps-react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
@@ -12,7 +11,8 @@ import LoadingContainer from '@/components/LoadingContainer';
 import { useAuth } from '@/components/contexts/AuthContext';
 import { useToasts } from '@/components/contexts/ToastContext';
 import { updateUser } from '@/db/users';
-import { profilePicture, showErrors } from '@/utils/viewHelpers';
+import { showErrors } from '@/utils/viewHelpers';
+import { ProfilePicture } from '@/components/ProfilePicture';
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
@@ -58,13 +58,7 @@ const EditProfile: NextPage = () => {
 
               <div className="flex items-center">
                 <div className="mr-5 image-resize-edit-profile">
-                  <Image
-                    className="rounded-full shadow shadow-lg w-80"
-                    alt="Profile picture"
-                    width={128}
-                    height={128}
-                    src={profilePicture(currentUser.md5_email, 164)}
-                  />
+                  <ProfilePicture user={currentUser} />
                 </div>
                 <p>
                   This is your gravatar image. Facebook and Google login is in

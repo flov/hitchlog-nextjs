@@ -1,5 +1,6 @@
+import React, { Fragment } from 'react';
+
 import { Tooltip } from 'flowbite-react';
-import { Fragment } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 import { BsArrowRight, BsChat, BsClock, BsSpeedometer } from 'react-icons/bs';
 import { CgSandClock } from 'react-icons/cg';
