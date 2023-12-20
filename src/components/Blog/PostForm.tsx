@@ -1,4 +1,5 @@
-import { Button, Label, TextInput, Textarea } from 'flowbite-react';
+import { Button } from '@/flowbite';
+import { Label, TextInput, Textarea } from 'flowbite-react';
 import { Field, Form, FormikValues } from 'formik';
 import React, { FC } from 'react';
 import ReactMarkdown from 'react-markdown';

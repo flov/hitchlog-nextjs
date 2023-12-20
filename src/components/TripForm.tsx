@@ -1,4 +1,5 @@
-import { Button, Label, Select, TextInput } from 'flowbite-react';
+import { Label, Select, TextInput } from 'flowbite-react';
+import { Button } from '@/flowbite';
 import { Field, FormikValues } from 'formik';
 import moment from 'moment';
 import { ChangeEvent, MutableRefObject, useEffect, useRef } from 'react';
@@ -31,7 +32,7 @@ export const TripForm = ({
         originRef,
         destinationRef,
         map,
-        setFieldValue
+        setFieldValue,
       );
     }
   }, [map, originRef, setFieldValue]);
@@ -43,12 +44,12 @@ export const TripForm = ({
     if (values.arrival && !values.departure) {
       setFieldValue(
         'departure',
-        moment(values.arrival).add(-5, 'hours').format('YYYY-MM-DDTHH:MM')
+        moment(values.arrival).add(-5, 'hours').format('YYYY-MM-DDTHH:MM'),
       );
     } else if (!values.arrival && values.departure) {
       setFieldValue(
         'arrival',
-        moment(values.departure).add(5, 'hours').format('YYYY-MM-DDTHH:MM')
+        moment(values.departure).add(5, 'hours').format('YYYY-MM-DDTHH:MM'),
       );
     }
     handleBlur(e);
@@ -62,7 +63,7 @@ export const TripForm = ({
             <div key={cd.distance}>
               {countryFlag(
                 cd.country_code,
-                `${cd.country}, distance ${Math.round(cd.distance / 1000)} km`
+                `${cd.country}, distance ${Math.round(cd.distance / 1000)} km`,
               )}
             </div>
           ))}

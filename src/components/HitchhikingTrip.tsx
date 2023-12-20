@@ -1,4 +1,5 @@
-import { Button, Card, Carousel, Tooltip } from 'flowbite-react';
+import { Card, Carousel, Tooltip } from 'flowbite-react';
+import { Button } from '@/flowbite';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';

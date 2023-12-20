@@ -1,14 +1,17 @@
-import LogRocket from 'logrocket';
-import type { AppProps } from 'next/app';
-import { ThemeProvider } from 'next-themes';
-import '../styles/globals.css';
 import React from 'react';
 
-import Layout from '../src/components/Layout';
-import { AuthProvider } from '../src/components/contexts/AuthContext';
-import LoginModalProvider from '../src/components/contexts/LoginModal';
-import ToastsProvider from '../src/components/contexts/ToastContext';
-import GoogleAnalyticsSetup from '../src/utils/GoogleAnalyticsSetup';
+import LogRocket from 'logrocket';
+import { ThemeProvider } from 'next-themes';
+import { CustomFlowbiteTheme, Flowbite } from 'flowbite-react';
+import type { AppProps } from 'next/app';
+
+import '../styles/globals.css';
+import Layout from '@/components/Layout';
+import { AuthProvider } from '@/components/contexts/AuthContext';
+import LoginModalProvider from '@/components/contexts/LoginModal';
+import ToastsProvider from '@/components/contexts/ToastContext';
+import GoogleAnalyticsSetup from '@/utils/GoogleAnalyticsSetup';
+import { theme } from '@/flowbite/theme';
 
 function MyApp({ Component, pageProps }: AppProps) {
   // Log rocket set up
@@ -18,15 +21,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <ThemeProvider attribute="class">
-        <ToastsProvider>
-          <LoginModalProvider>
-            <Layout>
-              <GoogleAnalyticsSetup />
-              {/** @ts-ignore */}
-              <Component {...pageProps} />
-            </Layout>
-          </LoginModalProvider>
-        </ToastsProvider>
+        <Flowbite theme={{ theme }}>
+          <ToastsProvider>
+            <LoginModalProvider>
+              <Layout>
+                <GoogleAnalyticsSetup />
+                {/** @ts-ignore */}
+                <Component {...pageProps} />
+              </Layout>
+            </LoginModalProvider>
+          </ToastsProvider>
+        </Flowbite>
       </ThemeProvider>
     </AuthProvider>
   );

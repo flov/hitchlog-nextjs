@@ -1,4 +1,5 @@
-import { Alert, Button, Label, Select, TextInput } from 'flowbite-react';
+import { Button } from '@/flowbite';
+import { Alert, Label, Select, TextInput } from 'flowbite-react';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -48,7 +49,7 @@ const Register: FC = () => {
                   .then(() => {
                     window.confetti();
                     addToast(
-                      'Welcome to the Hitchlog! Please check your mails and confirm your email.'
+                      'Welcome to the Hitchlog! Please check your mails and confirm your email.',
                     );
                     router.push('/login');
                   })

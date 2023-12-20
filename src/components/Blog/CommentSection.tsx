@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
-import { Button, Label, Textarea } from 'flowbite-react';
+import { Label, Textarea } from 'flowbite-react';
+import { Button } from '@/flowbite';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import React, { FC, useEffect, useState } from 'react';
 
@@ -16,7 +17,7 @@ const CommentSection: FC<{
   id: number;
   submitCallback: (
     id: number,
-    values: FormikValues
+    values: FormikValues,
   ) => Promise<AxiosResponse<Comment>>;
 }> = (props) => {
   const [comments, setComments] = useState(props.comments);

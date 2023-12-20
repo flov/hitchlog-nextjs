@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
-import { Button, Pagination } from 'flowbite-react';
+import { Pagination } from 'flowbite-react';
+import { Button } from '@/flowbite';
 import { Formik } from 'formik';
 import { GoogleAPI, GoogleApiWrapper } from 'google-maps-react';
 import { GetServerSideProps } from 'next';
@@ -69,7 +70,7 @@ const Index: FC<{
         query: { page: p, q: JSON.stringify(query) },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
     setPage(p);
     fetchTrips();
@@ -134,7 +135,7 @@ const Index: FC<{
           },
         },
         undefined,
-        { shallow: true }
+        { shallow: true },
       );
     }
   };
@@ -173,7 +174,7 @@ const Index: FC<{
                   query: { q: JSON.stringify(res.config.params.q) },
                 },
                 undefined,
-                { shallow: true }
+                { shallow: true },
               );
 
               setTrips(res.data.trips);

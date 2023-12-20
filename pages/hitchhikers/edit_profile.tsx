@@ -1,4 +1,5 @@
-import { Alert, Button } from 'flowbite-react';
+import { Alert } from 'flowbite-react';
+import { Button } from '@/flowbite';
 import { Formik, FormikValues } from 'formik';
 import { GoogleApiWrapper } from 'google-maps-react';
 import { GetServerSideProps, NextPage } from 'next';

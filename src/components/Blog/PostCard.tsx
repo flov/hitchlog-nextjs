@@ -1,4 +1,5 @@
-import { Badge, Button } from 'flowbite-react';
+import { Badge } from 'flowbite-react';
+import { Button } from '@/flowbite';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react';

@@ -1,10 +1,4 @@
-import {
-  Avatar,
-  Button,
-  DarkThemeToggle,
-  Dropdown,
-  Navbar,
-} from 'flowbite-react';
+import { Avatar, DarkThemeToggle, Dropdown, Navbar } from 'flowbite-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
@@ -14,6 +8,7 @@ import { capitalize, profilePicture } from '../utils';
 
 import { useAuth } from './contexts/AuthContext';
 import { useLoginModal } from './contexts/LoginModal';
+import { Button } from '@/flowbite';
 
 const NavBar = () => {
   const { currentUser, logout } = useAuth();

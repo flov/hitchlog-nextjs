@@ -1,4 +1,5 @@
-import { Button, Label, TextInput, Textarea } from 'flowbite-react';
+import { Label, TextInput, Textarea } from 'flowbite-react';
+import { Button } from '@/flowbite';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import { NextPage } from 'next';
 import React from 'react';
@@ -45,7 +46,7 @@ const Contact: NextPage = () => {
               .catch(() => {
                 addToast(
                   'Something went wrong, please try again later',
-                  'error'
+                  'error',
                 );
               })
               .finally(() => {
@@ -111,7 +112,7 @@ const Contact: NextPage = () => {
                   </Field>
                 </div>
                 <div className="mt-4">
-                  <Button type="submit" disabled={isSubmitting}>
+                  <Button color="blue" type="submit" disabled={isSubmitting}>
                     Send message
                   </Button>
                 </div>

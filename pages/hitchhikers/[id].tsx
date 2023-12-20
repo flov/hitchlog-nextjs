@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
-import { Alert, Button, Pagination } from 'flowbite-react';
+import { Alert, Pagination } from 'flowbite-react';
+import { Button } from '@/flowbite';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -84,7 +85,7 @@ const Show: NextPage<{
         query: { page: p },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
     setPage(p);
   };

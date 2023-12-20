@@ -1,4 +1,5 @@
-import { Alert, Button, TextInput } from 'flowbite-react';
+import { Alert, TextInput } from 'flowbite-react';
+import { Button } from '@/flowbite';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -46,7 +47,7 @@ const Reset: NextPage<{ token: string }> = ({ token }) => {
                   .catch((error) => {
                     addToast(
                       error?.response?.data?.toString() ||
-                        'Something went wrong'
+                        'Something went wrong',
                     );
 
                     setErrors(error?.response?.data);

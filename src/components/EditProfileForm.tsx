@@ -1,4 +1,5 @@
-import { Button, Label, Select, TextInput, Textarea } from 'flowbite-react';
+import { Button } from '@/flowbite';
+import { Label, Select, TextInput, Textarea } from 'flowbite-react';
 import { Field, Form, FormikValues } from 'formik';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { FaFlag } from 'react-icons/fa';
@@ -20,12 +21,12 @@ const EditProfileForm: FC<FormikValues> = ({
         locationRef.current as HTMLInputElement,
         {
           types: ['(regions)'],
-        }
+        },
       );
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         const { city, country, country_code } = getDataFromAddressComponents(
-          place.address_components
+          place.address_components,
         );
         setFieldValue('formatted_address', place.formatted_address);
         setFieldValue('city', city);
