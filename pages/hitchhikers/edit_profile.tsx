@@ -58,7 +58,7 @@ const EditProfile: NextPage = () => {
               </div>
 
               <div className="flex items-center">
-                <div className="mr-5 image-resize-edit-profile">
+                <div className="mr-5 w-[220px] image-resize-edit-profile">
                   <ProfilePicture user={currentUser} />
                 </div>
                 <p>
