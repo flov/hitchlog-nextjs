@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { Button as FlowButton } from 'flowbite-react';
+import { twMerge } from 'tailwind-merge';
+import { buttonTheme } from '../Button';
 
-export const Button = (props: any) => {
+type Props = {
+  className?: string;
+  children: ReactNode;
+};
+
+export const Button = ({ className, children, ...props }: Props) => {
+  const classes = twMerge(buttonTheme.base, className);
+
   return (
-    <FlowButton color="primary" {...props}>
-      {props.children}
+    <FlowButton color="primary" {...props} className={classes}>
+      {children}
     </FlowButton>
   );
 };
