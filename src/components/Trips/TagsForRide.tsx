@@ -7,7 +7,7 @@ import { removeDuplicates } from '../../utils';
 export const TagsForRide: FC<{ ride: Ride }> = ({ ride }) => (
   <>
     {ride.tags.map((tag) => (
-      <Badge color="info" key={`${ride.id}${tag}`}>
+      <Badge color="blue" key={`${ride.id}${tag}`}>
         {tag}
       </Badge>
     ))}
@@ -19,7 +19,7 @@ export const TagsForRides: FC<{ rides: Ride[] }> = ({ rides }) => {
   return (
     <>
       {tags.map((tag) => (
-        <Badge color="info" key={tag}>
+        <Badge color="blue" key={tag}>
           {tag}
         </Badge>
       ))}

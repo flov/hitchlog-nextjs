@@ -11,8 +11,8 @@ It's sort of a blog, but with a focus on hitchhiking.
 
 ## Getting started
 
-`cp .env.rb.sample .env.rb`.
-edit .env.rb to contain the right api keys
+`cp .env.local.sample .env.local`.
+edit .env.local to contain the right api keys
 
 ```bash
 npm install
