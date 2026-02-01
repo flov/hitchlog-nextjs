@@ -29,8 +29,7 @@ import {
   updateTrip,
 } from '../../../src/db/trips';
 import { Experiences, Ride, Trip, Vehicles } from '../../../src/types';
-import { displayRoute } from '../../../src/utils/DirectionsHandler';
-import { geocode } from '../../../src/utils/Geocoder';
+import { displayOSRMRoute } from '../../../src/utils/OSRMRouteService';
 
 declare global {
   interface Window {
@@ -75,57 +74,12 @@ const ShowTrip: NextPage<{ trip: Trip; google: GoogleAPI }> = ({
     const map = new google.maps.Map(mapElement, {
       mapTypeControl: false,
       zoom: 11,
-      // lat and lng of central europe
       center: { lat: 50.5, lng: 10.5 },
     });
-    const directionsService = new google.maps.DirectionsService();
-    const directionsRenderer = new google.maps.DirectionsRenderer({
-      draggable: true,
-      map,
-    });
-    displayRoute(
-      trip.origin,
-      trip.destination,
-      directionsService,
-      directionsRenderer
-    );
-    directionsRenderer.addListener('directions_changed', () => {
-      const directions = directionsRenderer.getDirections();
-      if (!directions.routes) return;
-      const route = directions.routes[0];
-      const origin = route.legs[0].start_location;
-      const destination = route.legs[0].end_location;
-      if (
-        origin.lat().toFixed(3) !== trip.origin.lat.toFixed(3) ||
-        origin.lng().toFixed(3) !== trip.origin.lng.toFixed(3)
-      ) {
-        geocode({ location: origin }).then((origin) => {
-          updateTrip({ id: trip.id, trip: { origin } })
-            .then((trip) => {
-              addToast('Trip updated', 'success');
-              window.confetti();
-            })
-            .catch((error) => {
-              addToast('Error updating trip', 'error');
-            });
-        });
-      } else if (
-        destination.lat().toFixed(3) !== trip.destination.lat.toFixed(3) ||
-        destination.lng().toFixed(3) !== trip.destination.lng.toFixed(3)
-      ) {
-        geocode({ location: destination }).then((destination) => {
-          updateTrip({ id: trip.id, trip: { destination } })
-            .then((trip) => {
-              addToast('Trip updated', 'success');
-              window.confetti();
-            })
-            .catch((error) => {
-              console.log({ error });
-            });
-        });
-      }
-    });
-  }, []);
+    if (trip.origin?.lat != null && trip.destination?.lat != null) {
+      displayOSRMRoute(map, trip.origin, trip.destination);
+    }
+  }, [trip]);
 
   const setRidesFromPayload = (payload: Ride) => {
     const newRides = rides.map((ride) => {

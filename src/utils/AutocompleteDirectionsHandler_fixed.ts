@@ -44,49 +44,25 @@ export class AutocompleteDirectionsHandler {
     const originInput = originRef.current as HTMLInputElement;
     const destinationInput = destinationRef.current as HTMLInputElement;
 
+    // Set up OSM-based autocomplete for origin
     this.setupOSMAutocomplete(originInput, 'origin');
+    
+    // Set up OSM-based autocomplete for destination
     this.setupOSMAutocomplete(destinationInput, 'destination');
 
     this.directionsRenderer.addListener('directions_changed', () => {
       const directions = this.directionsRenderer.getDirections();
-      if (directions?.routes?.[0]?.legs) {
-        const route = directions.routes[0];
-        const originLoc = route.legs[0].start_location;
-        const destLeg = route.legs[route.legs.length - 1];
-        const destLoc = destLeg.end_location;
-        this.setFieldValue('from_name', route.legs[0].start_address);
-        this.setFieldValue('to_name', destLeg.end_address);
+      if (directions && directions.geocoded_waypoints) {
+        const originPlaceId = directions.geocoded_waypoints[0].place_id;
+        const destinationPlaceId = directions.geocoded_waypoints[1].place_id;
+        this.geocode({ placeId: originPlaceId }, 'origin');
+        this.geocode({ placeId: destinationPlaceId }, 'destination');
+        this.setFieldValue(
+          'from_name',
+          directions.routes[0].legs[0].start_address
+        );
+        this.setFieldValue('to_name', directions.routes[0].legs[0].end_address);
         this.computeTotalDistance(directions);
-        OpenStreetMapService.reverseGeocode(originLoc.lat(), originLoc.lng()).then((originResult) => {
-          if (originResult) {
-            this.originCoordinates = { lat: originResult.lat, lng: originResult.lng };
-            this.originPlaceId = originResult.place_id;
-            this.setFieldValue('origin', {
-              place_id: originResult.place_id,
-              lat: originResult.lat,
-              lng: originResult.lng,
-              city: OpenStreetMapService.getDataFromAddressComponents(originResult.address_components || []).city,
-              country: OpenStreetMapService.getDataFromAddressComponents(originResult.address_components || []).country,
-              country_code: OpenStreetMapService.getDataFromAddressComponents(originResult.address_components || []).country_code,
-              formatted_address: originResult.formatted_address,
-            });
-          }
-        });
-        OpenStreetMapService.reverseGeocode(destLoc.lat(), destLoc.lng()).then((destResult) => {
-          if (destResult) {
-            this.destinationCoordinates = { lat: destResult.lat, lng: destResult.lng };
-            this.destinationPlaceId = destResult.place_id;
-            this.setFieldValue('destination', {
-              place_id: destResult.place_id,
-              lat: destResult.lat,
-              lng: destResult.lng,
-              city: OpenStreetMapService.getDataFromAddressComponents(destResult.address_components || []).city,
-              country: OpenStreetMapService.getDataFromAddressComponents(destResult.address_components || []).country,
-              country_code: OpenStreetMapService.getDataFromAddressComponents(destResult.address_components || []).country_code,
-              formatted_address: destResult.formatted_address,
-            });
-          }
-        });
       }
     });
   }
@@ -97,6 +73,7 @@ export class AutocompleteDirectionsHandler {
     let showSuggestions = false;
 
     const createSuggestionsDropdown = () => {
+      // Remove existing dropdown if any
       const existingDropdown = input.parentElement?.querySelector('.osm-suggestions');
       if (existingDropdown) {
         existingDropdown.remove();
@@ -106,25 +83,27 @@ export class AutocompleteDirectionsHandler {
 
       const dropdown = document.createElement('div');
       dropdown.className = 'osm-suggestions absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto';
-
-      suggestions.forEach((suggestion) => {
+      
+      suggestions.forEach((suggestion, index) => {
         const item = document.createElement('div');
         item.className = 'px-3 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0';
         item.innerHTML = `
           <div class="font-medium text-sm text-gray-900">${suggestion.formatted_address}</div>
           ${suggestion.city || suggestion.country ? `<div class="text-xs text-gray-500">${[suggestion.city, suggestion.country].filter(Boolean).join(', ')}</div>` : ''}
         `;
-
+        
         item.addEventListener('click', () => {
           this.handleOSMPlaceSelect(suggestion, mode);
           input.value = suggestion.formatted_address;
           showSuggestions = false;
           dropdown.remove();
         });
-
+        
         dropdown.appendChild(item);
       });
 
+      // Position dropdown
+      const inputRect = input.getBoundingClientRect();
       dropdown.style.position = 'absolute';
       dropdown.style.top = '100%';
       dropdown.style.left = '0';
@@ -148,6 +127,7 @@ export class AutocompleteDirectionsHandler {
         showSuggestions = true;
         createSuggestionsDropdown();
       } catch (error) {
+        console.error('Error searching places:', error);
         suggestions = [];
         showSuggestions = false;
       }
@@ -155,11 +135,11 @@ export class AutocompleteDirectionsHandler {
 
     input.addEventListener('input', (e) => {
       const query = (e.target as HTMLInputElement).value;
-
+      
       if (debounceTimeout) {
         clearTimeout(debounceTimeout);
       }
-
+      
       debounceTimeout = setTimeout(() => {
         searchPlaces(query);
       }, 300);
@@ -182,11 +162,14 @@ export class AutocompleteDirectionsHandler {
   }
 
   handleOSMPlaceSelect(place: any, mode: 'origin' | 'destination') {
+    console.log({ place });
     const { city, country, country_code } =
       OpenStreetMapService.getDataFromAddressComponents(
         place.address_components || [],
       );
+    console.log({ city, country, country_code });
 
+    // Create a Google Maps LatLng object for the selected place
     const location = new google.maps.LatLng(place.lat, place.lng);
     this.location = location;
 
@@ -210,9 +193,11 @@ export class AutocompleteDirectionsHandler {
       formatted_address: place.formatted_address,
     });
 
+    // Zoom to the selected place
     this.map.setCenter(location);
     this.map.setZoom(13);
-
+    
+    // Set a marker on the map
     if (this.marker) {
       this.marker.setMap(null);
     }
@@ -221,7 +206,8 @@ export class AutocompleteDirectionsHandler {
       position: location,
       map: this.map,
     });
-
+    
+    // Add drag listener for marker
     this.marker.addListener('dragend', (event: google.maps.MapMouseEvent) => {
       if (event.latLng) {
         this.geocode({ location: event.latLng }, mode);
@@ -262,7 +248,7 @@ export class AutocompleteDirectionsHandler {
   ) {
     try {
       let result;
-
+      
       if (geocoderRequest.placeId) {
         result = await OpenStreetMapService.geocodePlace(geocoderRequest.placeId);
       } else if (geocoderRequest.location) {
@@ -271,12 +257,12 @@ export class AutocompleteDirectionsHandler {
           geocoderRequest.location.lng()
         );
       }
-
+      
       if (result) {
         const { city, country, country_code } = OpenStreetMapService.getDataFromAddressComponents(
           result.address_components || []
         );
-
+        
         this.setFieldValue(mode, {
           place_id: result.place_id,
           city,
@@ -286,7 +272,7 @@ export class AutocompleteDirectionsHandler {
           country_code,
           formatted_address: result.formatted_address,
         });
-
+        
         if (mode === 'origin') {
           this.originPlaceId = result.place_id;
           this.originCoordinates = { lat: result.lat, lng: result.lng };
@@ -297,8 +283,8 @@ export class AutocompleteDirectionsHandler {
           this.setFieldValue('to_name', result.formatted_address);
         }
       }
-    } catch {
-      // Silently ignore geocode failures (e.g. rate limit)
+    } catch (error) {
+      console.error('Error geocoding:', error);
     }
   }
 
@@ -316,7 +302,8 @@ export class AutocompleteDirectionsHandler {
         } else {
           throw new Error('No results found');
         }
-      } catch {
+      } catch (error) {
+        console.error(`Error geocoding country ${country[0]}:`, error);
         return {
           country: country[0],
           country_code: '',
@@ -351,6 +338,7 @@ export class AutocompleteDirectionsHandler {
       if (!this.location) return;
       this.map.setCenter(this.location);
       this.map.setZoom(13);
+      // set a marker on the map
       this.marker = new google.maps.Marker({
         draggable: true,
         position: this.location,
@@ -371,7 +359,9 @@ export class AutocompleteDirectionsHandler {
 
     if (this.marker) this.marker.setMap(null);
 
+    // Use the stored coordinates instead of place IDs
     if (!this.originCoordinates || !this.destinationCoordinates) {
+      console.log('Missing origin or destination coordinates');
       return;
     }
 

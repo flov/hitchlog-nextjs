@@ -12,7 +12,7 @@ import LoadingContainer from '../../src/components/LoadingContainer';
 import { getTrip } from '../../src/db/trips';
 import { getUser } from '../../src/db/users';
 import { Trip, User } from '../../src/types';
-import { displayRoute } from '../../src/utils/DirectionsHandler';
+import { displayOSRMRoute } from '../../src/utils/OSRMRouteService';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   // params.id looks like: hitchhike-from-${fromCity}-to-${toCity}-${id}
@@ -54,17 +54,9 @@ const ShowTrip: NextPage<{
         center: { lat: 51.3336, lng: 12.375098 }, // Leipzig.
       }
     );
-    const directionsService = new google.maps.DirectionsService();
-    const directionsRenderer = new google.maps.DirectionsRenderer({
-      map,
-      panel: document.getElementById('panel') as HTMLElement,
-    });
-    displayRoute(
-      trip.origin,
-      trip.destination,
-      directionsService,
-      directionsRenderer
-    );
+    if (trip.origin?.lat != null && trip.destination?.lat != null) {
+      displayOSRMRoute(map, trip.origin, trip.destination);
+    }
   }, [trip]);
 
   return (

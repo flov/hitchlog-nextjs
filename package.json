@@ -9,7 +9,8 @@
     "fix": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watch",
+    "test": "jest --no-watch",
+    "test:watch": "jest --watch --forceExit",
     "test:e2e": "playwright test"
   },
   "dependencies": {
@@ -26,6 +27,7 @@
     "canvas-confetti": "^1.9.2",
     "chart.js": "^3.9.1",
     "classnames": "^2.3.2",
+    "dotenv": "^17.2.3",
     "flowbite": "^1.8.1",
     "flowbite-react": "^0.7.2",
     "formik": "^2.4.5",

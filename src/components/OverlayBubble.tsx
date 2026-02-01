@@ -1,8 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { BsArrowRight } from 'react-icons/bs';
 import { IoIosClose } from 'react-icons/io';
 
 import { Trip } from '../types';
+import { displayOSRMRoute } from '../utils/OSRMRouteService';
 
 import StoryCard from './Trips/StoryCard';
 
@@ -11,35 +12,19 @@ const OverlayBubble: FC<{ trip: Trip; map: google.maps.Map }> = ({
   map,
 }) => {
   const [isOpened, setIsOpened] = useState(false);
-  const [directionsRenderer, setDirectionsRenderer] =
-    useState<google.maps.DirectionsRenderer>();
+  const polylineRef = useRef<google.maps.Polyline | null>(null);
 
   const setRoute = () => {
-    const directionsService = new google.maps.DirectionsService();
-    const dr = new google.maps.DirectionsRenderer();
-    dr.setMap(map);
-    setDirectionsRenderer(dr);
-    const origin = new google.maps.LatLng(trip.origin.lat, trip.origin.lng);
-    const destination = new google.maps.LatLng(
-      trip.destination.lat,
-      trip.destination.lng
-    );
-    directionsService.route(
-      {
-        origin,
-        destination,
-        travelMode: google.maps.TravelMode.DRIVING,
-      },
-      (result, status) => {
-        if (status === google.maps.DirectionsStatus.OK) {
-          dr.setDirections(result);
-        }
-      }
-    );
+    if (!trip.origin?.lat || !trip.destination?.lat) return;
+    displayOSRMRoute(map, trip.origin, trip.destination, (_, polyline) => {
+      polylineRef.current = polyline;
+    });
+    setIsOpened(true);
   };
 
   const unsetRoute = () => {
-    directionsRenderer?.setMap(null);
+    polylineRef.current?.setMap(null);
+    polylineRef.current = null;
     setIsOpened(false);
   };
 
