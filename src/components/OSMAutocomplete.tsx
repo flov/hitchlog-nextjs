@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { OpenStreetMapService } from '../utils/OpenStreetMapService';
 
 interface OSMAutocompleteProps {
