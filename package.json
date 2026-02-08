@@ -22,6 +22,7 @@
     "@types/jquery": "^3.5.29",
     "@types/js-cookie": "^3.0.6",
     "@types/md5": "^2.3.5",
+    "@vercel/analytics": "^1.6.1",
     "autoprefixer": "^10.4.16",
     "axios": "^0.27.2",
     "canvas-confetti": "^1.9.2",

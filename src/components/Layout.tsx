@@ -1,4 +1,5 @@
 import React, { FC, ReactNode } from 'react';
+import { Analytics } from "@vercel/analytics/next"
 
 import Footer from '../flowbite/Footer';
 
@@ -16,6 +17,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
       <div className=".sticky-footer">
         <Footer />
       </div>
+      <Analytics />
     </div>
   );
 };
