@@ -15,7 +15,7 @@ const CarouselForRides: FC<{ rides: Ride[] }> = ({ rides }) => {
                 ride.photo && (
                   <div key={`carousel${ride.id}`} className="relative">
                     <img
-                      className="rounded-t-lg"
+                      className="w-full h-56 sm:h-64 xl:h-76 object-contain rounded-t-lg"
                       alt={`photo of ${getOrdinalNumber(ride.number)} ride`}
                       key={index}
                       src={ride.photo.url}
